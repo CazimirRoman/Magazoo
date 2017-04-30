@@ -1,10 +1,18 @@
 package magazoo.magazine.langa.tine;
 
+import android.Manifest.permission;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,7 +21,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,12 +41,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener {
 
+    private static final int MY_LOCATION_REQUEST_CODE = 523;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private GoogleMap mMap;
-
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +98,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
 
     @Override
     protected void onStart() {
-
-
         auth.addAuthStateListener(authListener);
+        mGoogleApiClient.connect();
         super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -159,8 +188,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mMap = googleMap;
 
+        setMyLocationEnabled();
+
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private void setMyLocationEnabled() {
+
+        if (ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        } else {
+            requestLocationPermissions();
+        }
+
+    }
+
+    private boolean requestLocationPermissions() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_LOCATION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setMyLocationEnabled();
+            } else {
+                requestLocationPermissions();
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+
+        if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermissions();
+        }else{
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null) {
+                Toast.makeText(this, "Location data: " + mLastLocation.getLatitude() + mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 18));
+            }
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
