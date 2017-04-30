@@ -12,6 +12,10 @@ public class StoreMarker {
     public String type;
     public String description;
 
+
+    public StoreMarker() {
+    }
+
     public StoreMarker(String name, Double lat, Double lon, String type, String description) {
         this.name = name;
         this.lat = lat;

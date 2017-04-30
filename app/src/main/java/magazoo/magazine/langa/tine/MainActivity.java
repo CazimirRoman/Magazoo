@@ -30,22 +30,30 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener {
+import static magazoo.magazine.langa.tine.R.id.map;
+
+public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
+        ConnectionCallbacks, OnConnectionFailedListener, OnMapLongClickListener {
 
     private static final int MY_LOCATION_REQUEST_CODE = 523;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
+    private DatabaseReference mStoreRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
@@ -68,6 +76,38 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
         };
 
+        mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+        mStoreRef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(marker.getLat(), marker.getLon()))
+                        .title("Hello world"));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,11 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
-                StoreMarker marker = new StoreMarker("Magazin exemplu", -34.506081, 150.88104, "piata", "02/07/2016");
-                mStoreRef.push().setValue(marker);
-
-
+                Toast.makeText(MainActivity.this, "Nothing here", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -95,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         navigationView.setNavigationItemSelectedListener(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
 
         mapFragment.getMapAsync(this);
 
@@ -107,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    private void addMarkerToFirebase(Double lat, Double lon) {
+        StoreMarker marker = new StoreMarker("Magazin exemplu", lat, lon, "piata", "02/07/2016");
+        mStoreRef.push().setValue(marker);
     }
 
     @Override
@@ -187,12 +228,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        mMap.setOnMapLongClickListener(this);
 
         setMyLocationEnabled();
 
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void setMyLocationEnabled() {
@@ -230,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissions();
         }else{
@@ -253,5 +294,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        addMarkerToFirebase(latLng.latitude, latLng.longitude);
     }
 }
