@@ -24,7 +24,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

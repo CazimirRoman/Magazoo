@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +22,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import magazoo.magazine.langa.tine.model.StoreMarker;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -58,8 +61,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+                StoreMarker marker = new StoreMarker("Magazin exemplu", -34.506081, 150.88104, "piata", "02/07/2016");
+                mStoreRef.push().setValue(marker);
+
+
             }
         });
 
@@ -80,8 +87,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onStart() {
-        super.onStart();
+
+
         auth.addAuthStateListener(authListener);
+        super.onStart();
     }
 
     @Override
@@ -147,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
 
         LatLng sydney = new LatLng(-34, 151);
