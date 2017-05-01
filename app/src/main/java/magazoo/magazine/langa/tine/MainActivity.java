@@ -36,7 +36,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,22 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        };
-
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+
         mStoreRef.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -152,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     protected void onStart() {
-        auth.addAuthStateListener(authListener);
+        auth = FirebaseAuth.getInstance();
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -222,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void signOut() {
         auth.signOut();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
+
     }
 
     @Override
@@ -229,12 +217,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
-
         setMyLocationEnabled();
 
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     private void setMyLocationEnabled() {
@@ -298,6 +282,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        addMarkerToFirebase(latLng.latitude, latLng.longitude);
+        if(auth.getCurrentUser() != null){
+            addMarkerToFirebase(latLng.latitude, latLng.longitude);
+        }else{
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
+
     }
 }
