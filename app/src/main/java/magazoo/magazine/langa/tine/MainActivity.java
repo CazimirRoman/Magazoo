@@ -34,7 +34,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.clustering.ClusterManager;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private DatabaseReference mStoreRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
+
+    private ClusterManager<StoreMarker> mClusterManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,13 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
-
-                if(marker != null){
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(marker.getLat(), marker.getLon()))
-                            .title("Hello world"));
-                }
-
+                    mClusterManager.addItem(marker);
             }
 
             @Override
@@ -146,9 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                 for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
                     StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(marker.getLat(), marker.getLon()))
-                            .title("Hello world"));
+                    mClusterManager.addItem(marker);
                 }
             }
 
@@ -249,6 +243,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
         setMyLocationEnabled();
+
+        mClusterManager = new ClusterManager<>(this, mMap);
+
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+
         onNewMarkerAdded();
         displayFirebaseMarkers();
     }
