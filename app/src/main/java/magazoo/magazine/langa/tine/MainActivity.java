@@ -41,6 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
@@ -61,37 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         super.onCreate(savedInstanceState);
 
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
-
-        mStoreRef.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(marker.getLat(), marker.getLon()))
-                        .title("Hello world"));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,6 +98,67 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    private void onNewMarkerAdded() {
+
+        mStoreRef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
+
+                if(marker != null){
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(marker.getLat(), marker.getLon()))
+                            .title("Hello world"));
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void displayFirebaseMarkers() {
+
+        mStoreRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
+                    StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(marker.getLat(), marker.getLon()))
+                            .title("Hello world"));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     private void addMarkerToFirebase(Double lat, Double lon) {
@@ -218,7 +249,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
         setMyLocationEnabled();
-
+        onNewMarkerAdded();
+        displayFirebaseMarkers();
     }
 
     private void setMyLocationEnabled() {
