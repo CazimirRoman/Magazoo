@@ -34,6 +34,8 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,10 +43,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.maps.android.clustering.ClusterManager;
+
+import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
-import magazoo.magazine.langa.tine.model.StoreMarkerCluster;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -57,8 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private DatabaseReference mStoreRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-
-    private ClusterManager<StoreMarkerCluster> mClusterManager;
+    private LatLngBounds bounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +110,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StoreMarkerCluster marker = dataSnapshot.getValue(StoreMarkerCluster.class);
-                    mClusterManager.addItem(marker);
-                    mClusterManager.cluster();
+                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(marker.getLat(), marker.getLon()))
+                        .title(marker.getName()));
             }
 
             @Override
@@ -142,11 +144,22 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
-                    StoreMarkerCluster marker = markerSnapshot.getValue(StoreMarkerCluster.class);
+                ArrayList<StoreMarker> filteredMarkers = new ArrayList<>();
 
-                    mClusterManager.addItem(marker);
+                for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
+                    StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
+                        if(bounds.contains(new LatLng(marker.getLat(), marker.getLon()))){
+                            filteredMarkers.add(marker);
+                    }
                 }
+
+                for (int i = 0; i < filteredMarkers.size(); i++){
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(filteredMarkers.get(i).getLat(), filteredMarkers.get(i).getLon()))
+                            .title(filteredMarkers.get(i).getName()));
+                }
+
+
             }
 
             @Override
@@ -246,14 +259,32 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
         setMyLocationEnabled();
-
-        mClusterManager = new ClusterManager<>(this, mMap);
-
-        mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
-
+        setOnCameraChangeListener();
         onNewMarkerAdded();
         displayFirebaseMarkers();
+    }
+
+    private void setOnCameraChangeListener() {
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+               mMap.clear();
+            }
+        });
+
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                getMapBounds();
+                displayFirebaseMarkers();
+            }
+        });
+    }
+
+    private void getMapBounds() {
+
+        bounds = MainActivity.this.mMap
+                .getProjection().getVisibleRegion().latLngBounds;
     }
 
     private void setMyLocationEnabled() {
