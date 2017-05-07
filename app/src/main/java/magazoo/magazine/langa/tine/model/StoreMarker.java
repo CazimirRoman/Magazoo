@@ -1,10 +1,13 @@
 package magazoo.magazine.langa.tine.model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 /**
  * Created by Suspedeal on 30-Apr-17.
  */
 
-public class StoreMarker {
+public class StoreMarker implements ClusterItem {
 
     public String name;
     public Double lat;
@@ -62,5 +65,20 @@ public class StoreMarker {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(this.lat, this.lon);
+    }
+
+    @Override
+    public String getTitle() {
+        return this.name;
+    }
+
+    @Override
+    public String getSnippet() {
+        return this.description;
     }
 }
