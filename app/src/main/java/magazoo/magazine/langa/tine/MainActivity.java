@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
+import magazoo.magazine.langa.tine.model.StoreMarkerCluster;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
-    private ClusterManager<StoreMarker> mClusterManager;
+    private ClusterManager<StoreMarkerCluster> mClusterManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
+                StoreMarkerCluster marker = dataSnapshot.getValue(StoreMarkerCluster.class);
                     mClusterManager.addItem(marker);
+                    mClusterManager.cluster();
             }
 
             @Override
@@ -141,7 +143,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
-                    StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
+                    StoreMarkerCluster marker = markerSnapshot.getValue(StoreMarkerCluster.class);
+
                     mClusterManager.addItem(marker);
                 }
             }
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void addMarkerToFirebase(Double lat, Double lon) {
-        StoreMarker marker = new StoreMarker("Magazin exemplu", lat, lon, "piata", "02/07/2016");
+        StoreMarker marker = new StoreMarker("Magazin exemplu", lat, lon, "piata", "store description", 0.00, auth.getCurrentUser().getUid());
         mStoreRef.push().setValue(marker);
     }
 
