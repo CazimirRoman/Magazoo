@@ -257,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        getMapBounds();
         mMap.setOnMapLongClickListener(this);
         setMyLocationEnabled();
         setOnCameraChangeListener();
@@ -310,8 +311,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_LOCATION_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == MY_LOCATION_REQUEST_CODE ) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
                 requestLocationPermissions();
