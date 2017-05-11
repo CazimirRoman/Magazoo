@@ -5,23 +5,27 @@ import java.util.Date;
 public class StoreMarker {
 
     public String name;
-    public Double lat;
-    public Double lon;
-    public String type;
-    public String description;
-    public Double rating;
-    public long createdAt;
-    public String createdBy;
+    private Double lat;
+    private Double lon;
+    private String type;
+    private boolean pos;
+    private boolean nonstop;
+    private String description;
+    private Double rating;
+    private long createdAt;
+    private String createdBy;
 
 
     public StoreMarker() {
     }
 
-    public StoreMarker(String name, Double lat, Double lon, String type, String description, Double rating, String userId) {
+    public StoreMarker(String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, String description, Double rating, String userId) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
         this.type = type;
+        this.pos = pos;
+        this.nonstop = nonstop;
         this.description = description;
         this.rating = rating;
         this.createdAt = new Date().getTime();
@@ -58,5 +62,10 @@ public class StoreMarker {
 
     public String getCreatedBy() {
         return createdBy;
+    }
+
+    public boolean getPos() { return pos;}
+
+    public boolean getNonStop() { return nonstop;
     }
 }

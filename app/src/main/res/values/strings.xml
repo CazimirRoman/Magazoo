@@ -34,4 +34,14 @@
     <string name="action_settings">Settings</string>
     <string name="prompt_password">New password</string>
     <string name="btn_link_skip">Skip for now</string>
+
+    <string name="invalid_name">Please enter a valid Name</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="invalid_confirm_email">Email does not match</string>
+    <string name="invalid_password">Please enter a valid password</string>
+    <string name="invalid_confirm_password">Password does not match</string>
+    <string name="invalid_phone">Please enter a valid Phone</string>
+    <string name="invalid_age">Age must be between 12 and 60.</string>
+
+
 </resources>

@@ -21,8 +21,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -45,6 +53,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
@@ -68,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
 
         setContentView(R.layout.activity_main);
+
+        buildAddShopDialog();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,6 +114,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    private MaterialDialog.Builder buildAddShopDialog() {
+
+        return new MaterialDialog.Builder(this)
+                .title("Add shop")
+                .customView(R.layout.add_shop, true)
+                .cancelable(false);
     }
 
     private void onNewMarkerAdded() {
@@ -146,14 +166,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                 ArrayList<StoreMarker> filteredMarkers = new ArrayList<>();
 
-                for (DataSnapshot markerSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
-                        if(bounds.contains(new LatLng(marker.getLat(), marker.getLon()))){
-                            filteredMarkers.add(marker);
+                    if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
+                        filteredMarkers.add(marker);
                     }
                 }
 
-                for (int i = 0; i < filteredMarkers.size(); i++){
+                for (int i = 0; i < filteredMarkers.size(); i++) {
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(filteredMarkers.get(i).getLat(), filteredMarkers.get(i).getLon()))
                             .title(filteredMarkers.get(i).getName()));
@@ -170,9 +190,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         });
 
     }
+    private void addMarkerToFirebase(StoreMarker markerToAdd) {
+        StoreMarker marker = new StoreMarker(markerToAdd.getName(), markerToAdd.getLat(),
+                markerToAdd.getLon(), markerToAdd.getType(), markerToAdd.getPos(), markerToAdd.getNonStop(),
+                markerToAdd.getDescription(), 0.00,
+                auth.getCurrentUser().getUid());
 
-    private void addMarkerToFirebase(Double lat, Double lon) {
-        StoreMarker marker = new StoreMarker("Magazin exemplu", lat, lon, "piata", "store description", 0.00, auth.getCurrentUser().getUid());
         mStoreRef.push().setValue(marker);
     }
 
@@ -269,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-               mMap.clear();
+                mMap.clear();
             }
         });
 
@@ -311,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_LOCATION_REQUEST_CODE ) {
+        if (requestCode == MY_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
@@ -325,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissions();
-        }else{
+        } else {
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
             if (mLastLocation != null) {
@@ -349,12 +372,56 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        if(auth.getCurrentUser() != null){
-            addMarkerToFirebase(latLng.latitude, latLng.longitude);
-        }else{
+        if (auth.getCurrentUser() != null) {
+            //addMarkerToFirebase(latLng.latitude, latLng.longitude);
+
+            showAddShopDialog(latLng);
+
+        } else {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
 
+    }
+
+    private void showAddShopDialog(final LatLng latlng) {
+        final MaterialDialog dialog = buildAddShopDialog().show();
+
+        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_type);
+        final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.check_pos);
+        final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.check_nonstop);
+
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(MainActivity.this, "selected", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        List<String> categories = new ArrayList<String>();
+        categories.add("magazin de cartier");
+        categories.add("piata");
+        categories.add("supermarket");
+        categories.add("hypermarket");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+        Button add = (Button) dialog.findViewById(R.id.btnValidate);
+
+        add.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addMarkerToFirebase(new StoreMarker("name", latlng.latitude, latlng.longitude,
+                        spinner.getSelectedItem().toString(), chkPos.isChecked(),
+                        chkNonstop.isChecked(), "test description", 0.00, ""));
+                dialog.dismiss();
+            }
+        });
     }
 }
