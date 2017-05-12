@@ -403,24 +403,38 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
         });
         List<String> categories = new ArrayList<String>();
-        categories.add("magazin de cartier");
-        categories.add("piata");
-        categories.add("supermarket");
-        categories.add("hypermarket");
+        categories.add(getResources().getString(R.string.popup_add_shop_type));
+        categories.add(getResources().getString(R.string.popup_add_shop_type_small));
+        categories.add(getResources().getString(R.string.popup_add_shop_farmer));
+        categories.add(getResources().getString(R.string.popup_add_shop_supermarket));
+        categories.add(getResources().getString(R.string.popup_add_shop_type_hypermarket));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        Button add = (Button) dialog.findViewById(R.id.btnValidate);
+        Button buttonAdd = (Button) dialog.findViewById(R.id.buttonAdd);
+        Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
 
-        add.setOnClickListener(new OnClickListener() {
+        buttonCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                addMarkerToFirebase(new StoreMarker("name", latlng.latitude, latlng.longitude,
-                        spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                        chkNonstop.isChecked(), "test description", 0.00, ""));
                 dialog.dismiss();
+            }
+        });
+
+        buttonAdd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))){
+                    addMarkerToFirebase(new StoreMarker("name", latlng.latitude, latlng.longitude,
+                            spinner.getSelectedItem().toString(), chkPos.isChecked(),
+                            chkNonstop.isChecked(), "test description", 0.00, ""));
+                    dialog.dismiss();
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
