@@ -3,6 +3,7 @@ package magazoo.magazine.langa.tine;
 import android.Manifest.permission;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
@@ -313,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        setMapTheme();
         getMapBounds();
         setMyLocationEnabled();
         setOnCameraChangeListener();
@@ -320,6 +325,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         displayFirebaseMarkers();
     }
 
+    private void setMapTheme() {
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.map_style));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+    }
 
 
     private void setOnCameraChangeListener() {
