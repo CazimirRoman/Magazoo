@@ -35,10 +35,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,25 +61,33 @@ import magazoo.magazine.langa.tine.model.StoreMarker;
 import static magazoo.magazine.langa.tine.R.id.map;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, OnMapLongClickListener {
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     private static final int MY_LOCATION_REQUEST_CODE = 523;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private static final int ACCURACY_DESIRED = 8;
+
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference mStoreRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private float mCurrentAccuracy = 0;
+    private LatLng mCurrentLocation;
+
     private LatLngBounds bounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        createLocationRequest();
+
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
 
         setContentView(R.layout.activity_main);
-
-        buildAddShopDialog();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,8 +96,17 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED){
+                    if (auth.getCurrentUser() != null) {
+                        showAddShopDialog(mCurrentLocation);
+                    } else {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                }else{
+                    buildErrorDialog(getResources().getString(R.string.popup_accuracy_error_title), getResources().getString(R.string.popup_accuracy_error_text)).show();
+                }
 
-                Toast.makeText(MainActivity.this, "Nothing here", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -116,12 +134,27 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         }
     }
 
-    private MaterialDialog.Builder buildAddShopDialog() {
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private MaterialDialog.Builder buildDialog(String title, int layout) {
 
         return new MaterialDialog.Builder(this)
-                .title("Add shop")
-                .customView(R.layout.add_shop, true)
+                .title(title)
+                .customView(layout, true)
                 .cancelable(false);
+    }
+
+    private MaterialDialog.Builder buildErrorDialog(String title, String content) {
+
+        return new MaterialDialog.Builder(this)
+                .title(title)
+                .content(content)
+                .positiveText(R.string.agree);
     }
 
     private void onNewMarkerAdded() {
@@ -281,12 +314,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         mMap = googleMap;
         getMapBounds();
-        mMap.setOnMapLongClickListener(this);
         setMyLocationEnabled();
         setOnCameraChangeListener();
         onNewMarkerAdded();
         displayFirebaseMarkers();
     }
+
+
 
     private void setOnCameraChangeListener() {
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
@@ -356,6 +390,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 18));
             }
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient, mLocationRequest, this);
         }
 
     }
@@ -370,22 +407,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        if (auth.getCurrentUser() != null) {
-            //addMarkerToFirebase(latLng.latitude, latLng.longitude);
-
-            showAddShopDialog(latLng);
-
-        } else {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        }
-
-    }
-
     private void showAddShopDialog(final LatLng latlng) {
-        final MaterialDialog dialog = buildAddShopDialog().show();
+        final MaterialDialog dialog = buildDialog(getResources().getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
 
         final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.check_pos);
@@ -437,5 +460,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             }
         });
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentAccuracy = location.getAccuracy();
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        Toast.makeText(this, "Accuracy: " + location.getAccuracy(), Toast.LENGTH_SHORT).show();
     }
 }
