@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-                mMap.clear();
+                //mMap.clear();
             }
         });
 
