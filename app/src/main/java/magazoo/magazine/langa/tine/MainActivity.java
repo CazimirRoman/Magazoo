@@ -47,6 +47,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -317,6 +318,16 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+
+        Marker lastOpenned = null;
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            public boolean onMarkerClick(Marker marker) {
+                marker.showInfoWindow();
+               return true;
+            }
+        });
+
         setMapTheme();
         getMapBounds();
         setMyLocationEnabled();
@@ -346,13 +357,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-                mMap.clear();
+                //mMap.clear();
             }
         });
 
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+                mMap.clear();
                 getMapBounds();
                 displayFirebaseMarkers();
             }
