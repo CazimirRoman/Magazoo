@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -67,22 +69,25 @@ import static magazoo.magazine.langa.tine.R.id.map;
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
+    private static final String ID_PLACEHOLDER = "check model property for id";
     private static final int MY_LOCATION_REQUEST_CODE = 523;
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authListener;
+    private Toolbar mToolbar;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mStoreRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
-
-    private LatLngBounds bounds;
+    private LatLngBounds mBounds;
+    private ArrayList<StoreMarker> mFilteredMarkers;
+    private CardView mShopDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,15 +99,59 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initUI();
 
+        setupNavigationView();
+
+        setUpMap();
+
+        setupApiClientLocation();
+
+    }
+
+    private void setupApiClientLocation() {
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    private void setUpMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(map);
+
+        mapFragment.getMapAsync(this);
+    }
+
+    private void setupNavigationView() {
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initUI() {
+
+        //mToolbar initialization
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        //floating button for adding shops
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED){
-                    if (auth.getCurrentUser() != null) {
+                if(mCurrentAccuracy != 0){
+                    if (mAuth.getCurrentUser() != null) {
                         showAddShopDialog(mCurrentLocation);
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -115,28 +164,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        // cardview for shop details
+        mShopDetails = (CardView) findViewById(R.id.shop_details);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(map);
-
-        mapFragment.getMapAsync(this);
-
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
     }
 
     private void createLocationRequest() {
@@ -171,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(marker.getLat(), marker.getLon()))
-                        .title(marker.getName()));
+                        .title(s));
             }
 
             @Override
@@ -202,22 +233,22 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<StoreMarker> filteredMarkers = new ArrayList<>();
+                mFilteredMarkers = new ArrayList<>();
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
-                    if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
-                        filteredMarkers.add(marker);
+                    //update model with id from firebase
+                    marker.setId(markerSnapshot.getKey());
+                    if (mBounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
+                        mFilteredMarkers.add(marker);
                     }
                 }
 
-                for (int i = 0; i < filteredMarkers.size(); i++) {
+                for (int i = 0; i < mFilteredMarkers.size(); i++) {
                     mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(filteredMarkers.get(i).getLat(), filteredMarkers.get(i).getLon()))
-                            .title(filteredMarkers.get(i).getName()));
+                            .position(new LatLng(mFilteredMarkers.get(i).getLat(), mFilteredMarkers.get(i).getLon()))
+                            .title(mFilteredMarkers.get(i).getId()));
                 }
-
-
             }
 
             @Override
@@ -229,17 +260,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
     private void addMarkerToFirebase(StoreMarker markerToAdd) {
-        StoreMarker marker = new StoreMarker(markerToAdd.getName(), markerToAdd.getLat(),
-                markerToAdd.getLon(), markerToAdd.getType(), markerToAdd.getPos(), markerToAdd.getNonStop(),
-                markerToAdd.getDescription(), 0.00,
-                auth.getCurrentUser().getUid());
-
-        mStoreRef.push().setValue(marker);
+        mStoreRef.push().setValue(markerToAdd);
     }
 
     @Override
     protected void onStart() {
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -308,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void signOut() {
-        auth.signOut();
+        mAuth.signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
 
@@ -323,7 +349,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
-                marker.showInfoWindow();
+
+                for(StoreMarker d : mFilteredMarkers){
+                    if(d.getId() != null && d.getId().contains(marker.getTitle())){
+                        showShopDetails(d);
+                    }
+                }
                return true;
             }
         });
@@ -334,6 +365,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         setOnCameraChangeListener();
         onNewMarkerAdded();
         displayFirebaseMarkers();
+    }
+
+    private void showShopDetails(StoreMarker d) {
+        mShopDetails.setVisibility(View.VISIBLE);
+        TextView tv = (TextView) mShopDetails.findViewById(R.id.texttoshow);
+        tv.setText(d.getId());
     }
 
     private void setMapTheme() {
@@ -354,10 +391,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
 
     private void setOnCameraChangeListener() {
+
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-                //mMap.clear();
+                mShopDetails.setVisibility(View.GONE);
             }
         });
 
@@ -373,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void getMapBounds() {
 
-        bounds = MainActivity.this.mMap
+        mBounds = MainActivity.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -482,9 +520,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
                 if(!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))){
-                    addMarkerToFirebase(new StoreMarker("name", latlng.latitude, latlng.longitude,
+                    addMarkerToFirebase(new StoreMarker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), "test description", 0.00, ""));
+                            chkNonstop.isChecked(), "test description", 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
                 }else{
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();

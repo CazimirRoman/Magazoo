@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class StoreMarker {
 
-    public String name;
+    private String id;
+    private String name;
     private Double lat;
     private Double lon;
     private String type;
@@ -19,7 +20,8 @@ public class StoreMarker {
     public StoreMarker() {
     }
 
-    public StoreMarker(String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, String description, Double rating, String userId) {
+    public StoreMarker(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, String description, Double rating, String userId) {
+        this.id = id;
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -34,6 +36,14 @@ public class StoreMarker {
 
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Double getLat() {
@@ -64,8 +74,11 @@ public class StoreMarker {
         return createdBy;
     }
 
-    public boolean getPos() { return pos;}
+    public boolean getPos() {
+        return pos;
+    }
 
-    public boolean getNonStop() { return nonstop;
+    public boolean getNonStop() {
+        return nonstop;
     }
 }
