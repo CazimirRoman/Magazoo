@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
+    private static final int ZOOM_LEVEL_DESIRED = 18;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
@@ -150,14 +152,16 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mCurrentAccuracy != 0){
-                    if (mAuth.getCurrentUser() != null) {
+
+                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
+                    if (auth.getCurrentUser() != null) {
+
                         showAddShopDialog(mCurrentLocation);
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                     }
-                }else{
+                } else {
                     buildErrorDialog(getResources().getString(R.string.popup_accuracy_error_title), getResources().getString(R.string.popup_accuracy_error_text)).show();
                 }
 
@@ -259,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         });
 
     }
+
     private void addMarkerToFirebase(StoreMarker markerToAdd) {
         mStoreRef.push().setValue(markerToAdd);
     }
@@ -421,8 +426,24 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
+        }
+
+    }
+
+    private void zoomToCurrentLocation() {
+        if (mCurrentLocation != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Location location = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
+                mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                zoomToCurrentLocation();
+            }
+
         }
 
     }
@@ -458,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             if (mLastLocation != null) {
                 Toast.makeText(this, "Location data: " + mLastLocation.getLatitude() + mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                 LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 18));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, ZOOM_LEVEL_DESIRED));
             }
 
             LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -536,6 +557,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onLocationChanged(Location location) {
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        Toast.makeText(this, "Accuracy: " + location.getAccuracy(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Accuracy: " + location.getAccuracy(), Toast.LENGTH_SHORT).show();
     }
 }
