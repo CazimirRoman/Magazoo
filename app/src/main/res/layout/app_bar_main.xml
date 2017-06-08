@@ -30,4 +30,36 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/shop_details"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        card_view:cardCornerRadius="6dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/texttoshow"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"
+                android:text="Hello Card" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Navigate" />
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 </android.support.design.widget.CoordinatorLayout>
