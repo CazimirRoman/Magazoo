@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <Spinner
-        android:id="@+id/spinner_type"
+        android:id="@+id/spinnerType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <CheckBox
+        android:id="@+id/checkPos"
         android:layout_width="wrap_content"
-        android:id="@+id/check_pos"
-        android:text="pos"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/pos_label" />
 
     <CheckBox
+        android:id="@+id/checkTickets"
         android:layout_width="wrap_content"
-        android:id="@+id/check_nonstop"
-        android:text="nonstop"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/tickets_label" />
+
+    <CheckBox
+        android:id="@+id/checkNonstop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nonstop_label" />
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enter_shop_description"
+        android:maxLines="5"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/buttonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/popup_add_shop_button_add"
-        />
+        android:text="@string/popup_add_shop_button_add" />
 
     <Button
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/popup_add_shop_button_cancel"
-        />
+        android:text="@string/popup_add_shop_button_cancel" />
 </LinearLayout>
