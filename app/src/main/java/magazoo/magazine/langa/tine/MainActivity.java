@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,28 +90,25 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
+    private LatLng mCurrentOpenShop;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mFilteredMarkers;
     private CardView mShopDetails;
+    private TextView shopTypeLabel;
+    private TextView nonStopLabel;
+    private TextView posLabel;
+    private TextView ticketsLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         createLocationRequest();
-
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
-
         setContentView(R.layout.activity_main);
-
         initUI();
-
         setupNavigationView();
-
         setUpMap();
-
         setupApiClientLocation();
-
     }
 
     private void setupApiClientLocation() {
@@ -153,9 +153,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
-                    if (auth.getCurrentUser() != null) {
-
+                if (true) {
+                    if (mAuth.getCurrentUser() != null) {
                         showAddShopDialog(mCurrentLocation);
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -169,9 +168,41 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         });
 
         // cardview for shop details
+        initUIShopDetails();
+
+    }
+
+    private void initUIShopDetails() {
         mShopDetails = (CardView) findViewById(R.id.shop_details);
+        shopTypeLabel = (TextView) mShopDetails.findViewById(R.id.shop_type_label);
+        nonStopLabel = (TextView) mShopDetails.findViewById(R.id.nonstop_label);
+        posLabel = (TextView) mShopDetails.findViewById(R.id.pos_label);
+        ticketsLabel = (TextView) mShopDetails.findViewById(R.id.tickets_label);
 
+        ImageButton buttonNavigate = (ImageButton) mShopDetails.findViewById(R.id.button_navigate);
 
+        buttonNavigate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToShop();
+            }
+        });
+    }
+
+    private void navigateToShop() {
+
+        if(mCurrentLocation != null && mCurrentOpenShop != null){
+            final String navigationLink = "http://maps.google.com/maps?saddr="
+                    .concat(String.valueOf(mCurrentLocation.latitude)).concat(", ").concat(String.valueOf(mCurrentLocation.longitude))
+                    .concat("&daddr=").concat(String.valueOf(mCurrentOpenShop.latitude)).concat(", ")
+                    .concat(String.valueOf(mCurrentOpenShop.longitude));
+
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(navigationLink));
+            intent.setPackage("com.google.android.apps.maps");
+            startActivity(intent);
+
+        }
     }
 
     private void createLocationRequest() {
@@ -247,6 +278,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         mFilteredMarkers.add(marker);
                     }
                 }
+
+                mMap.clear();
 
                 for (int i = 0; i < mFilteredMarkers.size(); i++) {
                     mMap.addMarker(new MarkerOptions()
@@ -350,8 +383,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         mMap = googleMap;
 
-        Marker lastOpenned = null;
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
 
@@ -373,9 +404,29 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void showShopDetails(StoreMarker d) {
+
+        mCurrentOpenShop = new LatLng(d.getLat(), d.getLon());
+        shopTypeLabel.setText(d.getType());
+
+        if(d.getNonstop()){
+            nonStopLabel.setVisibility(View.VISIBLE);
+        }else{
+            nonStopLabel.setVisibility(View.GONE);
+        }
+
+        if(d.getPos()){
+            posLabel.setVisibility(View.VISIBLE);
+        }else{
+            posLabel.setVisibility(View.GONE);
+        }
+
+        if(d.getTickets()){
+            ticketsLabel.setVisibility(View.VISIBLE);
+        }else{
+            ticketsLabel.setVisibility(View.GONE);
+        }
+
         mShopDetails.setVisibility(View.VISIBLE);
-        TextView tv = (TextView) mShopDetails.findViewById(R.id.texttoshow);
-        tv.setText(d.getId());
     }
 
     private void setMapTheme() {
@@ -426,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            zoomToCurrentLocation();
+            //zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
         }
@@ -501,9 +552,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void showAddShopDialog(final LatLng latlng) {
         final MaterialDialog dialog = buildDialog(getResources().getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
 
-        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinner_type);
-        final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.check_pos);
-        final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.check_nonstop);
+        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinnerType);
+        final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
+        final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.checkNonstop);
+        final CheckBox chkTickets = (CheckBox) dialog.findViewById(R.id.checkTickets);
+        final EditText editDescription = (EditText) dialog.findViewById(R.id.editDescription);
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -543,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if(!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))){
                     addMarkerToFirebase(new StoreMarker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), "test description", 0.00, mAuth.getCurrentUser().getUid()));
+                            chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
                 }else{
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
@@ -557,6 +610,5 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onLocationChanged(Location location) {
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-//        Toast.makeText(this, "Accuracy: " + location.getAccuracy(), Toast.LENGTH_SHORT).show();
     }
 }

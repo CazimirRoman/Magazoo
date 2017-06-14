@@ -11,6 +11,7 @@ public class StoreMarker {
     private String type;
     private boolean pos;
     private boolean nonstop;
+    private boolean tickets;
     private String description;
     private Double rating;
     private long createdAt;
@@ -20,7 +21,7 @@ public class StoreMarker {
     public StoreMarker() {
     }
 
-    public StoreMarker(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, String description, Double rating, String userId) {
+    public StoreMarker(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -28,10 +29,19 @@ public class StoreMarker {
         this.type = type;
         this.pos = pos;
         this.nonstop = nonstop;
+        this.tickets = tickets;
         this.description = description;
         this.rating = rating;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
+    }
+
+    public boolean getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(boolean tickets) {
+        this.tickets = tickets;
     }
 
     public String getName() {
@@ -78,7 +88,7 @@ public class StoreMarker {
         return pos;
     }
 
-    public boolean getNonStop() {
+    public boolean getNonstop() {
         return nonstop;
     }
 }
