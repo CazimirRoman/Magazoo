@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -218,6 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        LoginManager.getInstance().logOut();
                                         Toast.makeText(ProfileActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
                                         finish();
@@ -244,6 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
     //sign out method
     public void signOut() {
         auth.signOut();
+        LoginManager.getInstance().logOut();
     }
 
     @Override

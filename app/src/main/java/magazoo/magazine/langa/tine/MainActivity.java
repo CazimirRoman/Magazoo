@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -153,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                if (true) {
-                    if (mAuth.getCurrentUser() != null) {
+                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
+                    if (mAuth.getCurrentUser() != null ) {
                         showAddShopDialog(mCurrentLocation);
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -163,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 } else {
                     buildErrorDialog(getResources().getString(R.string.popup_accuracy_error_title), getResources().getString(R.string.popup_accuracy_error_text)).show();
                 }
-
             }
         });
 
@@ -373,6 +373,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void signOut() {
         mAuth.signOut();
+        LoginManager.getInstance().logOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
 
