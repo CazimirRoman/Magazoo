@@ -36,6 +36,7 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'com.afollestad.material-dialogs:core:0.9.4.4'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.blankj:utilcode:1.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

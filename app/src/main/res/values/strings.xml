@@ -38,8 +38,20 @@
     <string name="prompt_password">New password</string>
     <string name="btn_link_skip">Skip for now</string>
 
-    <string name="popup_accuracy_error_title">"Please wait…"</string>
-    <string name="popup_accuracy_error_text">Accuracy needs to be better</string>
+    <!--errors-->
+    <string name="popup_accuracy_error_title">"Location accuracy"</string>
+    <string name="popup_accuracy_error_text">Please wait for a better accuracy (8 meters or below) in order to add a shop \n</string>
+    <string name="popup_current_accuracy">Current accuracy:</string>
+
+    <string name="popup_connection_error_title">"You are offline"</string>
+    <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>
+
+    <string name="popup_gps_error_title">"No location access"</string>
+    <string name="popup_gps_error_text">Make sure device location is turned on, then try again.</string>
+
+
+
+
 
     <!--add shop popup start-->
 
