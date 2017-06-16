@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final int ERROR_ACCURACY = 567;
     private static final int ERROR_INTERNET = 876;
     private static final int ERROR_LOCATION = 159;
+    private static final int ERROR_PERMISSION = 670;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -128,13 +129,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void checkGPSConnection() {
         if(!LocationUtils.isLocationEnabled()){
-            buildErrorDialog(getResources().getString(R.string.popup_gps_error_title), getResources().getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
+            buildErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
         }
     }
 
     private void checkInternetConnection() {
         if(!NetworkUtils.isConnected()){
-            buildErrorDialog(getResources().getString(R.string.popup_connection_error_title), getResources().getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
+            buildErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
         }
     }
 
@@ -216,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void navigateToShop() {
-
         if (mCurrentLocation != null && mCurrentOpenShop != null) {
             final String navigationLink = "http://maps.google.com/maps?saddr="
                     .concat(String.valueOf(mCurrentLocation.latitude)).concat(", ").concat(String.valueOf(mCurrentLocation.longitude))
@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     Uri.parse(navigationLink));
             intent.setPackage("com.google.android.apps.maps");
             startActivity(intent);
-
         }
     }
 
@@ -258,6 +257,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         switch (errorType) {
                             case ERROR_ACCURACY:
                                 dialog.dismiss();
+                                break;
+
+                            case ERROR_PERMISSION:
+                                requestLocationPermissions();
                                 break;
                             default:
                                 finish();
@@ -514,7 +517,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            //zoomToCurrentLocation();
+
+            zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
         }
@@ -523,17 +527,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void zoomToCurrentLocation() {
         if (mCurrentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
+            animateCamera();
         } else {
             if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Location location = LocationServices.FusedLocationApi.getLastLocation(
                         mGoogleApiClient);
-                mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                zoomToCurrentLocation();
+                if(location != null){
+                    mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    animateCamera();
+                }
             }
-
         }
+    }
 
+    private void animateCamera() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
     }
 
     private boolean requestLocationPermissions() {
@@ -551,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
-                requestLocationPermissions();
+                buildErrorDialog(getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
             }
         }
     }
@@ -559,9 +567,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermissions();
-        } else {
+        if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
             if (mLastLocation != null) {
@@ -573,7 +579,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
         }
-
     }
 
     @Override
@@ -587,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void showAddShopDialog(final LatLng latlng) {
-        final MaterialDialog dialog = buildDialog(getResources().getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
+        final MaterialDialog dialog = buildDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
 
         final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinnerType);
         final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
@@ -607,11 +612,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
         });
         List<String> categories = new ArrayList<String>();
-        categories.add(getResources().getString(R.string.popup_add_shop_type));
-        categories.add(getResources().getString(R.string.popup_add_shop_type_small));
-        categories.add(getResources().getString(R.string.popup_add_shop_farmer));
-        categories.add(getResources().getString(R.string.popup_add_shop_supermarket));
-        categories.add(getResources().getString(R.string.popup_add_shop_type_hypermarket));
+        categories.add(getString(R.string.popup_add_shop_type));
+        categories.add(getString(R.string.popup_add_shop_type_small));
+        categories.add(getString(R.string.popup_add_shop_farmer));
+        categories.add(getString(R.string.popup_add_shop_supermarket));
+        categories.add(getString(R.string.popup_add_shop_type_hypermarket));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -636,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
                 }
 
             }
