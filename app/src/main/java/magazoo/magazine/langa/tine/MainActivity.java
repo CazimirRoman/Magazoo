@@ -37,7 +37,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.blankj.utilcode.util.LocationUtils;
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.Utils;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -79,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
     private static final int ZOOM_LEVEL_DESIRED = 18;
+    private static final int ERROR_ACCURACY = 567;
+    private static final int ERROR_INTERNET = 876;
+    private static final int ERROR_LOCATION = 159;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -103,13 +110,32 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createLocationRequest();
-        mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+        Utils.init(this);
         setContentView(R.layout.activity_main);
+        checkInternetConnection();
+        checkGPSConnection();
         initUI();
         setupNavigationView();
+        initializeDatabaseReference();
         setUpMap();
         setupApiClientLocation();
+        createLocationRequest();
+    }
+
+    private void initializeDatabaseReference() {
+        mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+    }
+
+    private void checkGPSConnection() {
+        if(!LocationUtils.isLocationEnabled()){
+            buildErrorDialog(getResources().getString(R.string.popup_gps_error_title), getResources().getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
+        }
+    }
+
+    private void checkInternetConnection() {
+        if(!NetworkUtils.isConnected()){
+            buildErrorDialog(getResources().getString(R.string.popup_connection_error_title), getResources().getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
+        }
     }
 
     private void setupApiClientLocation() {
@@ -155,14 +181,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public void onClick(View view) {
 
                 if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
-                    if (mAuth.getCurrentUser() != null ) {
+                    if (mAuth.getCurrentUser() != null) {
                         showAddShopDialog(mCurrentLocation);
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                     }
                 } else {
-                    buildErrorDialog(getResources().getString(R.string.popup_accuracy_error_title), getResources().getString(R.string.popup_accuracy_error_text)).show();
+                    buildErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
                 }
             }
         });
@@ -191,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void navigateToShop() {
 
-        if(mCurrentLocation != null && mCurrentOpenShop != null){
+        if (mCurrentLocation != null && mCurrentOpenShop != null) {
             final String navigationLink = "http://maps.google.com/maps?saddr="
                     .concat(String.valueOf(mCurrentLocation.latitude)).concat(", ").concat(String.valueOf(mCurrentLocation.longitude))
                     .concat("&daddr=").concat(String.valueOf(mCurrentOpenShop.latitude)).concat(", ")
@@ -220,12 +246,25 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 .cancelable(false);
     }
 
-    private MaterialDialog.Builder buildErrorDialog(String title, String content) {
+    private MaterialDialog.Builder buildErrorDialog(String title, String content, final int errorType) {
 
         return new MaterialDialog.Builder(this)
                 .title(title)
                 .content(content)
-                .positiveText(R.string.agree);
+                .positiveText(R.string.agree)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        switch (errorType) {
+                            case ERROR_ACCURACY:
+                                dialog.dismiss();
+                                break;
+                            default:
+                                finish();
+                                break;
+                        }
+                    }
+                });
     }
 
     private void onNewMarkerAdded() {
@@ -381,18 +420,16 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
 
-                for(StoreMarker d : mFilteredMarkers){
-                    if(d.getId() != null && d.getId().contains(marker.getTitle())){
+                for (StoreMarker d : mFilteredMarkers) {
+                    if (d.getId() != null && d.getId().contains(marker.getTitle())) {
                         showShopDetails(d);
                     }
                 }
-               return true;
+                return true;
             }
         });
 
@@ -409,21 +446,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mCurrentOpenShop = new LatLng(d.getLat(), d.getLon());
         shopTypeLabel.setText(d.getType());
 
-        if(d.getNonstop()){
+        if (d.getNonstop()) {
             nonStopLabel.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             nonStopLabel.setVisibility(View.GONE);
         }
 
-        if(d.getPos()){
+        if (d.getPos()) {
             posLabel.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             posLabel.setVisibility(View.GONE);
         }
 
-        if(d.getTickets()){
+        if (d.getTickets()) {
             ticketsLabel.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ticketsLabel.setVisibility(View.GONE);
         }
 
@@ -467,7 +504,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void getMapBounds() {
-
         mBounds = MainActivity.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
@@ -594,12 +630,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         buttonAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))){
+                if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
                     addMarkerToFirebase(new StoreMarker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
                 }
 
