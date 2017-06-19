@@ -77,18 +77,18 @@ import static magazoo.magazine.langa.tine.R.id.map;
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String ID_PLACEHOLDER = "check model property for id";
     private static final int MY_LOCATION_REQUEST_CODE = 523;
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
-    private static final int ZOOM_LEVEL_DESIRED = 18;
+    private static final int ZOOM_LEVEL_DESIRED = 15;
     private static final int ERROR_ACCURACY = 567;
     private static final int ERROR_INTERNET = 876;
     private static final int ERROR_LOCATION = 159;
     private static final int ERROR_PERMISSION = 670;
-
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int ERROR_MAX_ZOOM = 109;
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShop;
+    private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mFilteredMarkers;
     private CardView mShopDetails;
@@ -258,9 +259,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                             case ERROR_ACCURACY:
                                 dialog.dismiss();
                                 break;
-
                             case ERROR_PERMISSION:
                                 requestLocationPermissions();
+                                break;
+                            case ERROR_MAX_ZOOM:
+                                dialog.dismiss();
+                                zoomToCurrentLocation();
                                 break;
                             default:
                                 finish();
@@ -440,8 +444,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         getMapBounds();
         setMyLocationEnabled();
         setOnCameraChangeListener();
-        onNewMarkerAdded();
-        displayFirebaseMarkers();
+        if(mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED){
+            displayFirebaseMarkers();
+        }
+
     }
 
     private void showShopDetails(StoreMarker d) {
@@ -499,11 +505,24 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                mMap.clear();
-                getMapBounds();
-                displayFirebaseMarkers();
+                setZoomLevel();
+                if(mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED){
+                    mMap.clear();
+                    getMapBounds();
+                    displayFirebaseMarkers();
+                    onNewMarkerAdded();
+                }else{
+                    //first run only
+                    if(mCurrentZoomLevel != 2){
+                        buildErrorDialog("Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
+                    }
+                }
             }
         });
+    }
+
+    private void setZoomLevel() {
+        mCurrentZoomLevel = mMap.getCameraPosition().zoom;
     }
 
     private void getMapBounds() {
@@ -517,7 +536,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
             zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
@@ -527,20 +545,20 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void zoomToCurrentLocation() {
         if (mCurrentLocation != null) {
-            animateCamera();
+            animateToCurrentLocation();
         } else {
             if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Location location = LocationServices.FusedLocationApi.getLastLocation(
                         mGoogleApiClient);
                 if(location != null){
                     mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    animateCamera();
+                    animateToCurrentLocation();
                 }
             }
         }
     }
 
-    private void animateCamera() {
+    private void animateToCurrentLocation() {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
     }
 
