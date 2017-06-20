@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +69,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.model.StoreMarker;
 
 import static magazoo.magazine.langa.tine.R.id.map;
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
+                if (true) {
                     if (mAuth.getCurrentUser() != null) {
                         showAddShopDialog(mCurrentLocation);
                     } else {
@@ -612,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void showAddShopDialog(final LatLng latlng) {
         final MaterialDialog dialog = buildDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
 
-        final Spinner spinner = (Spinner) dialog.findViewById(R.id.spinnerType);
+        final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) dialog.findViewById(R.id.checkTickets);
@@ -629,15 +629,17 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             }
         });
+
         List<String> categories = new ArrayList<String>();
-        categories.add(getString(R.string.popup_add_shop_type));
         categories.add(getString(R.string.popup_add_shop_type_small));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
         categories.add(getString(R.string.popup_add_shop_type_hypermarket));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinner.setAdapter(dataAdapter);
 
         Button buttonAdd = (Button) dialog.findViewById(R.id.buttonAdd);
@@ -659,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(MainActivity.this, getString(R.string.popup_add_shop_error), Toast.LENGTH_SHORT).show();
+                    spinner.setError(getString(R.string.popup_add_shop_type));
                 }
 
             }
