@@ -71,6 +71,7 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.model.StoreMarker;
+import magazoo.magazine.langa.tine.model.User;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mStoreRef;
+    private DatabaseReference mUserRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -104,10 +105,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mFilteredMarkers;
     private CardView mShopDetails;
-    private TextView shopTypeLabel;
-    private TextView nonStopLabel;
-    private TextView posLabel;
-    private TextView ticketsLabel;
+    private TextView mShopTypeLabel;
+    private TextView mNonStopLabel;
+    private TextView mPosLabel;
+    private TextView mTicketsLabel;
+
+    private int mCurrentQuota = 0;
+    private long mCurrentDate = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +128,31 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         createLocationRequest();
     }
 
+    private void getRemainingAdds() {
+        mUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    User user = child.getValue(User.class);
+                    if (user.getId().equals( mAuth.getCurrentUser().getUid())) {
+                        mCurrentQuota = user.getAddQuota();
+                        Toast.makeText(MainActivity.this, "Quota updated" + mCurrentQuota, Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void initializeDatabaseReference() {
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+        mUserRef = FirebaseDatabase.getInstance().getReference("Users");
     }
 
     private void checkGPSConnection() {
@@ -181,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED
                 if (true) {
                     if (mAuth.getCurrentUser() != null) {
                         showAddShopDialog(mCurrentLocation);
@@ -202,10 +229,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void initUIShopDetails() {
         mShopDetails = (CardView) findViewById(R.id.shop_details);
-        shopTypeLabel = (TextView) mShopDetails.findViewById(R.id.shop_type_label);
-        nonStopLabel = (TextView) mShopDetails.findViewById(R.id.nonstop_label);
-        posLabel = (TextView) mShopDetails.findViewById(R.id.pos_label);
-        ticketsLabel = (TextView) mShopDetails.findViewById(R.id.tickets_label);
+        mShopTypeLabel = (TextView) mShopDetails.findViewById(R.id.shop_type_label);
+        mNonStopLabel = (TextView) mShopDetails.findViewById(R.id.nonstop_label);
+        mPosLabel = (TextView) mShopDetails.findViewById(R.id.pos_label);
+        mTicketsLabel = (TextView) mShopDetails.findViewById(R.id.tickets_label);
 
         ImageButton buttonNavigate = (ImageButton) mShopDetails.findViewById(R.id.button_navigate);
 
@@ -453,24 +480,24 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void showShopDetails(StoreMarker d) {
 
         mCurrentOpenShop = new LatLng(d.getLat(), d.getLon());
-        shopTypeLabel.setText(d.getType());
+        mShopTypeLabel.setText(d.getType());
 
         if (d.getNonstop()) {
-            nonStopLabel.setVisibility(View.VISIBLE);
+            mNonStopLabel.setVisibility(View.VISIBLE);
         } else {
-            nonStopLabel.setVisibility(View.GONE);
+            mNonStopLabel.setVisibility(View.GONE);
         }
 
         if (d.getPos()) {
-            posLabel.setVisibility(View.VISIBLE);
+            mPosLabel.setVisibility(View.VISIBLE);
         } else {
-            posLabel.setVisibility(View.GONE);
+            mPosLabel.setVisibility(View.GONE);
         }
 
         if (d.getTickets()) {
-            ticketsLabel.setVisibility(View.VISIBLE);
+            mTicketsLabel.setVisibility(View.VISIBLE);
         } else {
-            ticketsLabel.setVisibility(View.GONE);
+            mTicketsLabel.setVisibility(View.GONE);
         }
 
         mShopDetails.setVisibility(View.VISIBLE);

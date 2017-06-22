@@ -25,9 +25,17 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import magazoo.magazine.langa.tine.model.User;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private static final int ALLOWED_QUOTA = 3;
     private EditText inputEmail, inputPassword;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
@@ -117,9 +125,6 @@ public class SignupActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the mAuth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
@@ -150,7 +155,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -166,16 +170,40 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users");
+                            mUserRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            Toast.makeText(SignupActivity.this, "Authentication succeeded.",
-                                    Toast.LENGTH_SHORT).show();
+                                    User user;
 
+                                    if(dataSnapshot.getValue() != null){
+                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+
+                                            user = child.getValue(User.class);
+                                            if (!(user.getId().equals(mAuth.getCurrentUser().getUid()))) {
+                                                user = new User(mAuth.getCurrentUser().getUid(), 3);
+                                                mUserRef.push().setValue(user);
+                                            }
+                                        }
+                                    }else{
+                                        //first install ever - no users collection
+                                        user = new User(mAuth.getCurrentUser().getUid(), 3);
+                                        mUserRef.push().setValue(user);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                             startActivity(new Intent(SignupActivity.this, MainActivity.class));
                             progressBar.setVisibility(View.GONE);
                             finish();
 
                         } else {
-                            // If sign in fails, display a message to the user.
 
                             Toast.makeText(SignupActivity.this, task.getException().toString(),
                                     Toast.LENGTH_SHORT).show();
