@@ -52,6 +52,9 @@
     <string name="popup_location_permission_error_title">"Allow location permissions"</string>
     <string name="popup_location_permission_error_text">The app needs your location to search for nearby shops.</string>
 
+    <string name="popup_shop_limit_error_title">"Limit reached"</string>
+    <string name="popup_shop_limit_error_text">You have reached your daily add limit. Come back again tomorrow to add more shops.</string>
+
 
 
     <!--add shop popup start-->
