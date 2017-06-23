@@ -25,13 +25,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import magazoo.magazine.langa.tine.model.User;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -170,35 +163,6 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            final DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users");
-                            mUserRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                    User user;
-
-                                    if(dataSnapshot.getValue() != null){
-                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-
-
-                                            user = child.getValue(User.class);
-                                            if (!(user.getId().equals(mAuth.getCurrentUser().getUid()))) {
-                                                user = new User(mAuth.getCurrentUser().getUid(), 3);
-                                                mUserRef.push().setValue(user);
-                                            }
-                                        }
-                                    }else{
-                                        //first install ever - no users collection
-                                        user = new User(mAuth.getCurrentUser().getUid(), 3);
-                                        mUserRef.push().setValue(user);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                             startActivity(new Intent(SignupActivity.this, MainActivity.class));
                             progressBar.setVisibility(View.GONE);
                             finish();

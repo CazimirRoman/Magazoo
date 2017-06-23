@@ -64,14 +64,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.model.StoreMarker;
-import magazoo.magazine.langa.tine.model.User;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -85,16 +87,17 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static final int ACCURACY_DESIRED = 8;
     private static final int ZOOM_LEVEL_DESIRED = 15;
+    private static final int ADD_SHOP_LIMIT = 5;
     private static final int ERROR_ACCURACY = 567;
     private static final int ERROR_INTERNET = 876;
     private static final int ERROR_LOCATION = 159;
     private static final int ERROR_PERMISSION = 670;
     private static final int ERROR_MAX_ZOOM = 109;
+    private static final int ERROR_LIMIT = 643;
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
     private DatabaseReference mStoreRef;
-    private DatabaseReference mUserRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -110,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private TextView mPosLabel;
     private TextView mTicketsLabel;
 
-    private int mCurrentQuota = 0;
-    private long mCurrentDate = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,49 +120,26 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         setContentView(R.layout.activity_main);
         checkInternetConnection();
         checkGPSConnection();
+        initializeDatabaseReference();
         initUI();
         setupNavigationView();
-        initializeDatabaseReference();
         setUpMap();
         setupApiClientLocation();
         createLocationRequest();
     }
 
-    private void getRemainingAdds() {
-        mUserRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    User user = child.getValue(User.class);
-                    if (user.getId().equals( mAuth.getCurrentUser().getUid())) {
-                        mCurrentQuota = user.getAddQuota();
-                        Toast.makeText(MainActivity.this, "Quota updated" + mCurrentQuota, Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     private void initializeDatabaseReference() {
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
-        mUserRef = FirebaseDatabase.getInstance().getReference("Users");
     }
 
     private void checkGPSConnection() {
-        if(!LocationUtils.isLocationEnabled()){
+        if (!LocationUtils.isLocationEnabled()) {
             buildErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
         }
     }
 
     private void checkInternetConnection() {
-        if(!NetworkUtils.isConnected()){
+        if (!NetworkUtils.isConnected()) {
             buildErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
         }
     }
@@ -209,9 +186,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
                 //mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED
+
                 if (true) {
                     if (mAuth.getCurrentUser() != null) {
-                        showAddShopDialog(mCurrentLocation);
+                        checkIfAllowedToAdd();
                     } else {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
@@ -225,6 +203,52 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         // cardview for shop details
         initUIShopDetails();
 
+    }
+
+    private void checkIfAllowedToAdd() {
+
+        final ArrayList<StoreMarker> addedShopsToday = new ArrayList<>();
+        //filter data based on logged in user
+        Query query = mStoreRef.orderByChild("createdBy").equalTo(mAuth.getCurrentUser().getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                    StoreMarker store = markerSnapshot.getValue(StoreMarker.class);
+                    Date createdAt = new Date(store.getCreatedAt());
+                    long now = new Date().getTime();
+                    Date nowDate = new Date(now);
+
+                    if (isSameDay(createdAt, nowDate)) {
+                        addedShopsToday.add(store);
+                    }
+                }
+
+                if (addedShopsToday.size() <= ADD_SHOP_LIMIT) {
+                    showAddShopDialog(mCurrentLocation);
+                } else {
+                    buildErrorDialog(getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private boolean isSameDay(Date day1, Date day2) {
+
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(day1);
+        cal2.setTime(day2);
+        boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 
     private void initUIShopDetails() {
@@ -294,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                                 zoomToCurrentLocation();
                                 break;
                             default:
-                                finish();
+                                dialog.dismiss();
                                 break;
                         }
                     }
@@ -471,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         getMapBounds();
         setMyLocationEnabled();
         setOnCameraChangeListener();
-        if(mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED){
+        if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED) {
             displayFirebaseMarkers();
         }
 
@@ -533,14 +557,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onCameraIdle() {
                 setZoomLevel();
-                if(mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED){
+                if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED) {
                     mMap.clear();
                     getMapBounds();
                     displayFirebaseMarkers();
                     onNewMarkerAdded();
-                }else{
+                } else {
                     //first run only
-                    if(mCurrentZoomLevel != 2){
+                    if (mCurrentZoomLevel != 2) {
                         buildErrorDialog("Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
                     }
                 }
@@ -577,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Location location = LocationServices.FusedLocationApi.getLastLocation(
                         mGoogleApiClient);
-                if(location != null){
+                if (location != null) {
                     mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     animateToCurrentLocation();
                 }
