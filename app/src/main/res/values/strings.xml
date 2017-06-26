@@ -55,8 +55,6 @@
     <string name="popup_shop_limit_error_title">"Limit reached"</string>
     <string name="popup_shop_limit_error_text">You have reached your daily add limit. Come back again tomorrow to add more shops.</string>
 
-
-
     <!--add shop popup start-->
 
     <string name="popup_add_shop_title">Add shop</string>
@@ -79,5 +77,19 @@
     <string name="nonstop_label">nonstop</string>
 
     <!--add shop popup end-->
+
+    <!--report shop popup start-->
+
+    <string name="popup_report_shop_title">Report shop</string>
+    <string name="popup_report_question">What would you like to report?</string>
+    <string name="popup_report_location">The shop is not here</string>
+    <string name="popup_report_247_yes">The shop is open 24/7</string>
+    <string name="popup_report_247_no">The shop is not open 24/7</string>
+    <string name="popup_report_credit_card_yes">Credit cards are accepted</string>
+    <string name="popup_report_credit_card_no">Credit cards are not accepted</string>
+    <string name="popup_report_tickets_yes">Meal tickets are accepted</string>
+    <string name="popup_report_tickets_no">Meal tickets are not accepted</string>
+
+    <!--report shop popup end-->
 
 </resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_report_question"/>
+
+    <Button
+        android:id="@+id/button_report_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_report_location"/>
+
+    <Button
+        android:id="@+id/button_report_247"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_report_247_yes"/>
+
+    <Button
+        android:id="@+id/button_report_pos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_report_credit_card_yes"/>
+
+    <Button
+        android:id="@+id/button_report_tickets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_report_tickets_yes"/>
+
+
+</LinearLayout>
