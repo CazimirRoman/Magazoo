@@ -74,6 +74,7 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.model.StoreMarker;
+import magazoo.magazine.langa.tine.model.StoreReport;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -104,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
-    private LatLng mCurrentOpenShop;
+    private LatLng mCurrentOpenShopLatLng;
+    private StoreMarker mCurrentOpenShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mFilteredMarkers;
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase();
+                writeReportToDatabase(mCurrentOpenShop);
             }
         });
 
@@ -315,11 +317,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
 
-    private void writeReportToDatabase() {
+    private void writeReportToDatabase(final StoreMarker shop) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                StoreReport reportedShop = new StoreReport(shop.getId(), true, shop.getPos(), shop.getNonstop(), shop.getTickets(), new Date().getTime(), mAuth.getCurrentUser().getUid());
+                mReportRef.push().setValue(reportedShop);
             }
 
             @Override
@@ -330,11 +334,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void navigateToShop() {
-        if (mCurrentLocation != null && mCurrentOpenShop != null) {
+        if (mCurrentLocation != null && mCurrentOpenShopLatLng != null) {
             final String navigationLink = "http://maps.google.com/maps?saddr="
                     .concat(String.valueOf(mCurrentLocation.latitude)).concat(", ").concat(String.valueOf(mCurrentLocation.longitude))
-                    .concat("&daddr=").concat(String.valueOf(mCurrentOpenShop.latitude)).concat(", ")
-                    .concat(String.valueOf(mCurrentOpenShop.longitude));
+                    .concat("&daddr=").concat(String.valueOf(mCurrentOpenShopLatLng.latitude)).concat(", ")
+                    .concat(String.valueOf(mCurrentOpenShopLatLng.longitude));
 
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                     Uri.parse(navigationLink));
@@ -567,7 +571,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void showShopDetails(StoreMarker d) {
 
-        mCurrentOpenShop = new LatLng(d.getLat(), d.getLon());
+        mCurrentOpenShop = d;
+        mCurrentOpenShopLatLng = new LatLng(d.getLat(), d.getLon());
         mShopTypeLabel.setText(d.getType());
 
         if (d.getNonstop()) {
