@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
     private DatabaseReference mStoreRef;
+    private DatabaseReference mReportRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void initializeDatabaseReference() {
         mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+        mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
     }
 
     private void checkGPSConnection() {
@@ -259,11 +261,70 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mTicketsLabel = (TextView) mShopDetails.findViewById(R.id.tickets_label);
 
         ImageButton buttonNavigate = (ImageButton) mShopDetails.findViewById(R.id.button_navigate);
+        ImageButton buttonReport = (ImageButton) mShopDetails.findViewById(R.id.button_report);
 
         buttonNavigate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 navigateToShop();
+            }
+        });
+
+        buttonReport.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReportPopup();
+            }
+        });
+    }
+
+    private void showReportPopup() {
+
+        final MaterialDialog dialog = buildDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
+        Button report_location = (Button) dialog.findViewById(R.id.button_report_location);
+        Button report_247 = (Button) dialog.findViewById(R.id.button_report_247);
+        Button report_pos = (Button) dialog.findViewById(R.id.button_report_pos);
+        Button report_tickets = (Button) dialog.findViewById(R.id.button_report_tickets);
+
+        if(mNonStopLabel.getVisibility() == View.GONE){
+            report_247.setText(getString(R.string.popup_report_247_yes));
+        }else{
+            report_247.setText(getString(R.string.popup_report_247_no));
+        }
+
+        if(mPosLabel.getVisibility() == View.GONE){
+            report_pos.setText(getString(R.string.popup_report_credit_card_yes));
+        }else{
+            report_pos.setText(getString(R.string.popup_report_credit_card_no));
+        }
+
+        if(mTicketsLabel.getVisibility() == View.GONE){
+            report_tickets.setText(getString(R.string.popup_report_tickets_yes));
+        }else{
+            report_tickets.setText(getString(R.string.popup_report_tickets_no));
+        }
+
+        report_location.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeReportToDatabase();
+            }
+        });
+
+
+
+    }
+
+    private void writeReportToDatabase() {
+        mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -293,8 +354,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         return new MaterialDialog.Builder(this)
                 .title(title)
-                .customView(layout, true)
-                .cancelable(false);
+                .customView(layout, true);
     }
 
     private MaterialDialog.Builder buildErrorDialog(String title, String content, final int errorType) {
@@ -482,11 +542,15 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
 
-                for (StoreMarker d : mFilteredMarkers) {
-                    if (d.getId() != null && d.getId().contains(marker.getTitle())) {
-                        showShopDetails(d);
+                mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_DESIRED)));
+                if(mShopDetails.getVisibility() == View.GONE){
+                    for (StoreMarker d : mFilteredMarkers) {
+                        if (d.getId() != null && d.getId().contains(marker.getTitle())) {
+                            showShopDetails(d);
+                        }
                     }
                 }
+
                 return true;
             }
         });
