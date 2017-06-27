@@ -74,6 +74,7 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.model.StoreMarker;
+import magazoo.magazine.langa.tine.model.StoreReport;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
@@ -94,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final int ERROR_PERMISSION = 670;
     private static final int ERROR_MAX_ZOOM = 109;
     private static final int ERROR_LIMIT = 643;
+    private static final String REPORT_LOCATION = "location";
+    private static final String REPORT_POS = "pos";
+    private static final String REPORT_247 = "nonstop";
+    private static final String REPORT_TICKETS = "tickets";
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
@@ -104,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
-    private LatLng mCurrentOpenShop;
+    private LatLng mCurrentOpenShopLatLng;
+    private StoreMarker mCurrentOpenShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mFilteredMarkers;
@@ -273,7 +279,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         buttonReport.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showReportPopup();
+                if (mAuth.getCurrentUser() != null) {
+                    showReportPopup();
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
             }
         });
     }
@@ -286,40 +297,70 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         Button report_pos = (Button) dialog.findViewById(R.id.button_report_pos);
         Button report_tickets = (Button) dialog.findViewById(R.id.button_report_tickets);
 
-        if(mNonStopLabel.getVisibility() == View.GONE){
+        if (mNonStopLabel.getVisibility() == View.GONE) {
             report_247.setText(getString(R.string.popup_report_247_yes));
-        }else{
+        } else {
             report_247.setText(getString(R.string.popup_report_247_no));
         }
 
-        if(mPosLabel.getVisibility() == View.GONE){
+        if (mPosLabel.getVisibility() == View.GONE) {
             report_pos.setText(getString(R.string.popup_report_credit_card_yes));
-        }else{
+        } else {
             report_pos.setText(getString(R.string.popup_report_credit_card_no));
         }
 
-        if(mTicketsLabel.getVisibility() == View.GONE){
+        if (mTicketsLabel.getVisibility() == View.GONE) {
             report_tickets.setText(getString(R.string.popup_report_tickets_yes));
-        }else{
+        } else {
             report_tickets.setText(getString(R.string.popup_report_tickets_no));
         }
 
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase();
+                writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+                closeDialog(dialog);
             }
         });
 
+        report_247.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
+                closeDialog(dialog);
+            }
+        });
 
+        report_pos.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
+                closeDialog(dialog);
+            }
+        });
+
+        report_tickets.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
+                closeDialog(dialog);
+            }
+        });
 
     }
 
-    private void writeReportToDatabase() {
+    private void closeDialog(MaterialDialog dialog) {
+        dialog.dismiss();
+    }
+
+    private void writeReportToDatabase(final StoreMarker shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                {
+                    StoreReport reportedShop = new StoreReport(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
+                    mReportRef.push().setValue(reportedShop);
+                }
             }
 
             @Override
@@ -330,11 +371,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void navigateToShop() {
-        if (mCurrentLocation != null && mCurrentOpenShop != null) {
+        if (mCurrentLocation != null && mCurrentOpenShopLatLng != null) {
             final String navigationLink = "http://maps.google.com/maps?saddr="
                     .concat(String.valueOf(mCurrentLocation.latitude)).concat(", ").concat(String.valueOf(mCurrentLocation.longitude))
-                    .concat("&daddr=").concat(String.valueOf(mCurrentOpenShop.latitude)).concat(", ")
-                    .concat(String.valueOf(mCurrentOpenShop.longitude));
+                    .concat("&daddr=").concat(String.valueOf(mCurrentOpenShopLatLng.latitude)).concat(", ")
+                    .concat(String.valueOf(mCurrentOpenShopLatLng.longitude));
 
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                     Uri.parse(navigationLink));
@@ -543,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public boolean onMarkerClick(Marker marker) {
 
                 mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_DESIRED)));
-                if(mShopDetails.getVisibility() == View.GONE){
+                if (mShopDetails.getVisibility() == View.GONE) {
                     for (StoreMarker d : mFilteredMarkers) {
                         if (d.getId() != null && d.getId().contains(marker.getTitle())) {
                             showShopDetails(d);
@@ -567,7 +608,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void showShopDetails(StoreMarker d) {
 
-        mCurrentOpenShop = new LatLng(d.getLat(), d.getLon());
+        mCurrentOpenShop = d;
+        mCurrentOpenShopLatLng = new LatLng(d.getLat(), d.getLon());
         mShopTypeLabel.setText(d.getType());
 
         if (d.getNonstop()) {
