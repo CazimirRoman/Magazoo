@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final int ACCURACY_DESIRED = 8;
     private static final int ZOOM_LEVEL_DESIRED = 15;
     private static final int ADD_SHOP_LIMIT = 5;
+    private static final int REPORT_SHOP_LIMIT = 3;
     private static final int ERROR_ACCURACY = 567;
     private static final int ERROR_INTERNET = 876;
     private static final int ERROR_LOCATION = 159;
@@ -248,6 +249,41 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         });
     }
 
+    private void checkIfAllowedToReport() {
+
+        final ArrayList<StoreReport> reportsToday = new ArrayList<>();
+        //filter data based on logged in user
+        Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                    StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                    Date reportedAt = new Date(report.getReportedAt());
+                    long now = new Date().getTime();
+                    Date nowDate = new Date(now);
+
+                    if (isSameDay(reportedAt, nowDate)) {
+                        reportsToday.add(report);
+                    }
+                }
+
+                if (reportsToday.size() <= REPORT_SHOP_LIMIT) {
+                    showReportPopup();
+                } else {
+                    buildErrorDialog(getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private boolean isSameDay(Date day1, Date day2) {
 
         Calendar cal1 = Calendar.getInstance();
@@ -280,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
                 if (mAuth.getCurrentUser() != null) {
-                    showReportPopup();
+                    checkIfAllowedToReport();
                 } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
