@@ -90,6 +90,9 @@
     <string name="popup_report_tickets_yes">Meal tickets are accepted</string>
     <string name="popup_report_tickets_no">Meal tickets are not accepted</string>
 
+    <string name="popup_report_limit_error_title">"Limit reached"</string>
+    <string name="popup_report_limit_error_text">You have reached your daily report limit.</string>
+
     <!--report shop popup end-->
 
 </resources>
