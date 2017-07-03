@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private StoreMarker mCurrentOpenShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
-    private ArrayList<StoreMarker> mFilteredMarkers;
+    private ArrayList<StoreMarker> mMarkersInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
@@ -386,6 +386,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void closeDialog(MaterialDialog dialog) {
+        //TODO: need to find a way to update the cardview without closing it
+        mShopDetails.setVisibility(View.GONE);
         dialog.dismiss();
     }
 
@@ -502,23 +504,23 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mFilteredMarkers = new ArrayList<>();
+                mMarkersInBounds = new ArrayList<>();
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
                     //update model with id from firebase
                     marker.setId(markerSnapshot.getKey());
                     if (mBounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
-                        mFilteredMarkers.add(marker);
+                        mMarkersInBounds.add(marker);
                     }
                 }
 
                 mMap.clear();
 
-                for (int i = 0; i < mFilteredMarkers.size(); i++) {
+                for (int i = 0; i < mMarkersInBounds.size(); i++) {
                     mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(mFilteredMarkers.get(i).getLat(), mFilteredMarkers.get(i).getLon()))
-                            .title(mFilteredMarkers.get(i).getId()));
+                            .position(new LatLng(mMarkersInBounds.get(i).getLat(), mMarkersInBounds.get(i).getLon()))
+                            .title(mMarkersInBounds.get(i).getId()));
                 }
             }
 
@@ -621,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                 mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_DESIRED)));
                 if (mShopDetails.getVisibility() == View.GONE) {
-                    for (StoreMarker d : mFilteredMarkers) {
+                    for (StoreMarker d : mMarkersInBounds) {
                         if (d.getId() != null && d.getId().contains(marker.getTitle())) {
                             showShopDetails(d);
                         }
