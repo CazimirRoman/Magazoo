@@ -93,6 +93,10 @@
     <string name="popup_report_limit_error_title">"Limit reached"</string>
     <string name="popup_report_limit_error_text">You have reached your daily report limit.</string>
 
+    <string name="popup_location_report_duplicate_error_title">Duplicate location report</string>
+    <string name="popup_location_report_duplicate_error_text">You have already reported the location on this shop. Thank you!</string>
+
+
     <!--report shop popup end-->
 
 </resources>

@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
     private StoreMarker mCurrentOpenShop;
+    private StoreReport mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mMarkersInBounds;
@@ -354,8 +355,57 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+
+                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
+
+                //TODO: check internet connection
+                if (!isDuplicateLocationReport()){
+                    writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+                }else{
+                    buildErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
+                }
+
                 closeDialog(dialog);
+            }
+
+            private boolean isDuplicateLocationReport() {
+                //TODO: fix this! one element array
+                final boolean[] isDuplicate = {false};
+                final ArrayList<StoreReport> reportedToday = new ArrayList<>();
+
+                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                            StoreReport store = markerSnapshot.getValue(StoreReport.class);
+                            Date createdAt = new Date(store.getReportedAt());
+                            long now = new Date().getTime();
+                            Date nowDate = new Date(now);
+
+                            //add shops reported today to array
+                            if (isSameDay(createdAt, nowDate)) {
+                                reportedToday.add(store);
+                            }
+                        }
+
+                        if (reportedToday.contains(mCurrentReportedShop)) {
+                            int index = reportedToday.indexOf(mCurrentReportedShop);
+                            if (reportedToday.get(index).getRegards().equals("location")) {
+                                isDuplicate[0] = true;
+                            }
+                        };
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                return isDuplicate[0];
             }
         });
 
