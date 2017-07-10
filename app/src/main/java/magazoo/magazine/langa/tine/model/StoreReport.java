@@ -58,4 +58,18 @@ public class StoreReport {
     public void setReportedAt(long reportedAt) {
         this.reportedAt = reportedAt;
     }
+
+    @Override
+    public boolean equals(Object o){
+      if(o == this) return true;
+        if(!(o instanceof StoreReport)){
+            return false;
+        }
+
+        StoreReport report = (StoreReport) o;
+
+        return report.getShopId().equals(shopId) && report.getReportedBy().equals(reportedBy)
+                && report.getRegards().equals(regards) && report.isHowisit() == howisit;
+    }
 }
+

@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
     private StoreMarker mCurrentOpenShop;
+    private StoreReport mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
     private ArrayList<StoreMarker> mMarkersInBounds;
@@ -354,32 +355,166 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+
+                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
+
+                checkIfDuplicateLocationReport();
+
                 closeDialog(dialog);
             }
+
+            private void checkIfDuplicateLocationReport() {
+                final ArrayList<StoreReport> locationReports = new ArrayList<>();
+
+                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            if(report.getRegards().equals("location")){
+                                locationReports.add(report);
+                            }
+                        }
+
+                        if (!locationReports.contains(mCurrentReportedShop)) {
+                            int index = locationReports.indexOf(mCurrentReportedShop);
+                            writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+                        }else{
+                            buildErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+
         });
 
         report_247.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
+
+                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                checkIfDuplicate247Report();
                 closeDialog(dialog);
             }
+
+            private void checkIfDuplicate247Report() {
+                final ArrayList<StoreReport> nonStopReports = new ArrayList<>();
+
+                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            if(report.getRegards().equals("nonstop")){
+                                nonStopReports.add(report);
+                            }
+                        }
+
+                        if (!nonStopReports.contains(mCurrentReportedShop)) {
+                            writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
+                        }else{
+                            buildErrorDialog(getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+
         });
 
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
+                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                checkIfDuplicatePosReport();
                 closeDialog(dialog);
             }
+
+            private void checkIfDuplicatePosReport() {
+                final ArrayList<StoreReport> posReports = new ArrayList<>();
+
+                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            if(report.getRegards().equals("pos")){
+                                posReports.add(report);
+                            }
+                        }
+
+                        if (!posReports.contains(mCurrentReportedShop)) {
+                            writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
+                        }else{
+                            buildErrorDialog(getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
         });
 
         report_tickets.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
+                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                checkIfDuplicateTicketsReport();
                 closeDialog(dialog);
+            }
+
+            private void checkIfDuplicateTicketsReport() {
+                final ArrayList<StoreReport> ticketsReports = new ArrayList<>();
+
+                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            if(report.getRegards().equals("tickets")){
+                                ticketsReports.add(report);
+                            }
+                        }
+
+                        if (!ticketsReports.contains(mCurrentReportedShop)) {
+                            writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
+                        }else{
+                            buildErrorDialog(getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
