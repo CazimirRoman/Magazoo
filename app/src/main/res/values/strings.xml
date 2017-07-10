@@ -96,6 +96,14 @@
     <string name="popup_location_report_duplicate_error_title">Duplicate location report</string>
     <string name="popup_location_report_duplicate_error_text">You have already reported the location on this shop. Thank you!</string>
 
+    <string name="popup_nonstop_report_duplicate_error_title">Duplicate nonstop report</string>
+    <string name="popup_nonstop_report_duplicate_error_text">You have already reported the nonstop property for this shop. Thank you!</string>
+
+    <string name="popup_pos_report_duplicate_error_title">Duplicate POS report</string>
+    <string name="popup_pos_report_duplicate_error_text">You have already reported the POS property for this shop. Thank you!</string>
+
+    <string name="popup_tickets_report_duplicate_error_title">Duplicate POS report</string>
+    <string name="popup_tickets_report_duplicate_error_text">You have already reported the POS property for this shop. Thank you!</string>
 
     <!--report shop popup end-->
 
