@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //if user authenticated via Firebase
-        if (mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
@@ -125,9 +125,6 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the mAuth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
                                 progressBar.setVisibility(View.GONE);
                                 if (!task.isSuccessful()) {
                                     // there was an error
@@ -137,9 +134,16 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    if (mAuth.getCurrentUser().isEmailVerified()) {
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }else{
+                                        Toast.makeText(LoginActivity.this, getString(R.string.check_email), Toast.LENGTH_LONG).show();
+
+                                    }
+
                                 }
                             }
                         });
