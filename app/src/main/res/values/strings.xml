@@ -68,10 +68,9 @@
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
     <string name="popup_add_shop_error">Please select shop type</string>
-    <string name="agree">Ok</string>
+    <string name="ok">OK</string>
     <string name="nonstop">24/7</string>
     <string name="pos">credit cards accepted</string>
-    <string name="shop_type">Magazin de cartier</string>
     <string name="enter_shop_description">Enter shop description</string>
     <string name="pos_label">pos</string>
     <string name="tickets_label">tickets</string>

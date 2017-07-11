@@ -244,7 +244,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     //sign out method
-    public void signOut() {
+    private void signOut() {
         auth.signOut();
         LoginManager.getInstance().logOut();
     }

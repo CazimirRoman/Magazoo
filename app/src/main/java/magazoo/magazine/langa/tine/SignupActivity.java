@@ -17,7 +17,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +30,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = SignupActivity.class.getSimpleName();
-    private static final int ALLOWED_QUOTA = 3;
     private EditText inputEmail, inputPassword;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
@@ -195,11 +193,5 @@ public class SignupActivity extends AppCompatActivity {
 
                     }
                 });
-    }
-
-
-    public void signOut() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
     }
 }
