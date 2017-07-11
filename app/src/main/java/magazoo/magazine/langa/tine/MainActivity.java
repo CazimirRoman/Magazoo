@@ -195,9 +195,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED
 
-                if (true) {
+                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
                     if (mAuth.getCurrentUser() != null) {
                         checkIfAllowedToAdd();
                     } else {
@@ -291,9 +290,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(day1);
         cal2.setTime(day2);
-        boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-        return sameDay;
     }
 
     private void initUIShopDetails() {
@@ -380,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         }
 
                         if (!locationReports.contains(mCurrentReportedShop)) {
-                            int index = locationReports.indexOf(mCurrentReportedShop);
                             writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
                         }else{
                             buildErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
@@ -576,7 +573,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         return new MaterialDialog.Builder(this)
                 .title(title)
                 .content(content)
-                .positiveText(R.string.agree)
+                .positiveText(R.string.ok)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -960,13 +957,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
         });
 
-        List<String> categories = new ArrayList<String>();
+        List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_type_small));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
         categories.add(getString(R.string.popup_add_shop_type_hypermarket));
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
