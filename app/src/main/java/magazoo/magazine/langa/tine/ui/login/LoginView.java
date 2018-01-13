@@ -21,6 +21,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.Login;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -73,7 +75,7 @@ public class LoginView extends BaseActivity {
         mContext = getApplicationContext();
         //getFacebookHash();
 
-        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified()) {
+        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified() || AccessToken.getCurrentAccessToken() != null) {
             startActivity(new Intent(LoginView.this, MainActivity.class));
             finish();
         }
