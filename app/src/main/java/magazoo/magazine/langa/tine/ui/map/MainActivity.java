@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         super.onCreate(savedInstanceState);
         Utils.init(this);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
         checkInternetConnection();
         checkGPSConnection();
         initializeDatabaseReference();
@@ -168,6 +169,16 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (mAuth.getCurrentUser() != null) {
+            navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
+            View headerLayout = navigationView.getHeaderView(0);
+            TextView headerText = headerLayout.findViewById(R.id.signedInUserEmail);
+            headerText.setText(mAuth.getCurrentUser().getEmail());
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
+        }
     }
 
     private void initUI() {
@@ -358,14 +369,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                             Report report = markerSnapshot.getValue(Report.class);
-                            if(report.getRegards().equals("location")){
+                            if (report.getRegards().equals("location")) {
                                 locationReports.add(report);
                             }
                         }
 
                         if (!locationReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
-                        }else{
+                        } else {
                             buildErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
@@ -400,14 +411,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                             Report report = markerSnapshot.getValue(Report.class);
-                            if(report.getRegards().equals("nonstop")){
+                            if (report.getRegards().equals("nonstop")) {
                                 nonStopReports.add(report);
                             }
                         }
 
                         if (!nonStopReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
-                        }else{
+                        } else {
                             buildErrorDialog(getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
@@ -441,14 +452,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                             Report report = markerSnapshot.getValue(Report.class);
-                            if(report.getRegards().equals("pos")){
+                            if (report.getRegards().equals("pos")) {
                                 posReports.add(report);
                             }
                         }
 
                         if (!posReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
-                        }else{
+                        } else {
                             buildErrorDialog(getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
@@ -481,14 +492,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                             Report report = markerSnapshot.getValue(Report.class);
-                            if(report.getRegards().equals("tickets")){
+                            if (report.getRegards().equals("tickets")) {
                                 ticketsReports.add(report);
                             }
                         }
 
                         if (!ticketsReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
-                        }else{
+                        } else {
                             buildErrorDialog(getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
@@ -589,6 +600,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Marker marker = dataSnapshot.getValue(Marker.class);
+                assert marker != null;
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(marker.getLat(), marker.getLon()))
                         .title(s));
@@ -657,7 +669,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     protected void onStart() {
-        mAuth = FirebaseAuth.getInstance();
         mGoogleApiClient.connect();
         super.onStart();
     }
@@ -678,46 +689,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_profile) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
             signOut();
+        } else if (id == R.id.nav_signin) {
+            startActivity(new Intent(MainActivity.this, LoginView.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -3,19 +3,8 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_profile"
+            android:visible="false"
             android:icon="@drawable/ic_menu_manage"
             android:title="Profile" />
     </group>
@@ -28,8 +17,15 @@
                 android:title="Share" />
             <item
                 android:id="@+id/nav_signout"
+                android:visible="false"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Signout" />
+
+            <item
+                android:id="@+id/nav_signin"
+                android:visible="false"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Sign in" />
         </menu>
     </item>
 
