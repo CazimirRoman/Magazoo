@@ -1,6 +1,6 @@
 package magazoo.magazine.langa.tine.model;
 
-public class StoreReport {
+public class Report {
 
     private String shopId;
     private String regards;
@@ -8,10 +8,10 @@ public class StoreReport {
     private String reportedBy;
     private long reportedAt;
 
-    public StoreReport() {
+    public Report() {
     }
 
-    public StoreReport(String shopId, String regards, boolean howisit, String reportedBy, long reportedAt) {
+    public Report(String shopId, String regards, boolean howisit, String reportedBy, long reportedAt) {
         this.shopId = shopId;
         this.regards = regards;
         this.howisit = howisit;
@@ -62,11 +62,11 @@ public class StoreReport {
     @Override
     public boolean equals(Object o){
       if(o == this) return true;
-        if(!(o instanceof StoreReport)){
+        if(!(o instanceof Report)){
             return false;
         }
 
-        StoreReport report = (StoreReport) o;
+        Report report = (Report) o;
 
         return report.getShopId().equals(shopId) && report.getReportedBy().equals(reportedBy)
                 && report.getRegards().equals(regards) && report.isHowisit() == howisit;

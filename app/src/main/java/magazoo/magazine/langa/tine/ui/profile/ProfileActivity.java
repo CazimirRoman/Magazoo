@@ -1,9 +1,8 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileActivity extends AppCompatActivity {
+import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.ui.login.LoginActivity;
+import magazoo.magazine.langa.tine.ui.login.SignupActivity;
+import magazoo.magazine.langa.tine.base.BaseActivity;
+
+public class ProfileActivity extends BaseActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
             changeEmail, changePassword, sendEmail, remove, signOut;
@@ -30,7 +34,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
@@ -241,6 +244,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.activity_profile;
     }
 
     //sign out method

@@ -1,4 +1,4 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +26,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.ui.map.MainActivity;
+import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
 
 public class SignupActivity extends AppCompatActivity {
 

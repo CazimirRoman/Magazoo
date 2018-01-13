@@ -1,9 +1,8 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +25,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity {
+import magazoo.magazine.langa.tine.ui.map.MainActivity;
+import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
+import magazoo.magazine.langa.tine.base.BaseActivity;
+
+public class LoginActivity extends BaseActivity {
 
     private EditText inputEmail, inputPassword;
     private FirebaseAuth mAuth;
@@ -37,11 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         mCallbackManager = CallbackManager.Factory.create();
-
         //Get Firebase mAuth instance
         mAuth = FirebaseAuth.getInstance();
 
@@ -50,9 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
-
-        // set the view now
-        setContentView(R.layout.activity_login);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
 
-                                    }else{
+                                    } else {
                                         Toast.makeText(LoginActivity.this, getString(R.string.check_email), Toast.LENGTH_LONG).show();
 
                                     }
@@ -157,6 +153,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.activity_login;
     }
 
     @Override
