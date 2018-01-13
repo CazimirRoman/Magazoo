@@ -1,9 +1,8 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileActivity extends AppCompatActivity {
+import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.ui.login.LoginView;
+import magazoo.magazine.langa.tine.ui.login.RegisterView;
+import magazoo.magazine.langa.tine.base.BaseActivity;
+
+public class ProfileActivity extends BaseActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
             changeEmail, changePassword, sendEmail, remove, signOut;
@@ -31,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
@@ -49,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                    startActivity(new Intent(ProfileActivity.this, LoginView.class));
                     finish();
                 }
             }
@@ -67,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         oldEmail = (EditText) findViewById(R.id.old_email);
         newEmail = (EditText) findViewById(R.id.new_email);
-        password = (EditText) findViewById(R.id.password);
+        password = (EditText) findViewById(R.id.etPassword);
         newPassword = (EditText) findViewById(R.id.newPassword);
 
         oldEmail.setVisibility(View.GONE);
@@ -79,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
         sendEmail.setVisibility(View.GONE);
         remove.setVisibility(View.GONE);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
 
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
@@ -221,7 +224,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         LoginManager.getInstance().logOut();
                                         Toast.makeText(ProfileActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(ProfileActivity.this, SignupActivity.class));
+                                        startActivity(new Intent(ProfileActivity.this, RegisterView.class));
                                         finish();
                                         progressBar.setVisibility(View.GONE);
                                     } else {

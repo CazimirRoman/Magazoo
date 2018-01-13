@@ -6,7 +6,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_sign_in_short">Register</string>
+
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
@@ -22,6 +22,7 @@
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
+    <string name="btn_register">Register</string>
     <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
@@ -104,6 +105,13 @@
 
     <string name="popup_tickets_report_duplicate_error_title">Duplicate POS report</string>
     <string name="popup_tickets_report_duplicate_error_text">You have already reported the POS property for this shop. Thank you!</string>
+    <string name="email_missing">Enter email address!</string>
+    <string name="email_invalid">Not a valid email. Please check!</string>
+    <string name="password_missing">Enter password!</string>
+    <string name="login_failed">Login failed! Please check your email or password!</string>
+    <string name="no_internet">No internet</string>
+    <string name="authentication_success">Authentication succeeded.</string>
+    <string name="registration_failed">Registration failed</string>
 
     <!--report shop popup end-->
 

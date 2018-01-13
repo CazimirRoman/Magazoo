@@ -1,4 +1,4 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.profile;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import magazoo.magazine.langa.tine.R;
+
 public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText inputEmail;
@@ -26,10 +28,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        btnReset = (Button) findViewById(R.id.btn_reset_password);
+        inputEmail = (EditText) findViewById(R.id.etEmail);
+        btnReset = (Button) findViewById(R.id.btnForgotPassword);
         btnBack = (Button) findViewById(R.id.btn_back);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
 
         auth = FirebaseAuth.getInstance();
 

@@ -1,4 +1,4 @@
-package magazoo.magazine.langa.tine;
+package magazoo.magazine.langa.tine.ui.map;
 
 import android.Manifest.permission;
 import android.content.Intent;
@@ -56,7 +56,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -73,33 +72,20 @@ import java.util.Date;
 import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
-import magazoo.magazine.langa.tine.model.StoreMarker;
-import magazoo.magazine.langa.tine.model.StoreReport;
+
+import magazoo.magazine.langa.tine.ui.login.LoginView;
+import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
+import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.constants.Constants;
+import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Report;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Constants {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String ID_PLACEHOLDER = "check model property for id";
-    private static final int MY_LOCATION_REQUEST_CODE = 523;
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
-    private static final int ACCURACY_DESIRED = 8;
-    private static final int ZOOM_LEVEL_DESIRED = 15;
-    private static final int ADD_SHOP_LIMIT = 5;
-    private static final int REPORT_SHOP_LIMIT = 3;
-    private static final int ERROR_ACCURACY = 567;
-    private static final int ERROR_INTERNET = 876;
-    private static final int ERROR_LOCATION = 159;
-    private static final int ERROR_PERMISSION = 670;
-    private static final int ERROR_MAX_ZOOM = 109;
-    private static final int ERROR_LIMIT = 643;
-    private static final String REPORT_LOCATION = "location";
-    private static final String REPORT_POS = "pos";
-    private static final String REPORT_247 = "nonstop";
-    private static final String REPORT_TICKETS = "tickets";
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
@@ -111,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
-    private StoreMarker mCurrentOpenShop;
-    private StoreReport mCurrentReportedShop;
+    private Marker mCurrentOpenShop;
+    private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
-    private ArrayList<StoreMarker> mMarkersInBounds;
+    private ArrayList<Marker> mMarkersInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
@@ -200,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     if (mAuth.getCurrentUser() != null) {
                         checkIfAllowedToAdd();
                     } else {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, LoginView.class));
                         finish();
                     }
                 } else {
@@ -216,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void checkIfAllowedToAdd() {
 
-        final ArrayList<StoreMarker> addedShopsToday = new ArrayList<>();
+        final ArrayList<Marker> addedShopsToday = new ArrayList<>();
         //filter data based on logged in user
         Query query = mStoreRef.orderByChild("createdBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -225,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    StoreMarker store = markerSnapshot.getValue(StoreMarker.class);
+                    Marker store = markerSnapshot.getValue(Marker.class);
                     Date createdAt = new Date(store.getCreatedAt());
                     long now = new Date().getTime();
                     Date nowDate = new Date(now);
@@ -251,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void checkIfAllowedToReport() {
 
-        final ArrayList<StoreReport> reportsToday = new ArrayList<>();
+        final ArrayList<Report> reportsToday = new ArrayList<>();
         //filter data based on logged in user
         Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -260,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                    Report report = markerSnapshot.getValue(Report.class);
                     Date reportedAt = new Date(report.getReportedAt());
                     long now = new Date().getTime();
                     Date nowDate = new Date(now);
@@ -317,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if (mAuth.getCurrentUser() != null) {
                     checkIfAllowedToReport();
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(MainActivity.this, LoginView.class));
                     finish();
                 }
             }
@@ -354,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
 
                 checkIfDuplicateLocationReport();
 
@@ -362,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             }
 
             private void checkIfDuplicateLocationReport() {
-                final ArrayList<StoreReport> locationReports = new ArrayList<>();
+                final ArrayList<Report> locationReports = new ArrayList<>();
 
                 Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -371,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            Report report = markerSnapshot.getValue(Report.class);
                             if(report.getRegards().equals("location")){
                                 locationReports.add(report);
                             }
@@ -398,13 +384,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
 
-                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicate247Report();
                 closeDialog(dialog);
             }
 
             private void checkIfDuplicate247Report() {
-                final ArrayList<StoreReport> nonStopReports = new ArrayList<>();
+                final ArrayList<Report> nonStopReports = new ArrayList<>();
 
                 Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -413,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            Report report = markerSnapshot.getValue(Report.class);
                             if(report.getRegards().equals("nonstop")){
                                 nonStopReports.add(report);
                             }
@@ -439,13 +425,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicatePosReport();
                 closeDialog(dialog);
             }
 
             private void checkIfDuplicatePosReport() {
-                final ArrayList<StoreReport> posReports = new ArrayList<>();
+                final ArrayList<Report> posReports = new ArrayList<>();
 
                 Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -454,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            Report report = markerSnapshot.getValue(Report.class);
                             if(report.getRegards().equals("pos")){
                                 posReports.add(report);
                             }
@@ -479,13 +465,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         report_tickets.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new StoreReport(mCurrentOpenShop.getId(), REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicateTicketsReport();
                 closeDialog(dialog);
             }
 
             private void checkIfDuplicateTicketsReport() {
-                final ArrayList<StoreReport> ticketsReports = new ArrayList<>();
+                final ArrayList<Report> ticketsReports = new ArrayList<>();
 
                 Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -494,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            StoreReport report = markerSnapshot.getValue(StoreReport.class);
+                            Report report = markerSnapshot.getValue(Report.class);
                             if(report.getRegards().equals("tickets")){
                                 ticketsReports.add(report);
                             }
@@ -523,12 +509,12 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         dialog.dismiss();
     }
 
-    private void writeReportToDatabase(final StoreMarker shop, final String reportTarget, final boolean howisit) {
+    private void writeReportToDatabase(final Marker shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
-                    StoreReport reportedShop = new StoreReport(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
+                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
                     mReportRef.push().setValue(reportedShop);
                 }
             }
@@ -602,7 +588,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StoreMarker marker = dataSnapshot.getValue(StoreMarker.class);
+                Marker marker = dataSnapshot.getValue(Marker.class);
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(marker.getLat(), marker.getLon()))
                         .title(s));
@@ -639,7 +625,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 mMarkersInBounds = new ArrayList<>();
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    StoreMarker marker = markerSnapshot.getValue(StoreMarker.class);
+                    Marker marker = markerSnapshot.getValue(Marker.class);
                     //update model with id from firebase
                     marker.setId(markerSnapshot.getKey());
                     if (mBounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
@@ -665,7 +651,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
 
-    private void addMarkerToFirebase(StoreMarker markerToAdd) {
+    private void addMarkerToFirebase(Marker markerToAdd) {
         mStoreRef.push().setValue(markerToAdd);
     }
 
@@ -742,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        startActivity(new Intent(MainActivity.this, LoginView.class));
         finish();
 
     }
@@ -751,11 +737,11 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            public boolean onMarkerClick(Marker marker) {
+            public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
 
                 mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_DESIRED)));
                 if (mShopDetails.getVisibility() == View.GONE) {
-                    for (StoreMarker d : mMarkersInBounds) {
+                    for (Marker d : mMarkersInBounds) {
                         if (d.getId() != null && d.getId().contains(marker.getTitle())) {
                             showShopDetails(d);
                         }
@@ -776,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
 
-    private void showShopDetails(StoreMarker d) {
+    private void showShopDetails(Marker d) {
 
         mCurrentOpenShop = d;
         mCurrentOpenShopLatLng = new LatLng(d.getLat(), d.getLon());
@@ -983,7 +969,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                    addMarkerToFirebase(new StoreMarker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
+                    addMarkerToFirebase(new Marker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
