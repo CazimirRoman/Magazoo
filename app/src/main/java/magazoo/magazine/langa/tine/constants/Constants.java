@@ -9,7 +9,7 @@ public interface Constants {
     int ACCURACY_DESIRED = 8;
     int ZOOM_LEVEL_DESIRED = 15;
     int ADD_SHOP_LIMIT = 5;
-    int REPORT_SHOP_LIMIT = 3;
+    int REPORT_SHOP_LIMIT = 5;
     int ERROR_ACCURACY = 567;
     int ERROR_INTERNET = 876;
     int ERROR_LOCATION = 159;
