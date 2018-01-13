@@ -73,7 +73,7 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
-import magazoo.magazine.langa.tine.ui.login.LoginActivity;
+import magazoo.magazine.langa.tine.ui.login.LoginView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.constants.Constants;
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                     if (mAuth.getCurrentUser() != null) {
                         checkIfAllowedToAdd();
                     } else {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, LoginView.class));
                         finish();
                     }
                 } else {
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if (mAuth.getCurrentUser() != null) {
                     checkIfAllowedToReport();
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivity(new Intent(MainActivity.this, LoginView.class));
                     finish();
                 }
             }
@@ -728,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        startActivity(new Intent(MainActivity.this, LoginView.class));
         finish();
 
     }
