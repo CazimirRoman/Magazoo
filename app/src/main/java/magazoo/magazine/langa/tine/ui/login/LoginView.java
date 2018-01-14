@@ -21,8 +21,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.Login;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,7 +38,7 @@ import butterknife.ButterKnife;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.utils.Util;
 import magazoo.magazine.langa.tine.base.BaseActivity;
-import magazoo.magazine.langa.tine.ui.map.MainActivity;
+import magazoo.magazine.langa.tine.ui.map.MapActivity;
 import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
 
 public class LoginView extends BaseActivity {
@@ -76,7 +74,7 @@ public class LoginView extends BaseActivity {
         //getFacebookHash();
 
         if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified() || AccessToken.getCurrentAccessToken() != null) {
-            startActivity(new Intent(LoginView.this, MainActivity.class));
+            startActivity(new Intent(LoginView.this, MapActivity.class));
             finish();
         }
     }
@@ -96,9 +94,11 @@ public class LoginView extends BaseActivity {
 
                 if (isFormDataValid(email, password)) {
                     logInUser(email, password);
+                }else{
+                    progress.setVisibility(View.GONE);
                 }
 
-                progress.setVisibility(View.GONE);
+
             }
         });
 
@@ -121,7 +121,7 @@ public class LoginView extends BaseActivity {
         btnSkip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginView.this, MainActivity.class));
+                startActivity(new Intent(LoginView.this, MapActivity.class));
                 finish();
             }
         });
@@ -160,12 +160,11 @@ public class LoginView extends BaseActivity {
                     .addOnCompleteListener(LoginView.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            progress.setVisibility(View.GONE);
                             if (!task.isSuccessful()) {
                                 Toast.makeText(mContext, R.string.login_failed, Toast.LENGTH_LONG).show();
                             } else {
                                 if (mAuthManager.getCurrentUser().isEmailVerified()) {
-                                    Intent intent = new Intent(LoginView.this, MainActivity.class);
+                                    Intent intent = new Intent(LoginView.this, MapActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
@@ -174,14 +173,15 @@ public class LoginView extends BaseActivity {
                                 }
 
                             }
+
+                            progress.setVisibility(View.GONE);
                         }
                     });
 
         } else {
             Toast.makeText(mContext, "No internet", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
         }
-
-        progress.setVisibility(View.GONE);
     }
 
     protected void configureFacebookLogin() {
@@ -233,7 +233,7 @@ public class LoginView extends BaseActivity {
                             Toast.makeText(mContext, R.string.authentication_success,
                                     Toast.LENGTH_SHORT).show();
 
-                            startActivity(new Intent(LoginView.this, MainActivity.class));
+                            startActivity(new Intent(LoginView.this, MapActivity.class));
                             finish();
 
                         } else {

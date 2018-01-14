@@ -40,12 +40,11 @@ public class RegisterView extends LoginView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mCallbackManager = CallbackManager.Factory.create();
         mAuthManager = FirebaseAuth.getInstance();
         initActionButtons();
-
     }
 
     @Override
@@ -66,8 +65,6 @@ public class RegisterView extends LoginView {
                 if (isFormDataValid(email, password)) {
                     registerUser(email, password);
                 }
-
-                progress.setVisibility(View.GONE);
             }
         });
 
@@ -99,6 +96,7 @@ public class RegisterView extends LoginView {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(RegisterView.this,
                                                         "Verification email sent to " + user.getEmail(),
@@ -117,14 +115,15 @@ public class RegisterView extends LoginView {
                             finish();
                         }
                     }
+
+                    progress.setVisibility(View.GONE);
                 }
             });
 
         } else {
             Toast.makeText(mContext, R.string.no_internet, Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
         }
-
-        progress.setVisibility(View.GONE);
     }
 
     @Override

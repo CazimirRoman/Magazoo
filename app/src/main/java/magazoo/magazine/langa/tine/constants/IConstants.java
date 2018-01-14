@@ -1,6 +1,6 @@
 package magazoo.magazine.langa.tine.constants;
 
-public interface Constants {
+public interface IConstants {
 
     String ID_PLACEHOLDER = "check model property for id";
     int MY_LOCATION_REQUEST_CODE = 523;
