@@ -113,6 +113,10 @@
     <string name="authentication_success">Authentication succeeded.</string>
     <string name="registration_failed">Registration failed</string>
     <string name="welcome">Welcome to Magazoo</string>
+    <string name="reminder_to_add">You have not added any shop lately! Please add.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--report shop popup end-->
 

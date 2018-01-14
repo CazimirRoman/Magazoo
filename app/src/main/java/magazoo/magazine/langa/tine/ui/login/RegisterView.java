@@ -64,11 +64,14 @@ public class RegisterView extends LoginView {
 
                 if (isFormDataValid(email, password)) {
                     registerUser(email, password);
+                }else{
+                    progress.setVisibility(View.GONE);
                 }
             }
         });
 
         Button btnGoToLogin = findViewById(R.id.btnGoTo);
+        btnGoToLogin.setText(getString(R.string.btn_link_to_login));
 
         btnGoToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
