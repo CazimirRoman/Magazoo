@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.LocationUtils;
 import com.blankj.utilcode.util.NetworkUtils;
@@ -70,22 +68,25 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import magazoo.magazine.langa.tine.ui.login.LoginView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.R;
-import magazoo.magazine.langa.tine.constants.Constants;
+import magazoo.magazine.langa.tine.constants.IConstants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
+import magazoo.magazine.langa.tine.utils.OnErrorHandledListener;
+import magazoo.magazine.langa.tine.utils.Util;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, Constants {
+public class MapActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, IConstants, OnErrorHandledListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MapActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
     private FirebaseAuth mAuth;
@@ -107,18 +108,20 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private TextView mNonStopLabel;
     private TextView mPosLabel;
     private TextView mTicketsLabel;
+    private MapActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.init(this);
+        context = this;
+        Utils.init(context);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         checkInternetConnection();
         checkGPSConnection();
         initializeDatabaseReference();
         initUI();
-        setupNavigationView();
+        setupNavigationDrawer();
         setUpMap();
         setupApiClientLocation();
         createLocationRequest();
@@ -131,13 +134,13 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private void checkGPSConnection() {
         if (!LocationUtils.isLocationEnabled()) {
-            buildErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
+            Util.buildErrorDialog(context, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
         }
     }
 
     private void checkInternetConnection() {
         if (!NetworkUtils.isConnected()) {
-            buildErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
+            buildNoInternetErrorDialog();
         }
     }
 
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mapFragment.getMapAsync(this);
     }
 
-    private void setupNavigationView() {
+    private void setupNavigationDrawer() {
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -184,24 +187,30 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void initUI() {
 
         //mToolbar initialization
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         //floating button for adding shops
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
-                    if (mAuth.getCurrentUser() != null) {
-                        checkIfAllowedToAdd();
+                if (!Util.isInternetAvailable(context)) {
+
+                    if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
+                        if (mAuth.getCurrentUser() != null) {
+                            checkIfAllowedToAdd();
+                        } else {
+                            startActivity(new Intent(MapActivity.this, LoginView.class));
+                            finish();
+                        }
                     } else {
-                        startActivity(new Intent(MainActivity.this, LoginView.class));
-                        finish();
+                        Util.buildErrorDialog(context, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
                     }
+
                 } else {
-                    buildErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
+                    buildNoInternetErrorDialog();
                 }
             }
         });
@@ -209,6 +218,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         // cardview for shop details
         initUIShopDetails();
 
+    }
+
+    private void buildNoInternetErrorDialog() {
+        Util.buildErrorDialog(context, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
     }
 
     private void checkIfAllowedToAdd() {
@@ -235,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if (addedShopsToday.size() <= ADD_SHOP_LIMIT) {
                     showAddShopDialog(mCurrentLocation);
                 } else {
-                    buildErrorDialog(getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
+                    Util.buildErrorDialog(context, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
                 }
             }
 
@@ -270,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if (reportsToday.size() <= REPORT_SHOP_LIMIT) {
                     showReportPopup();
                 } else {
-                    buildErrorDialog(getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
+                    Util.buildErrorDialog(context, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
                 }
             }
 
@@ -292,14 +305,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void initUIShopDetails() {
-        mShopDetails = (CardView) findViewById(R.id.shop_details);
-        mShopTypeLabel = (TextView) mShopDetails.findViewById(R.id.shop_type_label);
-        mNonStopLabel = (TextView) mShopDetails.findViewById(R.id.nonstop_label);
-        mPosLabel = (TextView) mShopDetails.findViewById(R.id.pos_label);
-        mTicketsLabel = (TextView) mShopDetails.findViewById(R.id.tickets_label);
+        mShopDetails = findViewById(R.id.shop_details);
+        mShopTypeLabel = mShopDetails.findViewById(R.id.shop_type_label);
+        mNonStopLabel = mShopDetails.findViewById(R.id.nonstop_label);
+        mPosLabel = mShopDetails.findViewById(R.id.pos_label);
+        mTicketsLabel = mShopDetails.findViewById(R.id.tickets_label);
 
-        ImageButton buttonNavigate = (ImageButton) mShopDetails.findViewById(R.id.button_navigate);
-        ImageButton buttonReport = (ImageButton) mShopDetails.findViewById(R.id.button_report);
+        ImageButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
+        ImageButton buttonReport = mShopDetails.findViewById(R.id.button_report);
 
         buttonNavigate.setOnClickListener(new OnClickListener() {
             @Override
@@ -314,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 if (mAuth.getCurrentUser() != null) {
                     checkIfAllowedToReport();
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginView.class));
+                    startActivity(new Intent(MapActivity.this, LoginView.class));
                     finish();
                 }
             }
@@ -352,9 +365,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             public void onClick(View view) {
 
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
-
                 checkIfDuplicateLocationReport();
-
                 closeDialog(dialog);
             }
 
@@ -377,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         if (!locationReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
                         } else {
-                            buildErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildErrorDialog(context, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -419,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         if (!nonStopReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
                         } else {
-                            buildErrorDialog(getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildErrorDialog(context, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -460,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         if (!posReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
                         } else {
-                            buildErrorDialog(getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildErrorDialog(context, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -500,7 +511,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                         if (!ticketsReports.contains(mCurrentReportedShop)) {
                             writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
                         } else {
-                            buildErrorDialog(getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildErrorDialog(context, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -563,34 +574,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         return new MaterialDialog.Builder(this)
                 .title(title)
                 .customView(layout, true);
-    }
-
-    private MaterialDialog.Builder buildErrorDialog(String title, String content, final int errorType) {
-
-        return new MaterialDialog.Builder(this)
-                .title(title)
-                .content(content)
-                .positiveText(R.string.ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        switch (errorType) {
-                            case ERROR_ACCURACY:
-                                dialog.dismiss();
-                                break;
-                            case ERROR_PERMISSION:
-                                requestLocationPermissions();
-                                break;
-                            case ERROR_MAX_ZOOM:
-                                dialog.dismiss();
-                                zoomToCurrentLocation();
-                                break;
-                            default:
-                                dialog.dismiss();
-                                break;
-                        }
-                    }
-                });
     }
 
     private void onNewMarkerAdded() {
@@ -656,7 +639,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -681,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -696,17 +679,17 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            startActivity(new Intent(MapActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
             signOut();
         } else if (id == R.id.nav_signin) {
-            startActivity(new Intent(MainActivity.this, LoginView.class));
+            startActivity(new Intent(MapActivity.this, LoginView.class));
             finish();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -714,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MainActivity.this, LoginView.class));
+        startActivity(new Intent(MapActivity.this, LoginView.class));
         finish();
 
     }
@@ -804,6 +787,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+
                 setZoomLevel();
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED) {
                     mMap.clear();
@@ -813,7 +797,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
                 } else {
                     //first run only
                     if (mCurrentZoomLevel != 2) {
-                        buildErrorDialog("Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
+                        Util.buildErrorDialog(context, "Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
                     }
                 }
             }
@@ -825,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void getMapBounds() {
-        mBounds = MainActivity.this.mMap
+        mBounds = MapActivity.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -842,7 +826,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     }
 
-    private void zoomToCurrentLocation() {
+    public void zoomToCurrentLocation() {
         if (mCurrentLocation != null) {
             animateToCurrentLocation();
         } else {
@@ -861,7 +845,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
     }
 
-    private boolean requestLocationPermissions() {
+    public boolean requestLocationPermissions() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
             return true;
@@ -876,7 +860,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
-                buildErrorDialog(getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
+                Util.buildErrorDialog(context, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
             }
         }
     }
@@ -909,8 +893,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     }
 
     private void showAddShopDialog(final LatLng latlng) {
-        final MaterialDialog dialog = buildDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
 
+        final MaterialDialog dialog = buildDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
         final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.checkNonstop);
@@ -920,7 +904,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MainActivity.this, "selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivity.this, "selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
