@@ -117,6 +117,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="thanks_report">Thank you!</string>
+    <string name="details_report">Your report has been submitted! Thank you!</string>
 
     <!--report shop popup end-->
 

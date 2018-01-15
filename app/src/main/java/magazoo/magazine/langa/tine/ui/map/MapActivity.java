@@ -198,7 +198,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (mAuth.getCurrentUser() != null) {
@@ -234,7 +234,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                             finish();
                         }
                     } else {
-                        Util.buildErrorDialog(mContext, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
+                        Util.buildDialog(mContext, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
                     }
 
                 } else {
@@ -249,30 +249,28 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void buildNoInternetErrorDialog() {
-        Util.buildErrorDialog(mContext, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
+        Util.buildDialog(mContext, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
     }
 
     private void buildNoGPSErrorDialog() {
-        Util.buildErrorDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
+        Util.buildDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
     }
 
 
     private void checkIfAllowedToAdd() {
-        getShopsAddedToday(new OnGetShopsAddedTodayListener() {
+        getShopsAddedToday(new OnGetShopsFromDatabaseListener() {
             @Override
-            public void onDataFetched(ArrayList<Marker> markersAddedToday) {
-                if (markersAddedToday.size() <= ADD_SHOP_LIMIT) {
+            public void onDataFetched(ArrayList<Marker> shopsAddedToday) {
+                if (shopsAddedToday.size() <= ADD_SHOP_LIMIT) {
                     showAddShopDialog(mCurrentLocation);
                 } else {
-                    Util.buildErrorDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
+                    Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
                 }
             }
         });
-
-
     }
 
-    private void getShopsAddedToday(final OnGetShopsAddedTodayListener listener) {
+    private void getShopsAddedToday(final OnGetShopsFromDatabaseListener listener) {
 
         final ArrayList<Marker> addedShopsToday = new ArrayList<>();
         //filter data based on logged in user
@@ -294,7 +292,6 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                 }
 
                 listener.onDataFetched(addedShopsToday);
-
             }
 
             @Override
@@ -305,6 +302,20 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void checkIfAllowedToReport() {
+
+        getReportsAddedToday(new OnGetReportsFromDatabaseListener() {
+            @Override
+            public void onDataFetched(ArrayList<Report> reportsAddedToday) {
+                if (reportsAddedToday.size() <= REPORT_SHOP_LIMIT) {
+                    showReportPopup();
+                } else {
+                    Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
+                }
+            }
+        });
+    }
+
+    private void getReportsAddedToday(final OnGetReportsFromDatabaseListener listener) {
 
         final ArrayList<Report> reportsToday = new ArrayList<>();
         //filter data based on logged in user
@@ -325,11 +336,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                     }
                 }
 
-                if (reportsToday.size() <= REPORT_SHOP_LIMIT) {
-                    showReportPopup();
-                } else {
-                    Util.buildErrorDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
-                }
+                listener.onDataFetched(reportsToday);
             }
 
             @Override
@@ -337,6 +344,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
             }
         });
+
     }
 
     private void initUIShopDetails() {
@@ -371,7 +379,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     private void showReportPopup() {
 
-        final MaterialDialog dialog = buildDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
+        final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
         Button report_location = (Button) dialog.findViewById(R.id.button_report_location);
         Button report_247 = (Button) dialog.findViewById(R.id.button_report_247);
         Button report_pos = (Button) dialog.findViewById(R.id.button_report_pos);
@@ -421,9 +429,14 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                         }
 
                         if (!locationReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(mCurrentOpenShop, REPORT_LOCATION, false);
+                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
+                                @Override
+                                public void onReportWritten() {
+                                    showReportThanksPopup();
+                                }
+                            }, mCurrentOpenShop, REPORT_LOCATION, false);
                         } else {
-                            Util.buildErrorDialog(mContext, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -463,9 +476,14 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                         }
 
                         if (!nonStopReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
+                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
+                                @Override
+                                public void onReportWritten() {
+                                    showReportThanksPopup();
+                                }
+                            }, mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
                         } else {
-                            Util.buildErrorDialog(mContext, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -504,9 +522,14 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                         }
 
                         if (!posReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
+                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
+                                @Override
+                                public void onReportWritten() {
+                                    showReportThanksPopup();
+                                }
+                            }, mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
                         } else {
-                            Util.buildErrorDialog(mContext, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -544,9 +567,13 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                         }
 
                         if (!ticketsReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
+                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
+                                @Override
+                                public void onReportWritten() {
+                                    showReportThanksPopup();                                }
+                            }, mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
                         } else {
-                            Util.buildErrorDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
                         }
                     }
 
@@ -560,19 +587,24 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     }
 
+    private void showReportThanksPopup() {
+        Util.buildDialog(mContext, getString(R.string.thanks_report), getString(R.string.details_report), 0).show();
+    }
+
     private void closeDialog(MaterialDialog dialog) {
         //TODO: need to find a way to update the cardview without closing it
         mShopDetails.setVisibility(View.GONE);
         dialog.dismiss();
     }
 
-    private void writeReportToDatabase(final Marker shop, final String reportTarget, final boolean howisit) {
+    private void writeReportToDatabase(final OnReportWrittenToDatabaseListener listener, final Marker shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
                     Report reportedShop = new Report(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
                     mReportRef.push().setValue(reportedShop);
+                    listener.onReportWritten();
                 }
             }
 
@@ -581,6 +613,8 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
             }
         });
+
+
     }
 
     private void navigateToShop() {
@@ -604,7 +638,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    private MaterialDialog.Builder buildDialog(String title, int layout) {
+    private MaterialDialog.Builder buildCustomDialog(String title, int layout) {
 
         return new MaterialDialog.Builder(this)
                 .title(title)
@@ -834,7 +868,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                 } else {
                     //first run only
                     if (mCurrentZoomLevel != 2) {
-                        Util.buildErrorDialog(mContext, "Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
+                        Util.buildDialog(mContext, "Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
                     }
                 }
             }
@@ -897,7 +931,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
-                Util.buildErrorDialog(mContext, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
+                Util.buildDialog(mContext, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
             }
         }
     }
@@ -930,7 +964,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     private void showAddShopDialog(final LatLng latlng) {
 
-        final MaterialDialog dialog = buildDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
+        final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
         final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.checkNonstop);
