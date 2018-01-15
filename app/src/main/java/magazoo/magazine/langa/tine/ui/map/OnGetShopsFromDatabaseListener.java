@@ -5,6 +5,6 @@ import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.model.Marker;
 
-interface OnGetShopsAddedTodayListener {
-    void onDataFetched(ArrayList<Marker> markersAddedToday);
+interface OnGetShopsFromDatabaseListener {
+    void onDataFetched(ArrayList<Marker> shopsAddedToday);
 }

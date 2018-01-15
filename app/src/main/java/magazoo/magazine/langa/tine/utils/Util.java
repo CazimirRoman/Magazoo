@@ -37,7 +37,7 @@ public class Util implements IConstants {
         return true;
     }
 
-    public static MaterialDialog.Builder buildErrorDialog(final Context context, String title, final String content, final int errorType) {
+    public static MaterialDialog.Builder buildDialog(final Context context, String title, final String content, final int errorType) {
 
         final OnErrorHandledListener listener = (OnErrorHandledListener) context;
 
@@ -49,6 +49,7 @@ public class Util implements IConstants {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         switch (errorType) {
+
                             case ERROR_ACCURACY:
                                 dialog.dismiss();
                                 break;
