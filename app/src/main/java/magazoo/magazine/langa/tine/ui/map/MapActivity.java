@@ -132,9 +132,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     private void onboardingNeeded() {
 
-       if(isFirstRun()){
-           startTutorial();
-       }
+        if (isFirstRun()) {
+            startTutorial();
+        }
     }
 
     private void startTutorial() {
@@ -145,14 +145,14 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
         Boolean mFirstRun;
 
-            SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
-            mFirstRun = mPreferences.getBoolean(mAuth.getCurrentUser().getUid(), true);
-            if (mFirstRun) {
-                SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putBoolean(mAuth.getCurrentUser().getUid(), false);
-                editor.apply();
-                return true;
-            }
+        SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
+        mFirstRun = mPreferences.getBoolean(mAuth.getCurrentUser().getUid(), true);
+        if (mFirstRun) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putBoolean(mAuth.getCurrentUser().getUid(), false);
+            editor.apply();
+            return true;
+        }
 
         return false;
     }
@@ -572,7 +572,8 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                             writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
                                 @Override
                                 public void onReportWritten() {
-                                    showReportThanksPopup();                                }
+                                    showReportThanksPopup();
+                                }
                             }, mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
                         } else {
                             Util.buildDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
@@ -722,9 +723,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     showAddThanksPopup();
-                }else{
+                } else {
                     Toast.makeText(mContext, "A network error occured. Pleaase try again later", Toast.LENGTH_SHORT).show();
                 }
 
@@ -773,13 +774,24 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         } else if (id == R.id.nav_signin) {
             startActivity(new Intent(MapActivity.this, LoginView.class));
             finish();
-        } else if(id == R.id.nav_tutorial) {
+        } else if (id == R.id.nav_tutorial) {
             startTutorial();
+        } else if (id == R.id.nav_contact) {
+            sendContactEmail();
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sendContactEmail() {
+        Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
+        feedbackEmail.setType("text/email");
+        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {"cazimir.developer@gmail.com"});
+        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, mAuth.getCurrentUser().getEmail() + " has left a feedback");
+        startActivity(Intent.createChooser(feedbackEmail, "Send Feedback:"));
     }
 
     private void signOut() {
