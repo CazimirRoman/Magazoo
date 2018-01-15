@@ -56,6 +56,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -716,7 +718,22 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void addMarkerToFirebase(Marker markerToAdd) {
-        mStoreRef.push().setValue(markerToAdd);
+        mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if(task.isSuccessful()){
+                    showAddThanksPopup();
+                }else{
+                    Toast.makeText(mContext, "A network error occured. Pleaase try again later", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private void showAddThanksPopup() {
+        Util.buildDialog(mContext, getString(R.string.thanks_adding), getString(R.string.details_adding), 0).show();
     }
 
     @Override
