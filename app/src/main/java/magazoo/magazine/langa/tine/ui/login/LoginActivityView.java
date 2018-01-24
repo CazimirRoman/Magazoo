@@ -1,6 +1,5 @@
 package magazoo.magazine.langa.tine.ui.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -35,15 +34,18 @@ import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import magazoo.magazine.langa.tine.R;
-import magazoo.magazine.langa.tine.utils.Util;
 import magazoo.magazine.langa.tine.base.BaseActivity;
+import magazoo.magazine.langa.tine.base.IGeneralView;
+import magazoo.magazine.langa.tine.constants.Constants;
+import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivity;
 import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
+import magazoo.magazine.langa.tine.utils.Util;
+import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class LoginView extends BaseActivity {
-
-    protected Context mContext;
+public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -57,6 +59,10 @@ public class LoginView extends BaseActivity {
     Button btnSkip;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @BindView(R.id.btnAction)
+    Button btnAction;
+    @BindView(R.id.btnGoTo)
+    Button btnGoTo;
 
     private FirebaseAuth mAuthManager;
     private CallbackManager mCallbackManager;
@@ -70,61 +76,81 @@ public class LoginView extends BaseActivity {
         mCallbackManager = CallbackManager.Factory.create();
         mAuthManager = FirebaseAuth.getInstance();
         configureFacebookLogin();
-        mContext = getApplicationContext();
         //getFacebookHash();
+        checkIfAlreadyLoggedIn();
+        initActionButtonText();
+    }
 
-        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified() || AccessToken.getCurrentAccessToken() != null) {
-            startActivity(new Intent(LoginView.this, MapActivity.class));
+    @OnClick({R.id.btnAction, R.id.btnFBLogin, R.id.btnForgotPassword, R.id.btnGoTo})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnAction:
+                showProgressBar();
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+                UtilHelperClass.validateFormData(this, email, password, Constants.EMPTY_STRING_PLACEHOLDER);
+                showProgressBar();
+                break;
+            case R.id.btnFBLogin:
+
+                break;
+            case R.id.btnForgotPassword:
+                goToResetPasswordActivity();
+                break;
+            case R.id.btnGoTo:
+                startRegisterActivity();
+                break;
+        }
+    }
+
+    private void showProgressBar() {
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        progress.setVisibility(View.GONE);
+    }
+
+    private void initActionButtonText() {
+        btnAction.setText(getString(R.string.btn_login));
+    }
+
+    private void checkIfAlreadyLoggedIn() {
+        if (isLoggedInWithEmail() || isLoggedInWithFacebook()) {
+            goToMap();
             finish();
         }
     }
 
+    private void goToMap() {
+        startActivity(new Intent(LoginActivityView.this, MapActivity.class));
+    }
+
+    private boolean isLoggedInWithEmail() {
+        return mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified();
+    }
+
+    private boolean isLoggedInWithFacebook() {
+        return AccessToken.getCurrentAccessToken() != null;
+    }
+
     protected void initActionButtons() {
-
-        Button login = findViewById(R.id.btnAction);
-        login.setText(getString(R.string.btn_login));
-        login.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                progress.setVisibility(View.VISIBLE);
-
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-
-                if (isFormDataValid(email, password)) {
-                    logInUser(email, password);
-                }else{
-                    progress.setVisibility(View.GONE);
-                }
-
-
-            }
-        });
-
-        Button btnGoToRegister = findViewById(R.id.btnGoTo);
-
-        btnGoToRegister.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginView.this, RegisterView.class));
-            }
-        });
-
-        btnForgotPassword.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginView.this, ResetPasswordActivity.class));
-            }
-        });
 
         btnSkip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginView.this, MapActivity.class));
+                goToMap();
                 finish();
             }
         });
+    }
+
+    private void goToResetPasswordActivity() {
+        startActivity(new Intent(LoginActivityView.this, ResetPasswordActivity.class));
+    }
+
+    private void startRegisterActivity() {
+        startActivity(new Intent(LoginActivityView.this, RegisterActivityView.class));
     }
 
     protected boolean isFormDataValid(String email, String password) {
@@ -156,31 +182,11 @@ public class LoginView extends BaseActivity {
 
         if (Util.isInternetAvailable(mContext)) {
 
-            mAuthManager.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(LoginView.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(mContext, R.string.login_failed, Toast.LENGTH_LONG).show();
-                            } else {
-                                if (mAuthManager.getCurrentUser().isEmailVerified()) {
-                                    Intent intent = new Intent(LoginView.this, MapActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(mContext, getString(R.string.check_email), Toast.LENGTH_LONG).show();
 
-                                }
-
-                            }
-
-                            progress.setVisibility(View.GONE);
-                        }
-                    });
 
         } else {
             Toast.makeText(mContext, "No internet", Toast.LENGTH_LONG).show();
-            progress.setVisibility(View.GONE);
+            hideProgressBar();
         }
     }
 
@@ -233,7 +239,7 @@ public class LoginView extends BaseActivity {
                             Toast.makeText(mContext, R.string.authentication_success,
                                     Toast.LENGTH_SHORT).show();
 
-                            startActivity(new Intent(LoginView.this, MapActivity.class));
+                            goToMap();
                             finish();
 
                         } else {
@@ -248,23 +254,18 @@ public class LoginView extends BaseActivity {
                 });
     }
 
-    private void getFacebookHash() {
+    @Override
+    public IGeneralView getInstance() {
+        return this;
+    }
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "magazoo.magazine.langa.tine",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
+    @Override
+    public void onValidateSuccess(String email, String password) {
+        getPresenter().performLogin(email, password);
+    }
 
-        } catch (NoSuchAlgorithmException e) {
-
-        }
-
+    @Override
+    public void onValidateFail(String what) {
 
     }
 }

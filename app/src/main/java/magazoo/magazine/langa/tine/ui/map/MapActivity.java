@@ -73,7 +73,7 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
-import magazoo.magazine.langa.tine.ui.login.LoginView;
+import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.constants.IConstants;
@@ -232,7 +232,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                         if (mAuth.getCurrentUser() != null) {
                             checkIfAllowedToAdd();
                         } else {
-                            startActivity(new Intent(MapActivity.this, LoginView.class));
+                            startActivity(new Intent(MapActivity.this, LoginActivityView.class));
                             finish();
                         }
                     } else {
@@ -372,7 +372,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                 if (mAuth.getCurrentUser() != null) {
                     checkIfAllowedToReport();
                 } else {
-                    startActivity(new Intent(MapActivity.this, LoginView.class));
+                    startActivity(new Intent(MapActivity.this, LoginActivityView.class));
                     finish();
                 }
             }
@@ -772,7 +772,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         } else if (id == R.id.nav_signout) {
             signOut();
         } else if (id == R.id.nav_signin) {
-            startActivity(new Intent(MapActivity.this, LoginView.class));
+            startActivity(new Intent(MapActivity.this, LoginActivityView.class));
             finish();
         } else if (id == R.id.nav_tutorial) {
             startTutorial();
@@ -797,7 +797,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     private void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MapActivity.this, LoginView.class));
+        startActivity(new Intent(MapActivity.this, LoginActivityView.class));
         finish();
 
     }

@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.utils.Util;
 
-public class RegisterView extends LoginView {
+public class RegisterActivityView extends LoginActivityView {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -90,7 +90,7 @@ public class RegisterView extends LoginView {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progress.setVisibility(View.GONE);
                     if (!task.isSuccessful()) {
-                        Toast.makeText(RegisterView.this, "Authentication failed." + task.getException(),
+                        Toast.makeText(RegisterActivityView.this, "AuthenticationPresenter failed." + task.getException(),
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         final FirebaseUser user = mAuthManager.getCurrentUser();
@@ -101,20 +101,20 @@ public class RegisterView extends LoginView {
                                         public void onComplete(@NonNull Task<Void> task) {
 
                                             if (task.isSuccessful()) {
-                                                Toast.makeText(RegisterView.this,
+                                                Toast.makeText(RegisterActivityView.this,
                                                         "Verification email sent to " + user.getEmail(),
                                                         Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(RegisterView.this, LoginView.class));
+                                                startActivity(new Intent(RegisterActivityView.this, LoginActivityView.class));
                                                 finish();
                                             } else {
-                                                Toast.makeText(RegisterView.this,
+                                                Toast.makeText(RegisterActivityView.this,
                                                         "Failed to send verification email.",
                                                         Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                         } else {
-                            startActivity(new Intent(RegisterView.this, LoginView.class));
+                            startActivity(new Intent(RegisterActivityView.this, LoginActivityView.class));
                             finish();
                         }
                     }
