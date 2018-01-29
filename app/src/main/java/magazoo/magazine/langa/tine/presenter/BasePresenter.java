@@ -9,16 +9,19 @@ import magazoo.magazine.langa.tine.presenter.authentication.IAuthenticationPrese
 /**
  * TODO: Add a class header comment!
  */
-public class BasePresenter {
+public class BasePresenter implements IBasePresenter {
     private IGeneralView mView;
     private IAuthenticationPresenter mAuthentication;
-
     private FirebaseAuth mFirebaseAuthenticationManager;
 
     public BasePresenter(IGeneralView view) {
         mView = view;
         mAuthentication = new AuthenticationPresenter(mView);
         mFirebaseAuthenticationManager = FirebaseAuth.getInstance();
+    }
+
+    public IGeneralView getView() {
+        return mView;
     }
 
     public IAuthenticationPresenter getAuthenticationPresenter() {

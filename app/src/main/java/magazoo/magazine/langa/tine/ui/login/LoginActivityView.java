@@ -1,14 +1,10 @@
 package magazoo.magazine.langa.tine.ui.login;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -28,9 +24,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,7 +115,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         }
     }
 
-    private void goToMap() {
+    public void goToMap() {
         startActivity(new Intent(LoginActivityView.this, MapActivity.class));
     }
 
@@ -180,12 +173,12 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private void logInUser(String email, String password) {
 
-        if (Util.isInternetAvailable(mContext)) {
+        if (Util.isInternetAvailable(getContext())) {
 
 
 
         } else {
-            Toast.makeText(mContext, "No internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No internet", Toast.LENGTH_LONG).show();
             hideProgressBar();
         }
     }
@@ -207,10 +200,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
             @Override
             public void onError(FacebookException error) {
 
-                if (!Util.isInternetAvailable(mContext)) {
-                    Toast.makeText(mContext, R.string.no_internet, Toast.LENGTH_SHORT).show();
+                if (!Util.isInternetAvailable(getContext())) {
+                    Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -236,7 +229,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
-                            Toast.makeText(mContext, R.string.authentication_success,
+                            Toast.makeText(getContext(), R.string.authentication_success,
                                     Toast.LENGTH_SHORT).show();
 
                             goToMap();
@@ -245,7 +238,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                         } else {
                             // If sign in fails, display a message to the user.
 
-                            Toast.makeText(mContext, task.getException().toString(),
+                            Toast.makeText(getContext(), task.getException().toString(),
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -257,6 +250,11 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     public IGeneralView getInstance() {
         return this;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this.getActivity();
     }
 
     @Override

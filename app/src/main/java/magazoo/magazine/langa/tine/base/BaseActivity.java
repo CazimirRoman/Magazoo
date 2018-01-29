@@ -7,12 +7,13 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
+import magazoo.magazine.langa.tine.presenter.BasePresenter;
 import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Context mContext;
-    private LoginPresenter mPresenter;
+    private BasePresenter mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -20,14 +21,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getApplicationContext();
-        mPresenter = new LoginPresenter();
     }
 
     public Context getContext() {
         return mContext;
     }
 
-    public LoginPresenter getPresenter() {
+    public BasePresenter getPresenter() {
         return mPresenter;
     }
 }

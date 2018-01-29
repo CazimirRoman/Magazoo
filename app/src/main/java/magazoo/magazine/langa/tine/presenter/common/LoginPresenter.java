@@ -2,6 +2,7 @@ package magazoo.magazine.langa.tine.presenter.common;
 
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.presenter.BasePresenter;
+import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 
 public class LoginPresenter extends BasePresenter implements ICommonPresenter, OnLoginWithEmailFinishedListener {
@@ -16,11 +17,15 @@ public class LoginPresenter extends BasePresenter implements ICommonPresenter, O
 
     @Override
     public void onLoginWithEmailSuccess() {
-
+        getLoginActivityView().goToMap();
     }
 
     @Override
     public void onLoginWithEmailFailed(String error) {
 
+    }
+
+    private ILoginActivityView getLoginActivityView(){
+        return (ILoginActivityView) getView().getInstance();
     }
 }
