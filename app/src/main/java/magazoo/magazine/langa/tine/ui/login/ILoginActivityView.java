@@ -4,4 +4,5 @@ import magazoo.magazine.langa.tine.base.IGeneralView;
 
 public interface ILoginActivityView extends IGeneralView {
     void goToMap();
+    void showToast(String message);
 }

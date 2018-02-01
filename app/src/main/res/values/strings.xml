@@ -122,6 +122,7 @@
     <string name="thanks_adding">Thanks for adding</string>
     <string name="details_adding">Your shop has been added to the map!</string>
     <string name="close">Inchide</string>
+    <string name="password_minimum">Parola este prea scurta, minim 6 caractere</string>
 
     <!--report shop popup end-->
 

@@ -1,18 +1,31 @@
 package magazoo.magazine.langa.tine.presenter.common;
 
+import com.facebook.FacebookCallback;
+import com.facebook.login.LoginResult;
+
 import magazoo.magazine.langa.tine.base.IGeneralView;
-import magazoo.magazine.langa.tine.presenter.BasePresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
 import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 
-public class LoginPresenter extends BasePresenter implements ICommonPresenter, OnLoginWithEmailFinishedListener {
+public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinishedListener, OnLoginWithFacebookFinishedListener {
+
+    private IGeneralView mView;
+    private AuthenticationPresenter mAuthPresenter;
 
     public LoginPresenter(IGeneralView view) {
-        super(view);
+        mView = view;
+        mAuthPresenter = new AuthenticationPresenter(mView);
     }
 
-    public void performLogin(String email, String password) {
-        getAuthenticationPresenter().login(this, email, password);
+    public void performLoginWithEmail(String email, String password) {
+        mAuthPresenter.login(this, email, password);
+    }
+
+    @Override
+    public FacebookCallback<LoginResult> performLoginWithFacebook() {
+        return mAuthPresenter.loginWithFacebook(this);
     }
 
     @Override
@@ -22,10 +35,20 @@ public class LoginPresenter extends BasePresenter implements ICommonPresenter, O
 
     @Override
     public void onLoginWithEmailFailed(String error) {
-
+        getLoginActivityView().showToast(error);
     }
 
-    private ILoginActivityView getLoginActivityView(){
-        return (ILoginActivityView) getView().getInstance();
+    @Override
+    public void onLoginWithFacebookSuccess() {
+        getLoginActivityView().goToMap();
+    }
+
+    @Override
+    public void onLoginWithFacebookFailed(String error) {
+        getLoginActivityView().showToast(error);
+    }
+
+    private ILoginActivityView getLoginActivityView() {
+        return (ILoginActivityView) mView.getInstance();
     }
 }

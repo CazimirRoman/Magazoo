@@ -72,13 +72,12 @@ import java.util.Date;
 import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
-
-import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
-import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.R;
-import magazoo.magazine.langa.tine.constants.IConstants;
+import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
+import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
+import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity;
 import magazoo.magazine.langa.tine.utils.OnErrorHandledListener;
 import magazoo.magazine.langa.tine.utils.Util;
@@ -86,7 +85,7 @@ import magazoo.magazine.langa.tine.utils.Util;
 import static magazoo.magazine.langa.tine.R.id.map;
 
 public class MapActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, IConstants, OnErrorHandledListener {
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnErrorHandledListener {
 
     private static final String TAG = MapActivity.class.getSimpleName();
 
@@ -228,7 +227,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
                 if (Util.isInternetAvailable(mContext)) {
 
-                    if (mCurrentAccuracy != 0 && mCurrentAccuracy <= ACCURACY_DESIRED) {
+                    if (mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED) {
                         if (mAuth.getCurrentUser() != null) {
                             checkIfAllowedToAdd();
                         } else {
@@ -236,7 +235,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                             finish();
                         }
                     } else {
-                        Util.buildDialog(mContext, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, ERROR_ACCURACY).show();
+                        Util.buildDialog(mContext, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, Constants.ERROR_ACCURACY).show();
                     }
 
                 } else {
@@ -251,11 +250,11 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void buildNoInternetErrorDialog() {
-        Util.buildDialog(mContext, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), ERROR_INTERNET).show();
+        Util.buildDialog(mContext, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), Constants.ERROR_INTERNET).show();
     }
 
     private void buildNoGPSErrorDialog() {
-        Util.buildDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), ERROR_LOCATION).show();
+        Util.buildDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION).show();
     }
 
 
@@ -263,10 +262,10 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         getShopsAddedToday(new OnGetShopsFromDatabaseListener() {
             @Override
             public void onDataFetched(ArrayList<Marker> shopsAddedToday) {
-                if (shopsAddedToday.size() <= ADD_SHOP_LIMIT) {
+                if (shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT) {
                     showAddShopDialog(mCurrentLocation);
                 } else {
-                    Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), ERROR_LIMIT).show();
+                    Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), Constants.ERROR_LIMIT).show();
                 }
             }
         });
@@ -308,10 +307,10 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         getReportsAddedToday(new OnGetReportsFromDatabaseListener() {
             @Override
             public void onDataFetched(ArrayList<Report> reportsAddedToday) {
-                if (reportsAddedToday.size() <= REPORT_SHOP_LIMIT) {
+                if (reportsAddedToday.size() <= Constants.REPORT_SHOP_LIMIT) {
                     showReportPopup();
                 } else {
-                    Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), ERROR_LIMIT).show();
+                    Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
                 }
             }
         });
@@ -409,7 +408,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onClick(View view) {
 
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicateLocationReport();
                 closeDialog(dialog);
             }
@@ -436,9 +435,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                                 public void onReportWritten() {
                                     showReportThanksPopup();
                                 }
-                            }, mCurrentOpenShop, REPORT_LOCATION, false);
+                            }, mCurrentOpenShop, Constants.REPORT_LOCATION, false);
                         } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
                         }
                     }
 
@@ -456,7 +455,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onClick(View view) {
 
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicate247Report();
                 closeDialog(dialog);
             }
@@ -483,9 +482,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                                 public void onReportWritten() {
                                     showReportThanksPopup();
                                 }
-                            }, mCurrentOpenShop, REPORT_247, !mCurrentOpenShop.getNonstop());
+                            }, mCurrentOpenShop, Constants.REPORT_247, !mCurrentOpenShop.getNonstop());
                         } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
                         }
                     }
 
@@ -502,7 +501,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicatePosReport();
                 closeDialog(dialog);
             }
@@ -529,9 +528,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                                 public void onReportWritten() {
                                     showReportThanksPopup();
                                 }
-                            }, mCurrentOpenShop, REPORT_POS, !mCurrentOpenShop.getPos());
+                            }, mCurrentOpenShop, Constants.REPORT_POS, !mCurrentOpenShop.getPos());
                         } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
                         }
                     }
 
@@ -547,7 +546,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         report_tickets.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
                 checkIfDuplicateTicketsReport();
                 closeDialog(dialog);
             }
@@ -574,9 +573,9 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                                 public void onReportWritten() {
                                     showReportThanksPopup();
                                 }
-                            }, mCurrentOpenShop, REPORT_TICKETS, !mCurrentOpenShop.getTickets());
+                            }, mCurrentOpenShop, Constants.REPORT_TICKETS, !mCurrentOpenShop.getTickets());
                         } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), ERROR_LIMIT).show();
+                            Util.buildDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
                         }
                     }
 
@@ -636,8 +635,8 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setInterval(Constants.INTERVAL);
+        mLocationRequest.setFastestInterval(Constants.FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -808,7 +807,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
 
-                mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_DESIRED)));
+                mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
                 if (mShopDetails.getVisibility() == View.GONE) {
                     for (Marker d : mMarkersInBounds) {
                         if (d.getId() != null && d.getId().contains(marker.getTitle())) {
@@ -825,7 +824,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         getMapBounds();
         setMyLocationEnabled();
         setOnCameraChangeListener();
-        if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED) {
+        if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
             displayFirebaseMarkers();
         }
 
@@ -889,7 +888,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             public void onCameraIdle() {
 
                 setZoomLevel();
-                if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= ZOOM_LEVEL_DESIRED) {
+                if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
                     mMap.clear();
                     getMapBounds();
                     displayFirebaseMarkers();
@@ -897,7 +896,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                 } else {
                     //first run only
                     if (mCurrentZoomLevel != 2) {
-                        Util.buildDialog(mContext, "Max zoom reached", "Max zoom", ERROR_MAX_ZOOM).show();
+                        Util.buildDialog(mContext, "Max zoom reached", "Max zoom", Constants.ERROR_MAX_ZOOM).show();
                     }
                 }
             }
@@ -942,12 +941,12 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void animateToCurrentLocation() {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, ZOOM_LEVEL_DESIRED));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, Constants.ZOOM_LEVEL_DESIRED));
     }
 
     public boolean requestLocationPermissions() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, MY_LOCATION_REQUEST_CODE);
+            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, Constants.MY_LOCATION_REQUEST_CODE);
             return true;
         }
         return false;
@@ -956,11 +955,11 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_LOCATION_REQUEST_CODE) {
+        if (requestCode == Constants.MY_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
-                Util.buildDialog(mContext, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), ERROR_PERMISSION).show();
+                Util.buildDialog(mContext, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
             }
         }
     }
@@ -973,7 +972,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
                     mGoogleApiClient);
             if (mLastLocation != null) {
                 LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, ZOOM_LEVEL_DESIRED));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, Constants.ZOOM_LEVEL_DESIRED));
             }
 
             LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -1038,7 +1037,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                    addMarkerToFirebase(new Marker(ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
+                    addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();

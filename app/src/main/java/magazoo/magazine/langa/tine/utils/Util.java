@@ -12,10 +12,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import magazoo.magazine.langa.tine.R;
-import magazoo.magazine.langa.tine.constants.IConstants;
+import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.utils.data.NetworkStatus;
 
-public class Util implements IConstants {
+public class Util {
 
     public static boolean isValidEmail(CharSequence target) {
         if (TextUtils.isEmpty(target)) {
@@ -50,13 +50,13 @@ public class Util implements IConstants {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         switch (errorType) {
 
-                            case ERROR_ACCURACY:
+                            case Constants.ERROR_ACCURACY:
                                 dialog.dismiss();
                                 break;
-                            case ERROR_PERMISSION:
+                            case Constants.ERROR_PERMISSION:
                                 listener.requestLocationPermissions();
                                 break;
-                            case ERROR_MAX_ZOOM:
+                            case Constants.ERROR_MAX_ZOOM:
                                 dialog.dismiss();
                                 listener.zoomToCurrentLocation();
                                 break;

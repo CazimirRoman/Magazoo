@@ -83,7 +83,7 @@ public class RegisterActivityView extends LoginActivityView {
 
     private void registerUser(String email, String password) {
 
-        if (Util.isInternetAvailable(mContext)) {
+        if (Util.isInternetAvailable(getContext())) {
 
             mAuthManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -124,7 +124,7 @@ public class RegisterActivityView extends LoginActivityView {
             });
 
         } else {
-            Toast.makeText(mContext, R.string.no_internet, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_LONG).show();
             progress.setVisibility(View.GONE);
         }
     }

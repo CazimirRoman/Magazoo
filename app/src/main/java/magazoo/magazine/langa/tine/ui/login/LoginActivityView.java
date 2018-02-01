@@ -3,26 +3,15 @@ package magazoo.magazine.langa.tine.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -32,13 +21,15 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
+import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
+import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivity;
 import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
 import magazoo.magazine.langa.tine.utils.Util;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener {
+public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener, OnLoginWithFacebookFinishedListener {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -59,18 +50,16 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private FirebaseAuth mAuthManager;
     private CallbackManager mCallbackManager;
+    private LoginPresenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initActionButtons();
+        mLoginPresenter = new LoginPresenter(this);
         mCallbackManager = CallbackManager.Factory.create();
-        mAuthManager = FirebaseAuth.getInstance();
         configureFacebookLogin();
-        //getFacebookHash();
-        checkIfAlreadyLoggedIn();
         initActionButtonText();
     }
 
@@ -108,34 +97,18 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         btnAction.setText(getString(R.string.btn_login));
     }
 
-    private void checkIfAlreadyLoggedIn() {
-        if (isLoggedInWithEmail() || isLoggedInWithFacebook()) {
-            goToMap();
-            finish();
-        }
-    }
-
     public void goToMap() {
         startActivity(new Intent(LoginActivityView.this, MapActivity.class));
     }
 
-    private boolean isLoggedInWithEmail() {
-        return mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified();
-    }
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-    private boolean isLoggedInWithFacebook() {
-        return AccessToken.getCurrentAccessToken() != null;
     }
 
     protected void initActionButtons() {
 
-        btnSkip.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToMap();
-                finish();
-            }
-        });
     }
 
     private void goToResetPasswordActivity() {
@@ -171,80 +144,61 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         return true;
     }
 
-    private void logInUser(String email, String password) {
-
-        if (Util.isInternetAvailable(getContext())) {
-
-
-
-        } else {
-            Toast.makeText(getContext(), "No internet", Toast.LENGTH_LONG).show();
-            hideProgressBar();
-        }
-    }
-
     protected void configureFacebookLogin() {
 
         btnFBLogin.setReadPermissions("email", "public_profile");
-        btnFBLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-                if (!Util.isInternetAvailable(getContext())) {
-                    Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        btnFBLogin.registerCallback(mCallbackManager, mLoginPresenter.performLoginWithFacebook());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    protected void handleFacebookAccessToken(AccessToken token) {
+    @Override
+    public void onValidateSuccess(String email, String password) {
+        mLoginPresenter.performLoginWithEmail(email, password);
+    }
 
-        btnFBLogin.setVisibility(View.INVISIBLE);
+    @Override
+    public void onValidateFail(String what) {
+        switch (what) {
+            case Constants.EMAIL_EMPTY:
+                setEmailError(getString(R.string.email_missing));
+                break;
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuthManager.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+            case Constants.EMAIL_INVALID:
+                setEmailError(getString(R.string.email_invalid));
+                break;
 
-                            Toast.makeText(getContext(), R.string.authentication_success,
-                                    Toast.LENGTH_SHORT).show();
+            case Constants.PASSWORD_EMPTY:
+                setPasswordError(getString(R.string.password_missing));
+                break;
 
-                            goToMap();
-                            finish();
+            case Constants.PASSWORD_INVALID:
+                setPasswordError(getString(R.string.password_minimum));
+                break;
+        }
+    }
 
-                        } else {
-                            // If sign in fails, display a message to the user.
+    private void setPasswordError(String error) {
+        etPassword.setError(error);
+    }
 
-                            Toast.makeText(getContext(), task.getException().toString(),
-                                    Toast.LENGTH_SHORT).show();
+    private void setEmailError(String error) {
+        etEmail.setError(error);
+    }
 
-                        }
+    @Override
+    public void onLoginWithFacebookSuccess() {
+        goToMap();
+    }
 
-                    }
-                });
+    @Override
+    public void onLoginWithFacebookFailed(String error) {
+        showToast(error);
     }
 
     @Override
@@ -254,16 +208,11 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     @Override
     public Activity getActivity() {
-        return this.getActivity();
+        return this;
     }
 
     @Override
-    public void onValidateSuccess(String email, String password) {
-        getPresenter().performLogin(email, password);
-    }
-
-    @Override
-    public void onValidateFail(String what) {
-
+    protected int getLayoutId() {
+        return R.layout.activity_login;
     }
 }

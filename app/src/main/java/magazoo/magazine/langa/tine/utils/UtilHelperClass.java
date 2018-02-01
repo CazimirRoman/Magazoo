@@ -1,23 +1,12 @@
 package magazoo.magazine.langa.tine.utils;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import cazimir.com.bancuribune.constants.Constants;
-import cazimir.com.bancuribune.ui.login.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 

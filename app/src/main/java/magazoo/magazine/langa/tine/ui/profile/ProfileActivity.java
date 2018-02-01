@@ -1,5 +1,6 @@
 package magazoo.magazine.langa.tine.ui.profile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.RegisterActivityView;
 import magazoo.magazine.langa.tine.base.BaseActivity;
@@ -270,5 +272,20 @@ public class ProfileActivity extends BaseActivity {
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    public IGeneralView getInstance() {
+        return this;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this.getActivity();
     }
 }
