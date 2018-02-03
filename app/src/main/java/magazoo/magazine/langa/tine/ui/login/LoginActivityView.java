@@ -29,7 +29,7 @@ import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
 import magazoo.magazine.langa.tine.utils.Util;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener, OnLoginWithFacebookFinishedListener {
+public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -55,12 +55,16 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         initActionButtons();
         mLoginPresenter = new LoginPresenter(this);
         mCallbackManager = CallbackManager.Factory.create();
         configureFacebookLogin();
         initActionButtonText();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_login;
     }
 
     @OnClick({R.id.btnAction, R.id.btnFBLogin, R.id.btnForgotPassword, R.id.btnGoTo})
@@ -104,7 +108,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
     }
 
     protected void initActionButtons() {
@@ -192,16 +195,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     @Override
-    public void onLoginWithFacebookSuccess() {
-        goToMap();
-    }
-
-    @Override
-    public void onLoginWithFacebookFailed(String error) {
-        showToast(error);
-    }
-
-    @Override
     public IGeneralView getInstance() {
         return this;
     }
@@ -209,10 +202,5 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     public Activity getActivity() {
         return this;
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_login;
     }
 }
