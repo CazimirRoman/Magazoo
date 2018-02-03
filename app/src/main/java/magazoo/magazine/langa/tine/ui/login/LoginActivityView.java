@@ -12,16 +12,13 @@ import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
 import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivity;
@@ -48,8 +45,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @BindView(R.id.btnGoTo)
     Button btnGoTo;
 
-    private FirebaseAuth mAuthManager;
-    private CallbackManager mCallbackManager;
+    private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
 
     @Override
@@ -57,7 +53,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         super.onCreate(savedInstanceState);
         initActionButtons();
         mLoginPresenter = new LoginPresenter(this);
-        mCallbackManager = CallbackManager.Factory.create();
+        mFacebookCallbackManager = CallbackManager.Factory.create();
         configureFacebookLogin();
         initActionButtonText();
     }
@@ -76,9 +72,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                 String password = etPassword.getText().toString();
                 UtilHelperClass.validateFormData(this, email, password, Constants.EMPTY_STRING_PLACEHOLDER);
                 showProgressBar();
-                break;
-            case R.id.btnFBLogin:
-
                 break;
             case R.id.btnForgotPassword:
                 goToResetPasswordActivity();
@@ -148,16 +141,15 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     protected void configureFacebookLogin() {
-
         btnFBLogin.setReadPermissions("email", "public_profile");
-        btnFBLogin.registerCallback(mCallbackManager, mLoginPresenter.performLoginWithFacebook());
+        btnFBLogin.registerCallback(mFacebookCallbackManager, mLoginPresenter.performLoginWithFacebook());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

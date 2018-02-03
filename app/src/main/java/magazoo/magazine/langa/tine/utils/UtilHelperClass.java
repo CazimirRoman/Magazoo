@@ -35,7 +35,7 @@ public class UtilHelperClass {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    public static void validateFormData(OnFormValidatedListener listener, String email, String password, String password2) {
+    public static void validateFormData(OnFormValidatedListener listener, String email, String password, String passwordRepeat) {
 
         if (TextUtils.isEmpty(email)) {
             listener.onValidateFail(Constants.EMAIL_EMPTY);
@@ -57,8 +57,8 @@ public class UtilHelperClass {
             }
         }
 
-        if(!password2.equals("")){
-            if(!password2.equals(password)){
+        if(!passwordRepeat.equals("")){
+            if(!passwordRepeat.equals(password)){
                 listener.onValidateFail(Constants.PASSWORD_MATCH_ERROR);
                 return;
             }

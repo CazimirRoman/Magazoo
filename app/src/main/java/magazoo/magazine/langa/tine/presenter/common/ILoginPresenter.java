@@ -2,9 +2,7 @@ package magazoo.magazine.langa.tine.presenter.common;
 
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
-
-import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
-import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
+import com.facebook.login.widget.LoginButton;
 
 interface ILoginPresenter {
     void performLoginWithEmail(String email, String password);
