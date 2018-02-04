@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.utils.Util;
 
-public class RegisterView extends LoginView {
+public class RegisterActivityView extends LoginActivityView {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -34,6 +34,8 @@ public class RegisterView extends LoginView {
     Button btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @BindView(R.id.btnAction)
+    Button btnAction;
     private FirebaseAuth mAuthManager;
     private CallbackManager mCallbackManager;
 
@@ -49,11 +51,8 @@ public class RegisterView extends LoginView {
 
     @Override
     protected void initActionButtons() {
-        super.initActionButtons();
-
-        Button register = findViewById(R.id.btnAction);
-        register.setText(getString(R.string.btn_register));
-        register.setOnClickListener(new View.OnClickListener() {
+        btnAction.setText(getString(R.string.btn_register));
+        btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -64,7 +63,7 @@ public class RegisterView extends LoginView {
 
                 if (isFormDataValid(email, password)) {
                     registerUser(email, password);
-                }else{
+                } else {
                     progress.setVisibility(View.GONE);
                 }
             }
@@ -83,14 +82,14 @@ public class RegisterView extends LoginView {
 
     private void registerUser(String email, String password) {
 
-        if (Util.isInternetAvailable(mContext)) {
+        if (Util.isInternetAvailable(getContext())) {
 
             mAuthManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progress.setVisibility(View.GONE);
                     if (!task.isSuccessful()) {
-                        Toast.makeText(RegisterView.this, "Authentication failed." + task.getException(),
+                        Toast.makeText(RegisterActivityView.this, "AuthenticationPresenter failed." + task.getException(),
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         final FirebaseUser user = mAuthManager.getCurrentUser();
@@ -101,20 +100,20 @@ public class RegisterView extends LoginView {
                                         public void onComplete(@NonNull Task<Void> task) {
 
                                             if (task.isSuccessful()) {
-                                                Toast.makeText(RegisterView.this,
+                                                Toast.makeText(RegisterActivityView.this,
                                                         "Verification email sent to " + user.getEmail(),
                                                         Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(RegisterView.this, LoginView.class));
+                                                startActivity(new Intent(RegisterActivityView.this, LoginActivityView.class));
                                                 finish();
                                             } else {
-                                                Toast.makeText(RegisterView.this,
+                                                Toast.makeText(RegisterActivityView.this,
                                                         "Failed to send verification email.",
                                                         Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                         } else {
-                            startActivity(new Intent(RegisterView.this, LoginView.class));
+                            startActivity(new Intent(RegisterActivityView.this, LoginActivityView.class));
                             finish();
                         }
                     }
@@ -124,7 +123,7 @@ public class RegisterView extends LoginView {
             });
 
         } else {
-            Toast.makeText(mContext, R.string.no_internet, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_LONG).show();
             progress.setVisibility(View.GONE);
         }
     }

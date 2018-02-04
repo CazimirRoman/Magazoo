@@ -1,5 +1,6 @@
 package magazoo.magazine.langa.tine.ui.profile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import magazoo.magazine.langa.tine.R;
-import magazoo.magazine.langa.tine.ui.login.LoginView;
-import magazoo.magazine.langa.tine.ui.login.RegisterView;
+import magazoo.magazine.langa.tine.base.IGeneralView;
+import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
+import magazoo.magazine.langa.tine.ui.login.RegisterActivityView;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 
 public class ProfileActivity extends BaseActivity {
@@ -52,7 +54,7 @@ public class ProfileActivity extends BaseActivity {
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(ProfileActivity.this, LoginView.class));
+                    startActivity(new Intent(ProfileActivity.this, LoginActivityView.class));
                     finish();
                 }
             }
@@ -224,7 +226,7 @@ public class ProfileActivity extends BaseActivity {
                                     if (task.isSuccessful()) {
                                         LoginManager.getInstance().logOut();
                                         Toast.makeText(ProfileActivity.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(ProfileActivity.this, RegisterView.class));
+                                        startActivity(new Intent(ProfileActivity.this, RegisterActivityView.class));
                                         finish();
                                         progressBar.setVisibility(View.GONE);
                                     } else {
@@ -270,5 +272,25 @@ public class ProfileActivity extends BaseActivity {
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected int setActionBarTitle() {
+        return R.string.profile;
+    }
+
+    @Override
+    public IGeneralView getInstance() {
+        return this;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this.getActivity();
     }
 }
