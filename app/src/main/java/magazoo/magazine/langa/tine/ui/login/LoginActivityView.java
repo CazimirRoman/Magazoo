@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -33,17 +34,17 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.btnFBLogin)
-    LoginButton btnFBLogin;
+    LoginButton btnFacebook;
+    @BindView(R.id.login_button_dummy)
+    TextView btnDummyLoginButton;
     @BindView(R.id.btnForgotPassword)
-    Button btnForgotPassword;
-    @BindView(R.id.btnSkip)
-    Button btnSkip;
+    TextView btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
     @BindView(R.id.btnAction)
-    Button btnAction;
+    TextView btnAction;
     @BindView(R.id.btnGoTo)
-    Button btnGoTo;
+    TextView btnGoTo;
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
@@ -55,7 +56,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         mLoginPresenter = new LoginPresenter(this);
         mFacebookCallbackManager = CallbackManager.Factory.create();
         configureFacebookLogin();
-        initActionButtonText();
     }
 
     @Override
@@ -63,7 +63,12 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         return R.layout.activity_login;
     }
 
-    @OnClick({R.id.btnAction, R.id.btnFBLogin, R.id.btnForgotPassword, R.id.btnGoTo})
+    @Override
+    protected int setActionBarTitle() {
+        return R.string.login;
+    }
+
+    @OnClick({R.id.btnAction, R.id.btnFBLogin, R.id.btnForgotPassword, R.id.btnGoTo, R.id.login_button_dummy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAction:
@@ -72,6 +77,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                 String password = etPassword.getText().toString();
                 UtilHelperClass.validateFormData(this, email, password, Constants.EMPTY_STRING_PLACEHOLDER);
                 showProgressBar();
+                break;
+            case R.id.login_button_dummy:
+                    btnFacebook.performClick();
+                    btnDummyLoginButton.setVisibility(View.GONE);
                 break;
             case R.id.btnForgotPassword:
                 goToResetPasswordActivity();
@@ -90,10 +99,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         progress.setVisibility(View.GONE);
     }
 
-    private void initActionButtonText() {
-        btnAction.setText(getString(R.string.btn_login));
-    }
-
     public void goToMap() {
         startActivity(new Intent(LoginActivityView.this, MapActivity.class));
     }
@@ -104,7 +109,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     protected void initActionButtons() {
-
+        btnAction.setText(getString(R.string.btn_login));
     }
 
     private void goToResetPasswordActivity() {
@@ -141,8 +146,8 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     protected void configureFacebookLogin() {
-        btnFBLogin.setReadPermissions("email", "public_profile");
-        btnFBLogin.registerCallback(mFacebookCallbackManager, mLoginPresenter.performLoginWithFacebook());
+        btnFacebook.setReadPermissions("email", "public_profile");
+        btnFacebook.registerCallback(mFacebookCallbackManager, mLoginPresenter.performLoginWithFacebook());
     }
 
     @Override

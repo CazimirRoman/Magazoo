@@ -34,6 +34,8 @@ public class RegisterActivityView extends LoginActivityView {
     Button btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @BindView(R.id.btnAction)
+    Button btnAction;
     private FirebaseAuth mAuthManager;
     private CallbackManager mCallbackManager;
 
@@ -49,11 +51,8 @@ public class RegisterActivityView extends LoginActivityView {
 
     @Override
     protected void initActionButtons() {
-        super.initActionButtons();
-
-        Button register = findViewById(R.id.btnAction);
-        register.setText(getString(R.string.btn_register));
-        register.setOnClickListener(new View.OnClickListener() {
+        btnAction.setText(getString(R.string.btn_register));
+        btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -64,7 +63,7 @@ public class RegisterActivityView extends LoginActivityView {
 
                 if (isFormDataValid(email, password)) {
                     registerUser(email, password);
-                }else{
+                } else {
                     progress.setVisibility(View.GONE);
                 }
             }

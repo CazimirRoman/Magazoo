@@ -280,6 +280,11 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @Override
+    protected int setActionBarTitle() {
+        return R.string.profile;
+    }
+
+    @Override
     public IGeneralView getInstance() {
         return this;
     }
