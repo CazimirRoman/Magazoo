@@ -57,7 +57,12 @@ public class UtilHelperClass {
             }
         }
 
-        if(!passwordRepeat.equals("")){
+        if(!passwordRepeat.equals(Constants.PASSWORD_MATCH_NA)){
+            if (TextUtils.isEmpty(passwordRepeat)) {
+                listener.onValidateFail(Constants.PASSWORD_MATCH_ERROR);
+                return;
+            }
+
             if(!passwordRepeat.equals(password)){
                 listener.onValidateFail(Constants.PASSWORD_MATCH_ERROR);
                 return;

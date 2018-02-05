@@ -25,6 +25,7 @@ public class Constants {
     public static final String EMAIL_INVALID = "email_invalid";
     public static final String PASSWORD_EMPTY = "password_empty";
     public static final String PASSWORD_INVALID = "password_invalid";
+    public static final String PASSWORD_MATCH_NA = "no password repeat";
     public static final String PASSWORD_MATCH_ERROR = "password_match_error";
     public static final String EMPTY_STRING_PLACEHOLDER = "";
 }

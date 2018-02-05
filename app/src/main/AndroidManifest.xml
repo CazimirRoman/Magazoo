@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.map.MapActivity" />
-        <activity android:name=".ui.login.RegisterActivityView" />
+        <activity android:name=".ui.register.RegisterActivityView" />
         <activity android:name=".ui.profile.ResetPasswordActivity" />
         <activity android:name=".ui.profile.ProfileActivity" />
 

@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
-import magazoo.magazine.langa.tine.ui.login.RegisterActivityView;
+import magazoo.magazine.langa.tine.ui.register.RegisterActivityView;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 
 public class ProfileActivity extends BaseActivity {

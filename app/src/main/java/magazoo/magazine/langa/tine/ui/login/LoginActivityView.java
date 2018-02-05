@@ -3,9 +3,7 @@ package magazoo.magazine.langa.tine.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,7 +22,7 @@ import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivity;
 import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
-import magazoo.magazine.langa.tine.utils.Util;
+import magazoo.magazine.langa.tine.ui.register.RegisterActivityView;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
 public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener {
@@ -41,10 +39,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     TextView btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
-    @BindView(R.id.btnAction)
-    TextView btnAction;
-    @BindView(R.id.btnGoTo)
-    TextView btnGoTo;
+    @BindView(R.id.btnLoginWithEmail)
+    TextView btnLoginWithEmail;
+    @BindView(R.id.btnGoToRegister)
+    TextView btnGoToRegister;
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
@@ -52,7 +50,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initActionButtons();
         mLoginPresenter = new LoginPresenter(this);
         mFacebookCallbackManager = CallbackManager.Factory.create();
         configureFacebookLogin();
@@ -68,34 +65,33 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         return R.string.login;
     }
 
-    @OnClick({R.id.btnAction, R.id.btnFBLogin, R.id.btnForgotPassword, R.id.btnGoTo, R.id.login_button_dummy})
+    @OnClick({R.id.btnLoginWithEmail, R.id.btnForgotPassword, R.id.btnGoToRegister, R.id.login_button_dummy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btnAction:
+            case R.id.btnLoginWithEmail:
                 showProgressBar();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                UtilHelperClass.validateFormData(this, email, password, Constants.EMPTY_STRING_PLACEHOLDER);
-                showProgressBar();
+                UtilHelperClass.validateFormData(this, email, password, Constants.PASSWORD_MATCH_NA);
                 break;
             case R.id.login_button_dummy:
-                    btnFacebook.performClick();
-                    btnDummyLoginButton.setVisibility(View.GONE);
+                btnFacebook.performClick();
+                showProgressBar();
                 break;
             case R.id.btnForgotPassword:
                 goToResetPasswordActivity();
                 break;
-            case R.id.btnGoTo:
+            case R.id.btnGoToRegister:
                 startRegisterActivity();
                 break;
         }
     }
 
-    private void showProgressBar() {
+    public void showProgressBar() {
         progress.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressBar() {
+    public void hideProgressBar() {
         progress.setVisibility(View.GONE);
     }
 
@@ -108,41 +104,12 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void initActionButtons() {
-        btnAction.setText(getString(R.string.btn_login));
-    }
-
     private void goToResetPasswordActivity() {
         startActivity(new Intent(LoginActivityView.this, ResetPasswordActivity.class));
     }
 
     private void startRegisterActivity() {
         startActivity(new Intent(LoginActivityView.this, RegisterActivityView.class));
-    }
-
-    protected boolean isFormDataValid(String email, String password) {
-
-        if (TextUtils.isEmpty(email)) {
-            etEmail.setError(getString(R.string.email_missing));
-            return false;
-        } else {
-            if (!Util.isValidEmail(email)) {
-                etEmail.setError(getString(R.string.email_invalid));
-                return false;
-            }
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            etPassword.setError(getString(R.string.password_missing));
-            return false;
-        } else {
-            if (password.length() < 6) {
-                etPassword.setError(getString(R.string.minimum_password));
-                return false;
-            }
-        }
-
-        return true;
     }
 
     protected void configureFacebookLogin() {
@@ -164,6 +131,9 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     @Override
     public void onValidateFail(String what) {
+
+        hideProgressBar();
+
         switch (what) {
             case Constants.EMAIL_EMPTY:
                 setEmailError(getString(R.string.email_missing));
