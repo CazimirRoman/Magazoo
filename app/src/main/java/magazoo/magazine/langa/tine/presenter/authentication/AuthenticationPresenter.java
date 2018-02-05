@@ -13,10 +13,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
+import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListener;
 
 public class AuthenticationPresenter implements IAuthenticationPresenter {
 
@@ -41,12 +43,40 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
                                 listener.onLoginWithEmailSuccess();
 
                             } else {
-                                listener.onLoginWithEmailFailed(task.getException().getMessage());
+                                listener.onLoginWithEmailFailed("Te rog sa iti verifici mailul pentru a intra in aplicatie.");
 
                             }
                         }
                     }
                 });
+    }
+
+    @Override
+    public void register(final OnRegisterWithEmailFinishedListener listener, String email, String password) {
+        mFirebaseAuthenticationManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()) {
+                    listener.onRegisterWithEmailFailed(task.getException().getMessage());
+                } else {
+                    final FirebaseUser user = mFirebaseAuthenticationManager.getCurrentUser();
+                    if (user != null && !user.isEmailVerified()) {
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        if (task.isSuccessful()) {
+                                            listener.onRegisterWithEmailSuccess(user.getEmail());
+                                        } else {
+                                            listener.onRegisterWithEmailFailed(task.getException().getMessage());
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        });
     }
 
     @Override

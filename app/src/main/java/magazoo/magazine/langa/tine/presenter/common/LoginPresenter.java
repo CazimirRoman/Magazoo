@@ -30,21 +30,25 @@ public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinished
 
     @Override
     public void onLoginWithEmailSuccess() {
+        getLoginActivityView().hideProgressBar();
         getLoginActivityView().goToMap();
     }
 
     @Override
     public void onLoginWithEmailFailed(String error) {
+        getLoginActivityView().hideProgressBar();
         getLoginActivityView().showToast(error);
     }
 
     @Override
     public void onLoginWithFacebookSuccess() {
+        getLoginActivityView().hideProgressBar();
         getLoginActivityView().goToMap();
     }
 
     @Override
     public void onLoginWithFacebookFailed(String error) {
+        getLoginActivityView().hideProgressBar();
         getLoginActivityView().showToast(error);
     }
 
