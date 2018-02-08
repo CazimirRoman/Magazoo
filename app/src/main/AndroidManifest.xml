@@ -46,7 +46,7 @@
         </activity>
         <activity android:name=".ui.map.MapActivity" />
         <activity android:name=".ui.register.RegisterActivityView" />
-        <activity android:name=".ui.profile.ResetPasswordActivity" />
+        <activity android:name=".ui.profile.ForgotPasswordActivityView" />
         <activity android:name=".ui.profile.ProfileActivity" />
 
         <meta-data

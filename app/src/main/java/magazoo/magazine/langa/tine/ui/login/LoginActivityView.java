@@ -21,7 +21,7 @@ import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivity;
-import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
+import magazoo.magazine.langa.tine.ui.profile.ForgotPasswordActivityView;
 import magazoo.magazine.langa.tine.ui.register.RegisterActivityView;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
@@ -105,7 +105,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     private void goToResetPasswordActivity() {
-        startActivity(new Intent(LoginActivityView.this, ResetPasswordActivity.class));
+        startActivity(new Intent(LoginActivityView.this, ForgotPasswordActivityView.class));
     }
 
     private void startRegisterActivity() {

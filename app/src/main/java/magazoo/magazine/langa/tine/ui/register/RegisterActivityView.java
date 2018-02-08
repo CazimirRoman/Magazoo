@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.facebook.CallbackManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -20,7 +19,6 @@ import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.presenter.RegisterPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
-import magazoo.magazine.langa.tine.ui.profile.ResetPasswordActivity;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
 public class RegisterActivityView extends BaseBackActivity implements IRegisterActivityView, OnFormValidatedListener {

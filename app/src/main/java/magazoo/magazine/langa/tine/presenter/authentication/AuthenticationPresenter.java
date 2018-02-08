@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
+import magazoo.magazine.langa.tine.ui.profile.OnResetInstructionsSent;
 import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListener;
 
 public class AuthenticationPresenter implements IAuthenticationPresenter {
@@ -104,6 +105,21 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
             public void onError(FacebookException error) {
             }
         };
+    }
+
+    @Override
+    public void sendResetInstructions(final OnResetInstructionsSent listener, String email) {
+        mFirebaseAuthenticationManager.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            listener.onResetInstructionsSentSuccess();
+                            } else {
+                            listener.onResetInstructionsSentFailed();
+                        }
+                    }
+                });
     }
 
     private void handleFacebookAccessToken(final OnLoginWithFacebookFinishedListener listener, AccessToken accessToken) {

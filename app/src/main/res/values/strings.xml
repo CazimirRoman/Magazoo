@@ -131,6 +131,10 @@
     <string name="email_sent">"Ti-am trimis un email la adresa: "</string>
     <string name="hint_password_confirm">Confirma parola</string>
     <string name="password_not_matching">Parola nu este aceeasi</string>
+    <string name="resetPassword">Reseteaza parola</string>
+    <string name="email_reset_sent">Te rog sa verifici mailul. Ti-am trimis instructiunile de resetare a parolei.</string>
+    <string name="email_reset_sent_error">Nu am putut sa iti trimitem mailul. Te rog sa incerci din nou</string>
+    <string name="forgot_password">Ai uitat parola?</string>
 
     <!--report shop popup end-->
 
