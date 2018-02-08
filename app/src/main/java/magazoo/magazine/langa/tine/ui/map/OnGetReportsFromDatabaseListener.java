@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.model.Report;
 
-interface OnGetReportsFromDatabaseListener {
+public interface OnGetReportsFromDatabaseListener {
         void onDataFetched(ArrayList<Report> reportsAddedToday);
 }

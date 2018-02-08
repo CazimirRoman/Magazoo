@@ -1,6 +1,7 @@
 package magazoo.magazine.langa.tine.ui.map;
 
 import android.Manifest.permission;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,9 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,8 +61,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -73,9 +70,12 @@ import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.base.BaseActivity;
+import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
+import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity;
@@ -84,15 +84,14 @@ import magazoo.magazine.langa.tine.utils.Util;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
-public class MapActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, OnMapReadyCallback,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnErrorHandledListener {
+public class MapActivity extends BaseActivity implements IMapActivity, OnNavigationItemSelectedListener, OnMapReadyCallback,
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnErrorHandledListener, OnIsAllowedToAddListener, OnIsAllowedToReportListener {
 
     private static final String TAG = MapActivity.class.getSimpleName();
 
-    private Toolbar mToolbar;
+    private MapPresenter mPresenter;
+
     private FirebaseAuth mAuth;
-    private DatabaseReference mStoreRef;
-    private DatabaseReference mReportRef;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -114,9 +113,8 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
+        mPresenter = new MapPresenter();
         Utils.init(mContext);
-        setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         onboardingNeeded();
         checkInternetConnection();
@@ -129,14 +127,24 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         createLocationRequest();
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected int setActionBarTitle() {
+        return R.string.app_name;
+    }
+
     private void onboardingNeeded() {
 
         if (isFirstRun()) {
-            startTutorial();
+            startTutorialActivity();
         }
     }
 
-    private void startTutorial() {
+    private void startTutorialActivity() {
         startActivity(new Intent(this, TutorialActivity.class));
     }
 
@@ -157,8 +165,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     private void initializeDatabaseReference() {
-        mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
-        mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
+
     }
 
     private void checkInternetConnection() {
@@ -195,7 +202,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, getToolbar(), R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -215,10 +222,6 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     private void initUI() {
 
-        //mToolbar initialization
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
         //floating button for adding shops
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +232,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
                     if (mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED) {
                         if (mAuth.getCurrentUser() != null) {
-                            checkIfAllowedToAdd();
+                            mPresenter.checkIfAllowedToAdd(MapActivity.this);
                         } else {
                             startActivity(new Intent(MapActivity.this, LoginActivityView.class));
                             finish();
@@ -257,97 +260,6 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         Util.buildDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION).show();
     }
 
-
-    private void checkIfAllowedToAdd() {
-        getShopsAddedToday(new OnGetShopsFromDatabaseListener() {
-            @Override
-            public void onDataFetched(ArrayList<Marker> shopsAddedToday) {
-                if (shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT) {
-                    showAddShopDialog(mCurrentLocation);
-                } else {
-                    Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), Constants.ERROR_LIMIT).show();
-                }
-            }
-        });
-    }
-
-    private void getShopsAddedToday(final OnGetShopsFromDatabaseListener listener) {
-
-        final ArrayList<Marker> addedShopsToday = new ArrayList<>();
-        //filter data based on logged in user
-        Query query = mStoreRef.orderByChild("createdBy").equalTo(mAuth.getCurrentUser().getUid());
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Marker store = markerSnapshot.getValue(Marker.class);
-                    Date createdAt = new Date(store.getCreatedAt());
-                    long now = new Date().getTime();
-                    Date nowDate = new Date(now);
-
-                    if (Util.isSameDay(createdAt, nowDate)) {
-                        addedShopsToday.add(store);
-                    }
-                }
-
-                listener.onDataFetched(addedShopsToday);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void checkIfAllowedToReport() {
-
-        getReportsAddedToday(new OnGetReportsFromDatabaseListener() {
-            @Override
-            public void onDataFetched(ArrayList<Report> reportsAddedToday) {
-                if (reportsAddedToday.size() <= Constants.REPORT_SHOP_LIMIT) {
-                    showReportPopup();
-                } else {
-                    Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
-                }
-            }
-        });
-    }
-
-    private void getReportsAddedToday(final OnGetReportsFromDatabaseListener listener) {
-
-        final ArrayList<Report> reportsToday = new ArrayList<>();
-        //filter data based on logged in user
-        Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Report report = markerSnapshot.getValue(Report.class);
-                    Date reportedAt = new Date(report.getReportedAt());
-                    long now = new Date().getTime();
-                    Date nowDate = new Date(now);
-
-                    if (Util.isSameDay(reportedAt, nowDate)) {
-                        reportsToday.add(report);
-                    }
-                }
-
-                listener.onDataFetched(reportsToday);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
     private void initUIShopDetails() {
         mShopDetails = findViewById(R.id.shop_details);
         mShopTypeLabel = mShopDetails.findViewById(R.id.shop_type_label);
@@ -369,7 +281,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onClick(View view) {
                 if (mAuth.getCurrentUser() != null) {
-                    checkIfAllowedToReport();
+                    mPresenter.checkIfAllowedToReport(MapActivity.this);
                 } else {
                     startActivity(new Intent(MapActivity.this, LoginActivityView.class));
                     finish();
@@ -378,7 +290,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
         });
     }
 
-    private void showReportPopup() {
+    public void showReportPopup() {
 
         final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
         Button report_location = (Button) dialog.findViewById(R.id.button_report_location);
@@ -774,7 +686,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             startActivity(new Intent(MapActivity.this, LoginActivityView.class));
             finish();
         } else if (id == R.id.nav_tutorial) {
-            startTutorial();
+            startTutorialActivity();
         } else if (id == R.id.nav_contact) {
             sendContactEmail();
 
@@ -990,7 +902,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
 
     }
 
-    private void showAddShopDialog(final LatLng latlng) {
+    public void showAddShopDialog() {
 
         final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
         final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner_type);
@@ -1037,7 +949,7 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                    addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", latlng.latitude, latlng.longitude,
+                    addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
                     dialog.dismiss();
@@ -1050,8 +962,52 @@ public class MapActivity extends AppCompatActivity implements OnNavigationItemSe
     }
 
     @Override
+    public void showAlertDialog(String message) {
+        getAlertDialog().show(message);
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    @Override
+    public void isAllowedToReport() {
+        showReportPopup();
+    }
+
+    @Override
+    public void isNotAllowedToReport() {
+        showAddReportAlertPopup();
+    }
+
+    private void showAddReportAlertPopup() {
+        Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
+    }
+
+    @Override
+    public void isAllowedToAdd() {
+        showAddShopDialog();
+    }
+
+    @Override
+    public void isNotAllowedToAdd() {
+        showAddLimitAlertPopup();
+
+    }
+
+    private void showAddLimitAlertPopup() {
+        Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), Constants.ERROR_LIMIT).show();
+    }
+
+    @Override
+    public IGeneralView getInstance() {
+        return this;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }
