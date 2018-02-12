@@ -10,7 +10,9 @@ import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListen
 public interface IAuthenticationPresenter {
     void login (OnLoginWithEmailFinishedListener listener, String email, String password);
     void register (OnRegisterWithEmailFinishedListener listener, String email, String password);
-    void checkIfLoggedIn();
+    boolean isLoggedIn();
+    String getUserEmail();
+    String getUserId();
     FacebookCallback<LoginResult> loginWithFacebook(OnLoginWithFacebookFinishedListener listener);
     void sendResetInstructions(OnResetInstructionsSent listener, String email);
 }

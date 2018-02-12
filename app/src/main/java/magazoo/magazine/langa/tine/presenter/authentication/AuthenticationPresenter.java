@@ -81,11 +81,18 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
     }
 
     @Override
-    public void checkIfLoggedIn() {
-        if (isLoggedInWithEmail() || isLoggedInWithFacebook()) {
-            getLoginActivityView().goToMap();
-            getLoginActivityView().getActivity().finish();
-        }
+    public boolean isLoggedIn() {
+        return isLoggedInWithEmail() || isLoggedInWithFacebook();
+    }
+
+    @Override
+    public String getUserEmail() {
+        return mFirebaseAuthenticationManager.getCurrentUser().getEmail();
+    }
+
+    @Override
+    public String getUserId() {
+        return mFirebaseAuthenticationManager.getCurrentUser().getUid();
     }
 
     @Override

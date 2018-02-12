@@ -5,8 +5,9 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * TODO: Add a class header comment!
  */
-public interface IMapActivity {
+public interface IMapActivityView {
     void showAddShopDialog();
-    void showAlertDialog(String message);
+    void showErrorDialog(String title, String message, int errorType);
     void showReportPopup();
+    void showDuplicateLocationReportErrorDialog();
 }

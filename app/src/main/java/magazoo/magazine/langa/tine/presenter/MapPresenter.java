@@ -1,30 +1,33 @@
 package magazoo.magazine.langa.tine.presenter;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.Date;
 
-import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
 import magazoo.magazine.langa.tine.repository.Repository;
+import magazoo.magazine.langa.tine.ui.map.IMapActivityView;
 import magazoo.magazine.langa.tine.ui.map.OnGetReportsFromDatabaseListener;
 import magazoo.magazine.langa.tine.ui.map.OnGetShopsFromDatabaseListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToAddListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToReportListener;
-import magazoo.magazine.langa.tine.utils.Util;
+import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
 
 /**
  * TODO: Add a class header comment!
  */
-public class MapPresenter implements IMapPresenter {
+public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportListener, OnReportWrittenToDatabaseListener {
 
-    private Repository mRepository = new Repository();
+    private Repository mRepository;
+    private IGeneralView mView;
+    private AuthenticationPresenter mAuthenticationPresenter;
+    public MapPresenter(IGeneralView mView) {
+        this.mView = mView;
+        this.mRepository = new Repository();
+        this.mAuthenticationPresenter = new AuthenticationPresenter(mView);
+    }
 
     public void checkIfAllowedToReport(final OnIsAllowedToReportListener listener) {
 
@@ -37,8 +40,23 @@ public class MapPresenter implements IMapPresenter {
                     listener.isNotAllowedToReport();
                 }
             }
-        });
+        }, mAuthenticationPresenter.getUserId());
 
+    }
+
+    @Override
+    public void checkIfDuplicateLocationReport(Report currentReportedShop) {
+        mRepository.checkIfDuplicateLocationReport(this, mAuthenticationPresenter.getUserId(), currentReportedShop);
+    }
+
+    @Override
+    public boolean isUserLoggedIn() {
+        return mAuthenticationPresenter.isLoggedIn();
+    }
+
+    @Override
+    public String getUserEmail() {
+        return mAuthenticationPresenter.getUserEmail();
     }
 
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {
@@ -62,34 +80,29 @@ public class MapPresenter implements IMapPresenter {
         return shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT;
     }
 
-    private void getShopsAddedToday(final OnGetShopsFromDatabaseListener listener) {
+    @Override
+    public void isDuplicateLocationReport() {
+        getMapActivityView().showDuplicateLocationReportErrorDialog();
+    }
 
-        final ArrayList<Marker> addedShopsToday = new ArrayList<>();
-        //filter data based on logged in user
-        Query query = mStoreRef.orderByChild("createdBy").equalTo(mAuth.getCurrentUser().getUid());
+    @Override
+    public void isNotDuplicateLocationReport() {
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRepository.writeReportToDatabase(this);
+        writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Marker store = markerSnapshot.getValue(Marker.class);
-                    Date createdAt = new Date(store.getCreatedAt());
-                    long now = new Date().getTime();
-                    Date nowDate = new Date(now);
-
-                    if (Util.isSameDay(createdAt, nowDate)) {
-                        addedShopsToday.add(store);
-                    }
-                }
-
-                listener.onDataFetched(addedShopsToday);
+            public void onReportWritten() {
+                showReportThanksPopup();
             }
+        }, mCurrentOpenShop, Constants.REPORT_LOCATION, false);
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    private IMapActivityView getMapActivityView() {
+        return (IMapActivityView) mView.getInstance();
+    }
 
-            }
-        });
+    @Override
+    public void onReportWritten() {
+
     }
 }

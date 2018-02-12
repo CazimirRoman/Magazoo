@@ -84,10 +84,10 @@ import magazoo.magazine.langa.tine.utils.Util;
 
 import static magazoo.magazine.langa.tine.R.id.map;
 
-public class MapActivity extends BaseActivity implements IMapActivity, OnNavigationItemSelectedListener, OnMapReadyCallback,
+public class MapActivityView extends BaseActivity implements IMapActivityView, OnNavigationItemSelectedListener, OnMapReadyCallback,
         ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnErrorHandledListener, OnIsAllowedToAddListener, OnIsAllowedToReportListener {
 
-    private static final String TAG = MapActivity.class.getSimpleName();
+    private static final String TAG = MapActivityView.class.getSimpleName();
 
     private MapPresenter mPresenter;
 
@@ -108,18 +108,17 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
     private TextView mNonStopLabel;
     private TextView mPosLabel;
     private TextView mTicketsLabel;
-    private MapActivity mContext;
+    private MapActivityView mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapPresenter();
+        mPresenter = new MapPresenter(this);
         Utils.init(mContext);
         mAuth = FirebaseAuth.getInstance();
         onboardingNeeded();
         checkInternetConnection();
         checkGPSConnection();
-        initializeDatabaseReference();
         initUI();
         setupNavigationDrawer();
         setUpMap();
@@ -164,24 +163,19 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         return false;
     }
 
-    private void initializeDatabaseReference() {
-
-    }
-
     private void checkInternetConnection() {
         if (!NetworkUtils.isConnected()) {
-            buildNoInternetErrorDialog();
+            showNoInternetErrorDialog();
         }
     }
 
     private void checkGPSConnection() {
         if (!Util.isGPSAvailable()) {
-            buildNoGPSErrorDialog();
+            showNoGPSErrorDialog();
         }
     }
 
     private void setupApiClientLocation() {
-
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -209,12 +203,12 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (mAuth.getCurrentUser() != null) {
+        if (mPresenter.isUserLoggedIn()) {
             navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
             View headerLayout = navigationView.getHeaderView(0);
             TextView headerText = headerLayout.findViewById(R.id.signedInUserEmail);
-            headerText.setText(mAuth.getCurrentUser().getEmail());
+            headerText.setText(mPresenter.getUserEmail());
         } else {
             navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
         }
@@ -231,18 +225,18 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
                 if (Util.isInternetAvailable(mContext)) {
 
                     if (mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED) {
-                        if (mAuth.getCurrentUser() != null) {
-                            mPresenter.checkIfAllowedToAdd(MapActivity.this);
+                        if (mPresenter.isUserLoggedIn()) {
+                            mPresenter.checkIfAllowedToAdd(MapActivityView.this);
                         } else {
-                            startActivity(new Intent(MapActivity.this, LoginActivityView.class));
+                            startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
                             finish();
                         }
                     } else {
-                        Util.buildDialog(mContext, getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, Constants.ERROR_ACCURACY).show();
+                        showAccuracyErrorDialog();
                     }
 
                 } else {
-                    buildNoInternetErrorDialog();
+                    showNoInternetErrorDialog();
                 }
             }
         });
@@ -252,12 +246,20 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
 
     }
 
-    private void buildNoInternetErrorDialog() {
-        Util.buildDialog(mContext, getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), Constants.ERROR_INTERNET).show();
+    private void showAccuracyErrorDialog() {
+        showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, Constants.ERROR_ACCURACY);
     }
 
-    private void buildNoGPSErrorDialog() {
-        Util.buildDialog(mContext, getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION).show();
+    public void showDuplicateLocationReportErrorDialog() {
+        showErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), Constants.ERROR_LIMIT);
+    }
+
+    private void showNoInternetErrorDialog() {
+        showErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), Constants.ERROR_INTERNET);
+    }
+
+    private void showNoGPSErrorDialog() {
+        showErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION);
     }
 
     private void initUIShopDetails() {
@@ -280,10 +282,10 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         buttonReport.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mAuth.getCurrentUser() != null) {
-                    mPresenter.checkIfAllowedToReport(MapActivity.this);
+                if (mPresenter.isUserLoggedIn()) {
+                    mPresenter.checkIfAllowedToReport(MapActivityView.this);
                 } else {
-                    startActivity(new Intent(MapActivity.this, LoginActivityView.class));
+                    startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
                     finish();
                 }
             }
@@ -319,45 +321,9 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
-                checkIfDuplicateLocationReport();
+                mPresenter.checkIfDuplicateLocationReport(mCurrentReportedShop);
                 closeDialog(dialog);
-            }
-
-            private void checkIfDuplicateLocationReport() {
-                final ArrayList<Report> locationReports = new ArrayList<>();
-
-                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            Report report = markerSnapshot.getValue(Report.class);
-                            if (report.getRegards().equals("location")) {
-                                locationReports.add(report);
-                            }
-                        }
-
-                        if (!locationReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
-                                @Override
-                                public void onReportWritten() {
-                                    showReportThanksPopup();
-                                }
-                            }, mCurrentOpenShop, Constants.REPORT_LOCATION, false);
-                        } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
 
 
@@ -511,26 +477,6 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         dialog.dismiss();
     }
 
-    private void writeReportToDatabase(final OnReportWrittenToDatabaseListener listener, final Marker shop, final String reportTarget, final boolean howisit) {
-        mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                {
-                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
-                    mReportRef.push().setValue(reportedShop);
-                    listener.onReportWritten();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
     private void navigateToShop() {
         if (mCurrentLocation != null && mCurrentOpenShopLatLng != null) {
             final String navigationLink = "http://maps.google.com/maps?saddr="
@@ -622,7 +568,7 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MapActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivityView.this, "Not logged in", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -677,13 +623,13 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(MapActivity.this, ProfileActivity.class));
+            startActivity(new Intent(MapActivityView.this, ProfileActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
             signOut();
         } else if (id == R.id.nav_signin) {
-            startActivity(new Intent(MapActivity.this, LoginActivityView.class));
+            startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
             finish();
         } else if (id == R.id.nav_tutorial) {
             startTutorialActivity();
@@ -708,7 +654,7 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
     private void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MapActivity.this, LoginActivityView.class));
+        startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
         finish();
 
     }
@@ -820,7 +766,7 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
     }
 
     private void getMapBounds() {
-        mBounds = MapActivity.this.mMap
+        mBounds = MapActivityView.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -914,7 +860,7 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MapActivity.this, "selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivityView.this, "selected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -962,8 +908,8 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
     }
 
     @Override
-    public void showAlertDialog(String message) {
-        getAlertDialog().show(message);
+    public void showErrorDialog(String title, String message, int errorType) {
+        Util.buildDialog(getApplicationContext(), title, message, errorType).show();
     }
 
     @Override
@@ -979,10 +925,12 @@ public class MapActivity extends BaseActivity implements IMapActivity, OnNavigat
 
     @Override
     public void isNotAllowedToReport() {
-        showAddReportAlertPopup();
+        showReportLimitPopup();
     }
 
-    private void showAddReportAlertPopup() {
+    private void showReportLimitPopup() {
+
+
         Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
     }
 
