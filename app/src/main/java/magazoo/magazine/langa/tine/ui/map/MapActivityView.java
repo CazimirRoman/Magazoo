@@ -38,7 +38,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.NetworkUtils;
-import com.blankj.utilcode.util.Utils;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,8 +54,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -111,11 +108,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
-        Utils.init(mContext);
         mAuth = FirebaseAuth.getInstance();
         onboardingNeeded();
-        checkInternetConnection();
-        checkGPSConnection();
         initUI();
         setupNavigationDrawer();
         setUpMap();
@@ -223,8 +217,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
             @Override
             public void onClick(View view) {
 
-                if (Util.isInternetAvailable(mContext)) {
-
                     if (mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED) {
                         if (mPresenter.isUserLoggedIn()) {
                             mPresenter.checkIfAllowedToAdd(MapActivityView.this);
@@ -236,9 +228,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                         showAccuracyErrorDialog();
                     }
 
-                } else {
-                    showNoInternetErrorDialog();
-                }
             }
         });
 
@@ -770,7 +759,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
 
     @Override
     public void showErrorDialog(String title, String message, int errorType) {
-        Util.buildDialog(getApplicationContext(), title, message, errorType).show();
+        Util.buildDialog(this, title, message, errorType).show();
     }
 
     @Override
