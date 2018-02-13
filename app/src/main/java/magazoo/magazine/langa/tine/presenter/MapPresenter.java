@@ -1,5 +1,7 @@
 package magazoo.magazine.langa.tine.presenter;
 
+import com.google.android.gms.maps.model.LatLngBounds;
+
 import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.base.IGeneralView;
@@ -10,7 +12,6 @@ import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresen
 import magazoo.magazine.langa.tine.repository.Repository;
 import magazoo.magazine.langa.tine.ui.map.IMapActivityView;
 import magazoo.magazine.langa.tine.ui.map.OnGetReportsFromDatabaseListener;
-import magazoo.magazine.langa.tine.ui.map.OnGetShopsFromDatabaseListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToAddListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToReportListener;
 import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
@@ -18,15 +19,17 @@ import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
 /**
  * TODO: Add a class header comment!
  */
-public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportListener, OnReportWrittenToDatabaseListener {
+public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, OnReportWrittenToDatabaseListener, OnGetShopsAddedTodayListener, OnAddListenerForNewMarkerAdded, OnGetAllMarkersListener, OnAddMarkerToDatabaseListener {
 
     private Repository mRepository;
     private IGeneralView mView;
     private AuthenticationPresenter mAuthenticationPresenter;
+    private String userId;
     public MapPresenter(IGeneralView mView) {
         this.mView = mView;
         this.mRepository = new Repository();
         this.mAuthenticationPresenter = new AuthenticationPresenter(mView);
+        this.userId = mAuthenticationPresenter.getUserId();
     }
 
     public void checkIfAllowedToReport(final OnIsAllowedToReportListener listener) {
@@ -40,13 +43,12 @@ public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportLis
                     listener.isNotAllowedToReport();
                 }
             }
-        }, mAuthenticationPresenter.getUserId());
-
+        }, userId);
     }
 
     @Override
-    public void checkIfDuplicateLocationReport(Report currentReportedShop) {
-        mRepository.checkIfDuplicateLocationReport(this, mAuthenticationPresenter.getUserId(), currentReportedShop);
+    public void checkIfDuplicateReport(Report currentReportedShop) {
+        mRepository.checkIfDuplicateReport(this, userId, currentReportedShop);
     }
 
     @Override
@@ -59,21 +61,42 @@ public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportLis
         return mAuthenticationPresenter.getUserEmail();
     }
 
+    @Override
+    public void addListenerForNewMarkerAdded() {
+        mRepository.addChildEventListenerForMarker(this);
+    }
+
+    @Override
+    public void getAllMarkers(LatLngBounds bounds) {
+        mRepository.getAllMarkers(this, bounds);
+    }
+
+    @Override
+    public void addMarkerToFirebase(Marker markerToAdd) {
+        markerToAdd.setCreatedBy(mAuthenticationPresenter.getUserId());
+        mRepository.addMarkerToDatabase(this, markerToAdd);
+    }
+
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {
         return reportsAddedToday.size() <= Constants.REPORT_SHOP_LIMIT;
     }
 
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener listener) {
-        getShopsAddedToday(new OnGetShopsFromDatabaseListener() {
+        mRepository.getShopsAddedToday(new OnGetShopsAddedTodayListener() {
             @Override
-            public void onDataFetched(ArrayList<Marker> shopsAddedToday) {
+            public void onGetShopsAddedTodaySuccess(ArrayList<Marker> shopsAddedToday) {
                 if (isUnderTheAddLimit(shopsAddedToday)) {
                     listener.isAllowedToAdd();
                 } else {
                     listener.isNotAllowedToAdd();
                 }
             }
-        });
+
+            @Override
+            public void onGetShopsAddedTodayFailed() {
+                //TODO: handle this
+            }
+        }, userId);
     }
 
     private boolean isUnderTheAddLimit(ArrayList<Marker> shopsAddedToday) {
@@ -81,20 +104,16 @@ public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportLis
     }
 
     @Override
-    public void isDuplicateLocationReport() {
-        getMapActivityView().showDuplicateLocationReportErrorDialog();
+    public void isDuplicateReport(String regards) {
+        getMapActivityView().closeReportDialog();
+        getMapActivityView().showDuplicateReportErrorDialog(regards);
     }
 
     @Override
-    public void isNotDuplicateLocationReport() {
-
-        mRepository.writeReportToDatabase(this);
-        writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
-            @Override
-            public void onReportWritten() {
-                showReportThanksPopup();
-            }
-        }, mCurrentOpenShop, Constants.REPORT_LOCATION, false);
+    public void isNotDuplicateReport(String regards) {
+        getMapActivityView().closeReportDialog();
+        Marker currentReportedShopMarker = getMapActivityView().getCurrentOpenShop();
+        mRepository.writeReportToDatabase(this, userId, currentReportedShopMarker, regards, false);
     }
 
     private IMapActivityView getMapActivityView() {
@@ -102,7 +121,55 @@ public class MapPresenter implements IMapPresenter, OnDuplicateLocationReportLis
     }
 
     @Override
-    public void onReportWritten() {
+    public void onReportWrittenSuccess() {
+        getMapActivityView().closeReportDialog();
+        getMapActivityView().showReportThanksPopup();
+    }
 
+    @Override
+    public void onReportWrittenFailed(String error) {
+        getMapActivityView().showToast(error);
+    }
+
+    @Override
+    public void onGetShopsAddedTodaySuccess(ArrayList<Marker> shopsAddedToday) {
+
+    }
+
+    @Override
+    public void onGetShopsAddedTodayFailed() {
+        getMapActivityView().showShopLimitErrorDialog();
+    }
+
+    @Override
+    public void onAddListenerForNewMarkerAddedSuccess(Marker marker, String title) {
+        getMapActivityView().addNewlyAddedMarkerToMap(marker, title);
+    }
+
+    @Override
+    public void onAddListenerForNewMarkerAddedFailed() {
+
+    }
+
+    @Override
+    public void onGetAllMarkersSuccess(ArrayList<Marker> markers) {
+        getMapActivityView().addMarkersToMap(markers);
+    }
+
+    @Override
+    public void onGetAllMarkersFailed(String message) {
+        getMapActivityView().showToast(message);
+    }
+
+    @Override
+    public void onAddMarkerSuccess() {
+        getMapActivityView().closeAddShopDialog();
+        getMapActivityView().showAddThanksPopup();
+    }
+
+    @Override
+    public void onAddMarkerFailed(String error) {
+        getMapActivityView().closeAddShopDialog();
+        getMapActivityView().showToast(error);
     }
 }

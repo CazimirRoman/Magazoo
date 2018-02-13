@@ -68,8 +68,10 @@ public class Report {
 
         Report report = (Report) o;
 
-        return report.getShopId().equals(shopId) && report.getReportedBy().equals(reportedBy)
+        return report.getReportedBy().equals(reportedBy)
                 && report.getRegards().equals(regards) && report.isHowisit() == howisit;
     }
+
+
 }
 

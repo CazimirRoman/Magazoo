@@ -58,11 +58,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,6 +104,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     private TextView mPosLabel;
     private TextView mTicketsLabel;
     private MapActivityView mContext;
+    private MaterialDialog mReportDialog;
+    private MaterialDialog mAddShopDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +158,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         }
 
         return false;
+    }
+
+    public Marker getCurrentOpenShop() {
+        return mCurrentOpenShop;
     }
 
     private void checkInternetConnection() {
@@ -228,7 +229,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                         if (mPresenter.isUserLoggedIn()) {
                             mPresenter.checkIfAllowedToAdd(MapActivityView.this);
                         } else {
-                            startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
+                            startLoginActivity();
                             finish();
                         }
                     } else {
@@ -250,8 +251,18 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, Constants.ERROR_ACCURACY);
     }
 
-    public void showDuplicateLocationReportErrorDialog() {
-        showErrorDialog(getString(R.string.popup_location_report_duplicate_error_title), getString(R.string.popup_location_report_duplicate_error_text), Constants.ERROR_LIMIT);
+    @Override
+    public void showShopLimitErrorDialog() {
+
+    }
+
+    @Override
+    public void closeShopDetails() {
+        mShopDetails.setVisibility(View.GONE);
+    }
+
+    public void showDuplicateReportErrorDialog(String regards) {
+        showErrorDialog(getString(R.string.popup_report_duplicate_error_title), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
     }
 
     private void showNoInternetErrorDialog() {
@@ -285,20 +296,20 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                 if (mPresenter.isUserLoggedIn()) {
                     mPresenter.checkIfAllowedToReport(MapActivityView.this);
                 } else {
-                    startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
+                    startLoginActivity();
                     finish();
                 }
             }
         });
     }
 
-    public void showReportPopup() {
+    public void showReportDialog() {
 
-        final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
-        Button report_location = (Button) dialog.findViewById(R.id.button_report_location);
-        Button report_247 = (Button) dialog.findViewById(R.id.button_report_247);
-        Button report_pos = (Button) dialog.findViewById(R.id.button_report_pos);
-        Button report_tickets = (Button) dialog.findViewById(R.id.button_report_tickets);
+        mReportDialog = buildCustomDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
+        Button report_location = (Button) mReportDialog.findViewById(R.id.button_report_location);
+        Button report_247 = (Button) mReportDialog.findViewById(R.id.button_report_247);
+        Button report_pos = (Button) mReportDialog.findViewById(R.id.button_report_pos);
+        Button report_tickets = (Button) mReportDialog.findViewById(R.id.button_report_tickets);
 
         if (mNonStopLabel.getVisibility() == View.GONE) {
             report_247.setText(getString(R.string.popup_report_247_yes));
@@ -322,8 +333,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
             @Override
             public void onClick(View view) {
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_LOCATION, false, mAuth.getCurrentUser().getUid(), new Date().getTime());
-                mPresenter.checkIfDuplicateLocationReport(mCurrentReportedShop);
-                closeDialog(dialog);
+                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
 
 
@@ -332,91 +342,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         report_247.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_247, !mCurrentOpenShop.getNonstop(), mAuth.getCurrentUser().getUid(), new Date().getTime());
-                checkIfDuplicate247Report();
-                closeDialog(dialog);
+                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
-
-            private void checkIfDuplicate247Report() {
-                final ArrayList<Report> nonStopReports = new ArrayList<>();
-
-                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            Report report = markerSnapshot.getValue(Report.class);
-                            if (report.getRegards().equals("nonstop")) {
-                                nonStopReports.add(report);
-                            }
-                        }
-
-                        if (!nonStopReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
-                                @Override
-                                public void onReportWritten() {
-                                    showReportThanksPopup();
-                                }
-                            }, mCurrentOpenShop, Constants.REPORT_247, !mCurrentOpenShop.getNonstop());
-                        } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_nonstop_report_duplicate_error_title), getString(R.string.popup_nonstop_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-
         });
 
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_POS, !mCurrentOpenShop.getPos(), mAuth.getCurrentUser().getUid(), new Date().getTime());
-                checkIfDuplicatePosReport();
-                closeDialog(dialog);
-            }
-
-            private void checkIfDuplicatePosReport() {
-                final ArrayList<Report> posReports = new ArrayList<>();
-
-                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            Report report = markerSnapshot.getValue(Report.class);
-                            if (report.getRegards().equals("pos")) {
-                                posReports.add(report);
-                            }
-                        }
-
-                        if (!posReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
-                                @Override
-                                public void onReportWritten() {
-                                    showReportThanksPopup();
-                                }
-                            }, mCurrentOpenShop, Constants.REPORT_POS, !mCurrentOpenShop.getPos());
-                        } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_pos_report_duplicate_error_title), getString(R.string.popup_pos_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
 
         });
@@ -425,57 +360,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
             @Override
             public void onClick(View view) {
                 mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuth.getCurrentUser().getUid(), new Date().getTime());
-                checkIfDuplicateTicketsReport();
-                closeDialog(dialog);
-            }
-
-            private void checkIfDuplicateTicketsReport() {
-                final ArrayList<Report> ticketsReports = new ArrayList<>();
-
-                Query query = mReportRef.orderByChild("reportedBy").equalTo(mAuth.getCurrentUser().getUid());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                            Report report = markerSnapshot.getValue(Report.class);
-                            if (report.getRegards().equals("tickets")) {
-                                ticketsReports.add(report);
-                            }
-                        }
-
-                        if (!ticketsReports.contains(mCurrentReportedShop)) {
-                            writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
-                                @Override
-                                public void onReportWritten() {
-                                    showReportThanksPopup();
-                                }
-                            }, mCurrentOpenShop, Constants.REPORT_TICKETS, !mCurrentOpenShop.getTickets());
-                        } else {
-                            Util.buildDialog(mContext, getString(R.string.popup_tickets_report_duplicate_error_title), getString(R.string.popup_tickets_report_duplicate_error_text), Constants.ERROR_LIMIT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
 
     }
 
-    private void showReportThanksPopup() {
+    public void showReportThanksPopup() {
         Util.buildDialog(mContext, getString(R.string.thanks_report), getString(R.string.details_report), 0).show();
     }
-
-    private void closeDialog(MaterialDialog dialog) {
+    @Override
+    public void closeReportDialog() {
         //TODO: need to find a way to update the cardview without closing it
         mShopDetails.setVisibility(View.GONE);
-        dialog.dismiss();
+        mReportDialog.dismiss();
     }
+
+    @Override
+    public void addNewlyAddedMarkerToMap(Marker marker, String title) {
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(marker.getLat(), marker.getLon()))
+                .title(title));
+    }
+
+    @Override
+    public void addMarkersToMap(ArrayList<Marker> markers) {
+        mMap.clear();
+        for (int i = 0; i < markers.size(); i++) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(markers.get(i).getLat(), markers.get(i).getLon()))
+                    .title(markers.get(i).getId()));
+        }
+    }
+
+
 
     private void navigateToShop() {
         if (mCurrentLocation != null && mCurrentOpenShopLatLng != null) {
@@ -505,92 +424,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                 .customView(layout, true);
     }
 
-    private void onNewMarkerAdded() {
-
-        mStoreRef.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Marker marker = dataSnapshot.getValue(Marker.class);
-                assert marker != null;
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(marker.getLat(), marker.getLon()))
-                        .title(s));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void onNewShopMarkerAdded() {
+        mPresenter.addListenerForNewMarkerAdded();
     }
 
-    private void displayFirebaseMarkers() {
-
-        mStoreRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                mMarkersInBounds = new ArrayList<>();
-
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Marker marker = markerSnapshot.getValue(Marker.class);
-                    //update model with id from firebase
-                    marker.setId(markerSnapshot.getKey());
-                    if (mBounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
-                        mMarkersInBounds.add(marker);
-                    }
-                }
-
-                mMap.clear();
-
-                for (int i = 0; i < mMarkersInBounds.size(); i++) {
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(mMarkersInBounds.get(i).getLat(), mMarkersInBounds.get(i).getLon()))
-                            .title(mMarkersInBounds.get(i).getId()));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MapActivityView.this, "Not logged in", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+    private void getShopMarkers() {
+        mPresenter.getAllMarkers(mBounds);
     }
 
-    private void addMarkerToFirebase(Marker markerToAdd) {
-        mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-
-                if (task.isSuccessful()) {
-                    showAddThanksPopup();
-                } else {
-                    Toast.makeText(mContext, "A network error occured. Pleaase try again later", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-    }
-
-    private void showAddThanksPopup() {
+    public void showAddThanksPopup() {
         Util.buildDialog(mContext, getString(R.string.thanks_adding), getString(R.string.details_adding), 0).show();
     }
 
@@ -623,13 +465,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(MapActivityView.this, ProfileActivity.class));
+            startProfileActivity();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_signout) {
             signOut();
         } else if (id == R.id.nav_signin) {
-            startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
+            startLoginActivity();
             finish();
         } else if (id == R.id.nav_tutorial) {
             startTutorialActivity();
@@ -643,6 +485,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         return true;
     }
 
+    private void startProfileActivity() {
+        startActivity(new Intent(MapActivityView.this, ProfileActivity.class));
+    }
+
     private void sendContactEmail() {
         Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
         feedbackEmail.setType("text/email");
@@ -652,11 +498,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     private void signOut() {
+
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
+        startLoginActivity();
         finish();
 
+    }
+
+    private void startLoginActivity() {
+        startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
     @Override
@@ -683,30 +534,30 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
         setMyLocationEnabled();
         setOnCameraChangeListener();
         if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
-            displayFirebaseMarkers();
+            getShopMarkers();
         }
 
     }
 
-    private void showShopDetails(Marker d) {
+    private void showShopDetails(Marker marker) {
 
-        mCurrentOpenShop = d;
-        mCurrentOpenShopLatLng = new LatLng(d.getLat(), d.getLon());
-        mShopTypeLabel.setText(d.getType());
+        mCurrentOpenShop = marker;
+        mCurrentOpenShopLatLng = new LatLng(marker.getLat(), marker.getLon());
+        mShopTypeLabel.setText(marker.getType());
 
-        if (d.getNonstop()) {
+        if (marker.getNonstop()) {
             mNonStopLabel.setVisibility(View.VISIBLE);
         } else {
             mNonStopLabel.setVisibility(View.GONE);
         }
 
-        if (d.getPos()) {
+        if (marker.getPos()) {
             mPosLabel.setVisibility(View.VISIBLE);
         } else {
             mPosLabel.setVisibility(View.GONE);
         }
 
-        if (d.getTickets()) {
+        if (marker.getTickets()) {
             mTicketsLabel.setVisibility(View.VISIBLE);
         } else {
             mTicketsLabel.setVisibility(View.GONE);
@@ -749,8 +600,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
                     mMap.clear();
                     getMapBounds();
-                    displayFirebaseMarkers();
-                    onNewMarkerAdded();
+                    getShopMarkers();
+                    onNewShopMarkerAdded();
                 } else {
                     //first run only
                     if (mCurrentZoomLevel != 2) {
@@ -848,14 +699,19 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
 
     }
 
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+    }
+
     public void showAddShopDialog() {
 
-        final MaterialDialog dialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
-        final MaterialSpinner spinner = (MaterialSpinner) dialog.findViewById(R.id.spinner_type);
-        final CheckBox chkPos = (CheckBox) dialog.findViewById(R.id.checkPos);
-        final CheckBox chkNonstop = (CheckBox) dialog.findViewById(R.id.checkNonstop);
-        final CheckBox chkTickets = (CheckBox) dialog.findViewById(R.id.checkTickets);
-        final EditText editDescription = (EditText) dialog.findViewById(R.id.editDescription);
+        mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
+        final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
+        final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
+        final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
+        final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
+        final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -881,13 +737,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
 
         spinner.setAdapter(dataAdapter);
 
-        Button buttonAdd = (Button) dialog.findViewById(R.id.buttonAdd);
-        Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
+        Button buttonAdd = (Button) mAddShopDialog.findViewById(R.id.buttonAdd);
+        Button buttonCancel = (Button) mAddShopDialog.findViewById(R.id.buttonCancel);
 
         buttonCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                mAddShopDialog.dismiss();
             }
         });
 
@@ -895,16 +751,21 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                    addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
+
+                    mPresenter.addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, mAuth.getCurrentUser().getUid()));
-                    dialog.dismiss();
+                            chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, ""));
                 } else {
                     spinner.setError(getString(R.string.popup_add_shop_type));
                 }
 
             }
         });
+    }
+
+    @Override
+    public void closeAddShopDialog() {
+        mAddShopDialog.dismiss();
     }
 
     @Override
@@ -920,7 +781,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
 
     @Override
     public void isAllowedToReport() {
-        showReportPopup();
+        showReportDialog();
     }
 
     @Override
@@ -929,8 +790,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     private void showReportLimitPopup() {
-
-
         Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
     }
 

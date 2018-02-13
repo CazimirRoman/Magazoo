@@ -15,6 +15,7 @@ public class Marker {
     private String description;
     private Double rating;
     private long createdAt;
+
     private String createdBy;
 
 
@@ -78,6 +79,10 @@ public class Marker {
 
     public long getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getCreatedBy() {

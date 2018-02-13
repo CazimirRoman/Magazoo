@@ -1,5 +1,8 @@
 package magazoo.magazine.langa.tine.presenter;
 
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToReportListener;
 
@@ -8,7 +11,10 @@ import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToReportListener;
  */
 public interface IMapPresenter {
     void checkIfAllowedToReport(OnIsAllowedToReportListener listener);
-    void checkIfDuplicateLocationReport(Report currentReportedShop);
+    void checkIfDuplicateReport(Report currentReportedShop);
     boolean isUserLoggedIn();
     String getUserEmail();
+    void addListenerForNewMarkerAdded();
+    void getAllMarkers(LatLngBounds mBounds);
+    void addMarkerToFirebase(Marker markerToAdd);
 }

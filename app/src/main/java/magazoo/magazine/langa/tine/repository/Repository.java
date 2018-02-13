@@ -1,5 +1,12 @@
 package magazoo.magazine.langa.tine.repository;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,10 +19,12 @@ import java.util.Date;
 
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
-import magazoo.magazine.langa.tine.presenter.OnDuplicateLocationReportListener;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.OnAddListenerForNewMarkerAdded;
+import magazoo.magazine.langa.tine.presenter.OnAddMarkerToDatabaseListener;
+import magazoo.magazine.langa.tine.presenter.OnDuplicateReportListener;
+import magazoo.magazine.langa.tine.presenter.OnGetAllMarkersListener;
+import magazoo.magazine.langa.tine.presenter.OnGetShopsAddedTodayListener;
 import magazoo.magazine.langa.tine.ui.map.OnGetReportsFromDatabaseListener;
-import magazoo.magazine.langa.tine.ui.map.OnGetShopsFromDatabaseListener;
 import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
 import magazoo.magazine.langa.tine.utils.Util;
 
@@ -59,11 +68,87 @@ public class Repository implements IRepository {
 
     }
 
-    private void getShopsAddedToday(final OnGetShopsFromDatabaseListener listener) {
+    @Override
+    public void addChildEventListenerForMarker(final OnAddListenerForNewMarkerAdded listener) {
+        mStoreRef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Marker marker = dataSnapshot.getValue(Marker.class);
+                assert marker != null;
+                listener.onAddListenerForNewMarkerAddedSuccess(marker, s);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getAllMarkers(final OnGetAllMarkersListener listener, final LatLngBounds bounds) {
+        mStoreRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<Marker> markersInVisibleArea = new ArrayList<>();
+                    for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                        Marker marker = markerSnapshot.getValue(Marker.class);
+                        //update model with id from firebase
+                        if(marker != null){
+                            marker.setId(markerSnapshot.getKey());
+                            if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
+                                markersInVisibleArea.add(marker);
+                            }
+                        }
+                    }
+
+                listener.onGetAllMarkersSuccess(markersInVisibleArea);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                listener.onGetAllMarkersFailed(databaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener listener, Marker markerToAdd) {
+        mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    listener.onAddMarkerSuccess();
+                } else{
+                    listener.onAddMarkerFailed(task.getException().getMessage());
+                }
+            }
+        });
+    }
+
+    public void getShopsAddedToday(final OnGetShopsAddedTodayListener listener, String userId) {
 
         final ArrayList<Marker> addedShopsToday = new ArrayList<>();
         //filter data based on logged in user
-        Query query = mStoreRef.orderByChild("createdBy").equalTo(mAuth.getCurrentUser().getUid());
+        Query query = mStoreRef.orderByChild("createdBy").equalTo(userId);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -80,7 +165,7 @@ public class Repository implements IRepository {
                     }
                 }
 
-                listener.onDataFetched(addedShopsToday);
+                listener.onGetShopsAddedTodaySuccess(addedShopsToday);
             }
 
             @Override
@@ -90,8 +175,8 @@ public class Repository implements IRepository {
         });
     }
 
-    public void checkIfDuplicateLocationReport(final OnDuplicateLocationReportListener listener, String userId, final Report currentReportedShop) {
-        final ArrayList<Report> locationReports = new ArrayList<>();
+    public void checkIfDuplicateReport(final OnDuplicateReportListener listener, String userId, final Report currentReportedShop) {
+        final ArrayList<Report> reports = new ArrayList<>();
 
         Query query = mReportRef.orderByChild("reportedBy").equalTo(userId);
 
@@ -101,16 +186,13 @@ public class Repository implements IRepository {
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     Report report = markerSnapshot.getValue(Report.class);
-                    if (report.getRegards().equals("location")) {
-                        locationReports.add(report);
-                    }
+                    reports.add(report);
                 }
 
-                if (!locationReports.contains(currentReportedShop)) {
-
-                    listener.isNotDuplicateLocationReport();
+                if (reports.contains(currentReportedShop)) {
+                    listener.isDuplicateReport(currentReportedShop.getRegards());
                 } else {
-                    listener.isDuplicateLocationReport();
+                    listener.isNotDuplicateReport(currentReportedShop.getRegards());
                 }
             }
 
@@ -121,20 +203,20 @@ public class Repository implements IRepository {
         });
     }
 
-    private void writeReportToDatabase(final OnReportWrittenToDatabaseListener listener, final Marker shop, final String reportTarget, final boolean howisit) {
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener listener, final String userId, final Marker shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
-                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, mAuth.getCurrentUser().getUid(), new Date().getTime());
+                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, userId, new Date().getTime());
                     mReportRef.push().setValue(reportedShop);
-                    listener.onReportWritten();
+                    listener.onReportWrittenSuccess();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                    listener.onReportWrittenFailed(databaseError.getMessage());
             }
         });
 
