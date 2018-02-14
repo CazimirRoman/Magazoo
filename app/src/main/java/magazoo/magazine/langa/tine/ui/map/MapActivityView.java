@@ -251,7 +251,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     public void showDuplicateReportErrorDialog(String regards) {
-        showErrorDialog(getString(R.string.popup_report_duplicate_error_title), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
+        showErrorDialog(String.format(getString(R.string.popup_report_duplicate_error_title), regards), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
     }
 
     private void showNoInternetErrorDialog() {
@@ -356,7 +356,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     public void showReportThanksPopup() {
-        Util.buildDialog(mContext, getString(R.string.thanks_report), getString(R.string.details_report), 0).show();
+        Util.buildDialog(this, getString(R.string.thanks_report), getString(R.string.details_report), 0).show();
     }
     @Override
     public void closeReportDialog() {
@@ -381,6 +381,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                     .position(new LatLng(markers.get(i).getLat(), markers.get(i).getLon()))
                     .title(markers.get(i).getId()));
         }
+
+        mMarkersInBounds = markers;
     }
 
 
