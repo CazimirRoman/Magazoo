@@ -8,7 +8,7 @@ import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.repository.Repository;
 import magazoo.magazine.langa.tine.ui.map.IMapActivityView;
 import magazoo.magazine.langa.tine.ui.map.OnGetReportsFromDatabaseListener;
@@ -23,12 +23,12 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
 
     private Repository mRepository;
     private IGeneralView mView;
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
     private String userId;
     public MapPresenter(IGeneralView mView) {
         this.mView = mView;
         this.mRepository = new Repository();
-        this.mAuthenticationPresenter = new AuthenticationPresenter(mView);
+        this.mAuthenticationPresenter = new AuthPresenter(mView);
         this.userId = mAuthenticationPresenter.getUserId();
     }
 

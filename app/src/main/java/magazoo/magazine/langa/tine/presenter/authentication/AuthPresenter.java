@@ -21,26 +21,25 @@ import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 import magazoo.magazine.langa.tine.ui.profile.OnResetInstructionsSent;
 import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListener;
 
-public class AuthenticationPresenter implements IAuthenticationPresenter {
+public class AuthPresenter implements IAuthPresenter {
 
     private IGeneralView mView;
-    private AuthenticationPresenter mAuthentication;
-    private FirebaseAuth mFirebaseAuthenticationManager;
+    private FirebaseAuth mAuthManager;
 
-    public AuthenticationPresenter(IGeneralView view) {
+    public AuthPresenter(IGeneralView view) {
         mView = view;
-        mFirebaseAuthenticationManager = FirebaseAuth.getInstance();
+        mAuthManager = FirebaseAuth.getInstance();
     }
 
     @Override
     public void login(final OnLoginWithEmailFinishedListener listener, String email, String password) {
-        mFirebaseAuthenticationManager.signInWithEmailAndPassword(email, password)
+        mAuthManager.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(mView.getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            if (mFirebaseAuthenticationManager.getCurrentUser().isEmailVerified()) {
+                            if (mAuthManager.getCurrentUser().isEmailVerified()) {
                                 listener.onLoginWithEmailSuccess();
 
                             } else {
@@ -54,13 +53,13 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
 
     @Override
     public void register(final OnRegisterWithEmailFinishedListener listener, String email, String password) {
-        mFirebaseAuthenticationManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuthManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     listener.onRegisterWithEmailFailed(task.getException().getMessage());
                 } else {
-                    final FirebaseUser user = mFirebaseAuthenticationManager.getCurrentUser();
+                    final FirebaseUser user = mAuthManager.getCurrentUser();
                     if (user != null && !user.isEmailVerified()) {
                         user.sendEmailVerification()
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -87,12 +86,12 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
 
     @Override
     public String getUserEmail() {
-        return mFirebaseAuthenticationManager.getCurrentUser().getEmail();
+        return mAuthManager.getCurrentUser().getEmail();
     }
 
     @Override
     public String getUserId() {
-        return mFirebaseAuthenticationManager.getCurrentUser().getUid();
+        return mAuthManager.getCurrentUser().getUid();
     }
 
     @Override
@@ -116,7 +115,7 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
 
     @Override
     public void sendResetInstructions(final OnResetInstructionsSent listener, String email) {
-        mFirebaseAuthenticationManager.sendPasswordResetEmail(email)
+        mAuthManager.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -130,11 +129,16 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
     }
 
     @Override
-    public void checkIfUserLoggedIn() {
-        if (mFirebaseAuthenticationManager.getCurrentUser() != null) {
+    public void checkIfUserLoggedInAndRedirectToMap() {
+        if (mAuthManager.getCurrentUser() != null) {
             ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
             view.goToMap();
         }
+    }
+
+    @Override
+    public void signOut() {
+        mAuthManager.signOut();
     }
 
     private void handleFacebookAccessToken(final OnLoginWithFacebookFinishedListener listener, AccessToken accessToken) {
@@ -143,7 +147,7 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
         Activity context = view.getActivity();
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        mFirebaseAuthenticationManager.signInWithCredential(credential)
+        mAuthManager.signInWithCredential(credential)
                 .addOnCompleteListener(context, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -161,7 +165,7 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
     }
 
     private boolean isLoggedInWithEmail() {
-        return mFirebaseAuthenticationManager.getCurrentUser() != null && mFirebaseAuthenticationManager.getCurrentUser().isEmailVerified();
+        return mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified();
     }
 
     private boolean isLoggedInWithFacebook() {

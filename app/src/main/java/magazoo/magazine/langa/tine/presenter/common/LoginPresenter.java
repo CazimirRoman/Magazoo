@@ -4,7 +4,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
 import magazoo.magazine.langa.tine.base.IGeneralView;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
 import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
@@ -12,11 +12,11 @@ import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinishedListener, OnLoginWithFacebookFinishedListener {
 
     private IGeneralView mView;
-    private AuthenticationPresenter mAuthPresenter;
+    private AuthPresenter mAuthPresenter;
 
     public LoginPresenter(IGeneralView view) {
         mView = view;
-        mAuthPresenter = new AuthenticationPresenter(mView);
+        mAuthPresenter = new AuthPresenter(mView);
     }
 
     public void performLoginWithEmail(String email, String password) {

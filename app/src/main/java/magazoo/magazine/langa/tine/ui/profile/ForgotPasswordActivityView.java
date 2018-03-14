@@ -2,24 +2,19 @@ package magazoo.magazine.langa.tine.ui.profile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseBackActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
 public class ForgotPasswordActivityView extends BaseBackActivity implements IResetPasswordActivity, OnResetInstructionsSent {
@@ -31,7 +26,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @BindView(R.id.progress)
     ProgressBar progress;
 
-    private AuthenticationPresenter mAuthPresenter;
+    private AuthPresenter mAuthPresenter;
 
     @OnClick(R.id.btnForgotPassword)
     public void onViewClicked() {
@@ -47,7 +42,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthPresenter = new AuthenticationPresenter(this);
+        mAuthPresenter = new AuthPresenter(this);
     }
 
     private boolean isFormDataValid() {

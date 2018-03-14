@@ -1,12 +1,7 @@
 package magazoo.magazine.langa.tine.presenter;
 
-import com.facebook.FacebookCallback;
-import com.facebook.login.LoginResult;
-
-import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.IGeneralView;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
-import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookFinishedListener;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.ui.register.IRegisterActivityView;
 import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListener;
 
@@ -16,11 +11,11 @@ import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListen
 public class RegisterPresenter implements IRegisterPresenter, OnRegisterWithEmailFinishedListener {
 
     private IGeneralView mView;
-    private AuthenticationPresenter mAuthPresenter;
+    private AuthPresenter mAuthPresenter;
 
     public RegisterPresenter(IGeneralView view) {
         mView = view;
-        mAuthPresenter = new AuthenticationPresenter(mView);
+        mAuthPresenter = new AuthPresenter(mView);
     }
 
     public void performRegisterWithEmail(String email, String password) {

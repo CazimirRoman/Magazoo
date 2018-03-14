@@ -18,7 +18,7 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthenticationPresenter;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.map.MapActivityView;
@@ -47,16 +47,20 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
-    private AuthenticationPresenter mAuthPresenter;
+    private AuthPresenter mAuthPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLoginPresenter = new LoginPresenter(this);
         mFacebookCallbackManager = CallbackManager.Factory.create();
-        mAuthPresenter = new AuthenticationPresenter(this);
-        mAuthPresenter.checkIfUserLoggedIn();
+        mAuthPresenter = new AuthPresenter(this);
+        redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
+    }
+
+    private void redirectToMapScreenIfLoggedIn() {
+        mAuthPresenter.checkIfUserLoggedInAndRedirectToMap();
     }
 
     @Override
