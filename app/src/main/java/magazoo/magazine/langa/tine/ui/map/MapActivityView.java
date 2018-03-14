@@ -424,7 +424,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     public void showAddThanksPopup() {
-        Util.buildDialog(mContext, getString(R.string.thanks_adding), getString(R.string.details_adding), 0).show();
+        Util.buildDialog(this, getString(R.string.thanks_adding), getString(R.string.details_adding), 0).show();
     }
 
     @Override
@@ -596,7 +596,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
                 } else {
                     //first run only
                     if (mCurrentZoomLevel != 2) {
-                        Util.buildDialog(mContext, "Max zoom reached", "Max zoom", Constants.ERROR_MAX_ZOOM).show();
+                        Util.buildDialog(MapActivityView.this, "Max zoom reached", "Max zoom", Constants.ERROR_MAX_ZOOM).show();
                     }
                 }
             }
@@ -659,7 +659,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
             } else {
-                Util.buildDialog(mContext, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
+                Util.buildDialog(this, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
             }
         }
     }
@@ -781,7 +781,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     private void showReportLimitPopup() {
-        Util.buildDialog(mContext, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
+        Util.buildDialog(this, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
     }
 
     @Override
@@ -796,7 +796,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, O
     }
 
     private void showAddLimitAlertPopup() {
-        Util.buildDialog(mContext, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), Constants.ERROR_LIMIT).show();
+        Util.buildDialog(this, getString(R.string.popup_shop_limit_error_title), getString(R.string.popup_shop_limit_error_text), Constants.ERROR_LIMIT).show();
     }
 
     @Override

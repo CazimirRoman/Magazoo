@@ -129,6 +129,14 @@ public class AuthenticationPresenter implements IAuthenticationPresenter {
                 });
     }
 
+    @Override
+    public void checkIfUserLoggedIn() {
+        if (mFirebaseAuthenticationManager.getCurrentUser() != null) {
+            ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
+            view.goToMap();
+        }
+    }
+
     private void handleFacebookAccessToken(final OnLoginWithFacebookFinishedListener listener, AccessToken accessToken) {
 
         final ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();

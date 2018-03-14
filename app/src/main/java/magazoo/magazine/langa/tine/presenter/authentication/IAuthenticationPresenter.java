@@ -15,4 +15,5 @@ public interface IAuthenticationPresenter {
     String getUserId();
     FacebookCallback<LoginResult> loginWithFacebook(OnLoginWithFacebookFinishedListener listener);
     void sendResetInstructions(OnResetInstructionsSent listener, String email);
+    void checkIfUserLoggedIn();
 }
