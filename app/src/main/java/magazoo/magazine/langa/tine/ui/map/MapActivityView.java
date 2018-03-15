@@ -38,7 +38,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.NetworkUtils;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -54,7 +53,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +66,6 @@ import magazoo.magazine.langa.tine.constants.Constants;
 import magazoo.magazine.langa.tine.model.Marker;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
-import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity;
@@ -82,7 +79,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private static final String TAG = MapActivityView.class.getSimpleName();
 
     private MapPresenter mPresenter;
-    private AuthPresenter mAuthPresenter;
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -90,7 +86,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
-    private Marker mCurrentOpenShop;
+    private Marker mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
@@ -107,7 +103,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
-        mAuthPresenter = new AuthPresenter(this);
         onboardingNeeded();
         initUI();
         setupNavigationDrawer();
@@ -142,10 +137,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Boolean mFirstRun;
 
         SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
-        mFirstRun = mPreferences.getBoolean(mAuthPresenter.getUserId(), true);
+        mFirstRun = mPreferences.getBoolean(mPresenter.getUserId(), true);
         if (mFirstRun) {
             SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putBoolean(mAuthPresenter.getUserId(), false);
+            editor.putBoolean(mPresenter.getUserId(), false);
             editor.apply();
             return true;
         }
@@ -153,20 +148,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return false;
     }
 
-    public Marker getCurrentOpenShop() {
-        return mCurrentOpenShop;
-    }
-
-    private void checkInternetConnection() {
-        if (!NetworkUtils.isConnected()) {
-            showNoInternetErrorDialog();
-        }
-    }
-
-    private void checkGPSConnection() {
-        if (!Util.isGPSAvailable()) {
-            showNoGPSErrorDialog();
-        }
+    public Marker getCurrentSelectedShop() {
+        return mCurrentSelectedShop;
     }
 
     private void setupApiClientLocation() {
@@ -267,7 +250,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     startTutorialActivity();
                 } else if (id == R.id.nav_contact) {
                     sendContactEmail();
-
                 }
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -295,7 +277,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                    if (checkIfCorrectAccuracy()) {
+                    if (true) {
                         if (mPresenter.isUserLoggedIn()) {
                             mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
                                 @Override
@@ -424,7 +406,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_LOCATION, false, mAuthPresenter.getUserId(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
 
@@ -434,7 +416,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_247.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_247, !mCurrentOpenShop.getNonstop(), mAuthPresenter.getUserId(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
@@ -442,7 +424,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_POS, !mCurrentOpenShop.getPos(), mAuthPresenter.getUserId(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
 
@@ -451,7 +433,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_tickets.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentReportedShop = new Report(mCurrentOpenShop.getId(), Constants.REPORT_TICKETS, !mCurrentOpenShop.getTickets(), mAuthPresenter.getUserId(), new Date().getTime());
+                mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
@@ -560,13 +542,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
         feedbackEmail.setType("text/email");
         feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {"cazimir.developer@gmail.com"});
-        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, mAuthPresenter.getUserEmail() + " has left a feedback");
+        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, mPresenter.getUserEmail() + " has left a feedback");
         startActivity(Intent.createChooser(feedbackEmail, "Send Feedback:"));
     }
 
     private void signOut() {
-        mAuthPresenter.signOut();
-        LoginManager.getInstance().logOut();
+        mPresenter.signOut();
         startLoginActivity();
         finish();
 
@@ -578,7 +559,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private void showShopDetails(Marker marker) {
 
-        mCurrentOpenShop = marker;
+        mCurrentSelectedShop = marker;
         mCurrentOpenShopLatLng = new LatLng(marker.getLat(), marker.getLon());
         mShopTypeLabel.setText(marker.getType());
 
@@ -715,7 +696,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void showAddShopDialog() {
+    private void showAddShopDialog() {
 
         mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
         final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
@@ -723,18 +704,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
         final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
-
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MapActivityView.this, "selected", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_type_small));

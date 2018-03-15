@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -139,6 +140,7 @@ public class AuthPresenter implements IAuthPresenter {
     @Override
     public void signOut() {
         mAuthManager.signOut();
+        LoginManager.getInstance().logOut();
     }
 
     private void handleFacebookAccessToken(final OnLoginWithFacebookFinishedListener listener, AccessToken accessToken) {

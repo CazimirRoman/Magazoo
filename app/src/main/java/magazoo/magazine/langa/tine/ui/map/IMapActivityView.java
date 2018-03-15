@@ -11,13 +11,12 @@ import magazoo.magazine.langa.tine.model.Marker;
  */
 public interface IMapActivityView {
     void showToast(String message);
-    void showAddShopDialog();
     void showErrorDialog(String title, String message, int errorType);
     void showReportDialog();
     void showReportThanksPopup();
     void showAddThanksPopup();
     void showDuplicateReportErrorDialog(String regards);
-    Marker getCurrentOpenShop();
+    Marker getCurrentSelectedShop();
     void showShopLimitErrorDialog();
     void closeShopDetails();
     void closeReportDialog();

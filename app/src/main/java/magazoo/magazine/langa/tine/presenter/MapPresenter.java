@@ -112,7 +112,7 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
     @Override
     public void isNotDuplicateReport(String regards) {
         getMapActivityView().closeReportDialog();
-        Marker currentReportedShopMarker = getMapActivityView().getCurrentOpenShop();
+        Marker currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
         mRepository.writeReportToDatabase(this, userId, currentReportedShopMarker, regards, false);
     }
 
@@ -171,5 +171,13 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
     public void onAddMarkerFailed(String error) {
         getMapActivityView().closeAddShopDialog();
         getMapActivityView().showToast(error);
+    }
+
+    public String getUserId() {
+        return mAuthenticationPresenter.getUserId();
+    }
+
+    public void signOut() {
+        mAuthenticationPresenter.signOut();
     }
 }
