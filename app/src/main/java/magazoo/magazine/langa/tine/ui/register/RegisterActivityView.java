@@ -21,7 +21,7 @@ import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class RegisterActivityView extends BaseBackActivity implements IRegisterActivityView, OnFormValidatedListener {
+public class RegisterActivityView extends BaseBackActivity implements IRegisterActivityView {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -34,12 +34,12 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     @BindView(R.id.progress)
     ProgressBar progress;
 
-    private RegisterPresenter mRegisterPresenter;
+    private RegisterPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRegisterPresenter = new RegisterPresenter(this);
+        mPresenter = new RegisterPresenter(this);
     }
 
     @Override
@@ -58,7 +58,38 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
-        UtilHelperClass.validateFormData(this, email, password, passwordConfirm);
+        UtilHelperClass.validateFormData(new OnFormValidatedListener() {
+            @Override
+            public void onValidateSuccess(String email, String password) {
+                mPresenter.performRegisterWithEmail(email, password);
+            }
+
+            @Override
+            public void onValidateFail(String what) {
+                hideProgressBar();
+                switch (what) {
+                    case Constants.EMAIL_EMPTY:
+                        setEmailError(getString(R.string.email_missing));
+                        break;
+
+                    case Constants.EMAIL_INVALID:
+                        setEmailError(getString(R.string.email_invalid));
+                        break;
+
+                    case Constants.PASSWORD_EMPTY:
+                        setPasswordError(getString(R.string.password_missing));
+                        break;
+
+                    case Constants.PASSWORD_INVALID:
+                        setPasswordError(getString(R.string.password_minimum));
+                        break;
+
+                    case Constants.PASSWORD_MATCH_ERROR:
+                        setPasswordConfirmError(getString(R.string.password_not_matching));
+                        break;
+                }
+            }
+        }, email, password, passwordConfirm);
     }
 
     public void showProgressBar() {
@@ -84,37 +115,6 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     public void redirectToLoginPage() {
         startActivity(new Intent(RegisterActivityView.this, LoginActivityView.class));
         finish();
-    }
-
-    @Override
-    public void onValidateSuccess(String email, String password) {
-        mRegisterPresenter.performRegisterWithEmail(email, password);
-    }
-
-    @Override
-    public void onValidateFail(String what) {
-        hideProgressBar();
-        switch (what) {
-            case Constants.EMAIL_EMPTY:
-                setEmailError(getString(R.string.email_missing));
-                break;
-
-            case Constants.EMAIL_INVALID:
-                setEmailError(getString(R.string.email_invalid));
-                break;
-
-            case Constants.PASSWORD_EMPTY:
-                setPasswordError(getString(R.string.password_missing));
-                break;
-
-            case Constants.PASSWORD_INVALID:
-                setPasswordError(getString(R.string.password_minimum));
-                break;
-
-            case Constants.PASSWORD_MATCH_ERROR:
-                setPasswordConfirmError(getString(R.string.password_not_matching));
-                break;
-        }
     }
 
     private void setPasswordError(String error) {

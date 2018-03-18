@@ -19,12 +19,13 @@ import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
 /**
  * TODO: Add a class header comment!
  */
-public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, OnReportWrittenToDatabaseListener, OnGetShopsAddedTodayListener, OnAddListenerForNewMarkerAdded, OnGetAllMarkersListener, OnAddMarkerToDatabaseListener {
+public class MapPresenter implements IMapPresenter {
 
     private Repository mRepository;
     private IGeneralView mView;
     private AuthPresenter mAuthenticationPresenter;
     private String userId;
+
     public MapPresenter(IGeneralView mView) {
         this.mView = mView;
         this.mRepository = new Repository();
@@ -32,15 +33,15 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
         this.userId = mAuthenticationPresenter.getUserId();
     }
 
-    public void checkIfAllowedToReport(final OnIsAllowedToReportListener listener) {
+    public void checkIfAllowedToReport(final OnIsAllowedToReportListener mapActivityView) {
 
         mRepository.getReportsAddedToday(new OnGetReportsFromDatabaseListener() {
             @Override
             public void onDataFetched(ArrayList<Report> reportsAddedToday) {
                 if (isUnderTheReportLimit(reportsAddedToday)) {
-                    listener.isAllowedToReport();
+                    mapActivityView.isAllowedToReport();
                 } else {
-                    listener.isNotAllowedToReport();
+                    mapActivityView.isNotAllowedToReport();
                 }
             }
         }, userId);
@@ -48,7 +49,31 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
 
     @Override
     public void checkIfDuplicateReport(Report currentReportedShop) {
-        mRepository.checkIfDuplicateReport(this, userId, currentReportedShop);
+        mRepository.checkIfDuplicateReport(new OnDuplicateReportListener() {
+            @Override
+            public void isDuplicateReport(String regards) {
+                getMapActivityView().closeReportDialog();
+                getMapActivityView().showDuplicateReportErrorDialog(regards);
+            }
+
+            @Override
+            public void isNotDuplicateReport(String regards) {
+                getMapActivityView().closeReportDialog();
+                Marker currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
+                mRepository.writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
+                    @Override
+                    public void onReportWrittenSuccess() {
+                        getMapActivityView().closeReportDialog();
+                        getMapActivityView().showReportThanksPopup();
+                    }
+
+                    @Override
+                    public void onReportWrittenFailed(String error) {
+                        getMapActivityView().showToast(error);
+                    }
+                }, userId, currentReportedShopMarker, regards, false);
+            }
+        }, userId, currentReportedShop);
     }
 
     @Override
@@ -63,32 +88,64 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
 
     @Override
     public void addListenerForNewMarkerAdded() {
-        mRepository.addChildEventListenerForMarker(this);
+        mRepository.addChildEventListenerForMarker(new OnAddListenerForNewMarkerAdded() {
+            @Override
+            public void onAddListenerForNewMarkerAddedSuccess(Marker marker, String title) {
+                getMapActivityView().addNewlyAddedMarkerToMap(marker, title);
+            }
+
+            @Override
+            public void onAddListenerForNewMarkerAddedFailed() {
+
+            }
+        });
     }
 
     @Override
     public void getAllMarkers(LatLngBounds bounds) {
-        mRepository.getAllMarkers(this, bounds);
+        mRepository.getAllMarkers(new OnGetAllMarkersListener() {
+            @Override
+            public void onGetAllMarkersSuccess(ArrayList<Marker> markers) {
+                getMapActivityView().addMarkersToMap(markers);
+            }
+
+            @Override
+            public void onGetAllMarkersFailed(String message) {
+                getMapActivityView().showToast(message);
+            }
+        }, bounds);
     }
 
     @Override
     public void addMarkerToFirebase(Marker markerToAdd) {
         markerToAdd.setCreatedBy(mAuthenticationPresenter.getUserId());
-        mRepository.addMarkerToDatabase(this, markerToAdd);
+        mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
+            @Override
+            public void onAddMarkerSuccess() {
+                getMapActivityView().closeAddShopDialog();
+                getMapActivityView().showAddThanksPopup();
+            }
+
+            @Override
+            public void onAddMarkerFailed(String error) {
+                getMapActivityView().closeAddShopDialog();
+                getMapActivityView().showToast(error);
+            }
+        }, markerToAdd);
     }
 
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {
         return reportsAddedToday.size() <= Constants.REPORT_SHOP_LIMIT;
     }
 
-    public void checkIfAllowedToAdd(final OnIsAllowedToAddListener listener) {
+    public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
         mRepository.getShopsAddedToday(new OnGetShopsAddedTodayListener() {
             @Override
             public void onGetShopsAddedTodaySuccess(ArrayList<Marker> shopsAddedToday) {
                 if (isUnderTheAddLimit(shopsAddedToday)) {
-                    listener.isAllowedToAdd();
+                    mapActivityView.isAllowedToAdd();
                 } else {
-                    listener.isNotAllowedToAdd();
+                    mapActivityView.isNotAllowedToAdd();
                 }
             }
 
@@ -103,74 +160,8 @@ public class MapPresenter implements IMapPresenter, OnDuplicateReportListener, O
         return shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT;
     }
 
-    @Override
-    public void isDuplicateReport(String regards) {
-        getMapActivityView().closeReportDialog();
-        getMapActivityView().showDuplicateReportErrorDialog(regards);
-    }
-
-    @Override
-    public void isNotDuplicateReport(String regards) {
-        getMapActivityView().closeReportDialog();
-        Marker currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
-        mRepository.writeReportToDatabase(this, userId, currentReportedShopMarker, regards, false);
-    }
-
     private IMapActivityView getMapActivityView() {
         return (IMapActivityView) mView.getInstance();
-    }
-
-    @Override
-    public void onReportWrittenSuccess() {
-        getMapActivityView().closeReportDialog();
-        getMapActivityView().showReportThanksPopup();
-    }
-
-    @Override
-    public void onReportWrittenFailed(String error) {
-        getMapActivityView().showToast(error);
-    }
-
-    @Override
-    public void onGetShopsAddedTodaySuccess(ArrayList<Marker> shopsAddedToday) {
-
-    }
-
-    @Override
-    public void onGetShopsAddedTodayFailed() {
-        getMapActivityView().showShopLimitErrorDialog();
-    }
-
-    @Override
-    public void onAddListenerForNewMarkerAddedSuccess(Marker marker, String title) {
-        getMapActivityView().addNewlyAddedMarkerToMap(marker, title);
-    }
-
-    @Override
-    public void onAddListenerForNewMarkerAddedFailed() {
-
-    }
-
-    @Override
-    public void onGetAllMarkersSuccess(ArrayList<Marker> markers) {
-        getMapActivityView().addMarkersToMap(markers);
-    }
-
-    @Override
-    public void onGetAllMarkersFailed(String message) {
-        getMapActivityView().showToast(message);
-    }
-
-    @Override
-    public void onAddMarkerSuccess() {
-        getMapActivityView().closeAddShopDialog();
-        getMapActivityView().showAddThanksPopup();
-    }
-
-    @Override
-    public void onAddMarkerFailed(String error) {
-        getMapActivityView().closeAddShopDialog();
-        getMapActivityView().showToast(error);
     }
 
     public String getUserId() {

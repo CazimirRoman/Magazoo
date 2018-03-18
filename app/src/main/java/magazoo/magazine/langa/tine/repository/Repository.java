@@ -36,7 +36,7 @@ public class Repository implements IRepository {
     private DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
 
-    public void getReportsAddedToday(final OnGetReportsFromDatabaseListener listener, String userId) {
+    public void getReportsAddedToday(final OnGetReportsFromDatabaseListener mapPresenter, String userId) {
 
         final ArrayList<Report> reportsToday = new ArrayList<>();
         //filter data based on logged in user
@@ -57,7 +57,7 @@ public class Repository implements IRepository {
                     }
                 }
 
-                listener.onDataFetched(reportsToday);
+                mapPresenter.onDataFetched(reportsToday);
             }
 
             @Override
@@ -69,14 +69,14 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void addChildEventListenerForMarker(final OnAddListenerForNewMarkerAdded listener) {
+    public void addChildEventListenerForMarker(final OnAddListenerForNewMarkerAdded mapPresenter) {
         mStoreRef.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Marker marker = dataSnapshot.getValue(Marker.class);
                 assert marker != null;
-                listener.onAddListenerForNewMarkerAddedSuccess(marker, s);
+                mapPresenter.onAddListenerForNewMarkerAddedSuccess(marker, s);
             }
 
             @Override
@@ -102,7 +102,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void getAllMarkers(final OnGetAllMarkersListener listener, final LatLngBounds bounds) {
+    public void getAllMarkers(final OnGetAllMarkersListener mapPresenter, final LatLngBounds bounds) {
         mStoreRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -119,32 +119,32 @@ public class Repository implements IRepository {
                         }
                     }
 
-                listener.onGetAllMarkersSuccess(markersInVisibleArea);
+                mapPresenter.onGetAllMarkersSuccess(markersInVisibleArea);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-                listener.onGetAllMarkersFailed(databaseError.getMessage());
+                mapPresenter.onGetAllMarkersFailed(databaseError.getMessage());
             }
         });
     }
 
     @Override
-    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener listener, Marker markerToAdd) {
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Marker markerToAdd) {
         mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    listener.onAddMarkerSuccess();
+                    mapPresenter.onAddMarkerSuccess();
                 } else{
-                    listener.onAddMarkerFailed(task.getException().getMessage());
+                    mapPresenter.onAddMarkerFailed(task.getException().getMessage());
                 }
             }
         });
     }
 
-    public void getShopsAddedToday(final OnGetShopsAddedTodayListener listener, String userId) {
+    public void getShopsAddedToday(final OnGetShopsAddedTodayListener mapPresenter, String userId) {
 
         final ArrayList<Marker> addedShopsToday = new ArrayList<>();
         //filter data based on logged in user
@@ -165,7 +165,7 @@ public class Repository implements IRepository {
                     }
                 }
 
-                listener.onGetShopsAddedTodaySuccess(addedShopsToday);
+                mapPresenter.onGetShopsAddedTodaySuccess(addedShopsToday);
             }
 
             @Override
@@ -175,7 +175,7 @@ public class Repository implements IRepository {
         });
     }
 
-    public void checkIfDuplicateReport(final OnDuplicateReportListener listener, String userId, final Report currentReportedShop) {
+    public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, String userId, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
         Query query = mReportRef.orderByChild("reportedBy").equalTo(userId);
@@ -190,9 +190,9 @@ public class Repository implements IRepository {
                 }
 
                 if (reports.contains(currentReportedShop)) {
-                    listener.isDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isDuplicateReport(currentReportedShop.getRegards());
                 } else {
-                    listener.isNotDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isNotDuplicateReport(currentReportedShop.getRegards());
                 }
             }
 
@@ -203,24 +203,22 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener listener, final String userId, final Marker shop, final String reportTarget, final boolean howisit) {
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final String userId, final Marker shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
                     Report reportedShop = new Report(shop.getId(), reportTarget, howisit, userId, new Date().getTime());
                     mReportRef.push().setValue(reportedShop);
-                    listener.onReportWrittenSuccess();
+                    mapPresenter.onReportWrittenSuccess();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                    listener.onReportWrittenFailed(databaseError.getMessage());
+                    mapPresenter.onReportWrittenFailed(databaseError.getMessage());
             }
         });
-
-
     }
 
 }
