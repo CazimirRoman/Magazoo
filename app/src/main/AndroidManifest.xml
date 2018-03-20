@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.map.MapActivity" />
+        <activity android:name=".ui.map.MapActivityView" />
         <activity android:name=".ui.register.RegisterActivityView" />
         <activity android:name=".ui.profile.ForgotPasswordActivityView" />
         <activity android:name=".ui.profile.ProfileActivity" />

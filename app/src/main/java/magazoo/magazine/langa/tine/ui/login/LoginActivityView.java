@@ -18,9 +18,10 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
+import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.presenter.common.LoginPresenter;
 import magazoo.magazine.langa.tine.ui.OnFormValidatedListener;
-import magazoo.magazine.langa.tine.ui.map.MapActivity;
+import magazoo.magazine.langa.tine.ui.map.MapActivityView;
 import magazoo.magazine.langa.tine.ui.profile.ForgotPasswordActivityView;
 import magazoo.magazine.langa.tine.ui.register.RegisterActivityView;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
@@ -46,13 +47,20 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
+    private AuthPresenter mAuthPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLoginPresenter = new LoginPresenter(this);
         mFacebookCallbackManager = CallbackManager.Factory.create();
+        mAuthPresenter = new AuthPresenter(this);
+        redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
+    }
+
+    private void redirectToMapScreenIfLoggedIn() {
+        mAuthPresenter.checkIfUserLoggedInAndRedirectToMap();
     }
 
     @Override
@@ -96,7 +104,8 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     public void goToMap() {
-        startActivity(new Intent(LoginActivityView.this, MapActivity.class));
+        startActivity(new Intent(LoginActivityView.this, MapActivityView.class));
+        finish();
     }
 
     @Override

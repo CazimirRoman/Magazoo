@@ -1,5 +1,6 @@
 package magazoo.magazine.langa.tine.ui.map;
 
-interface OnReportWrittenToDatabaseListener {
-    void onReportWritten();
+public interface OnReportWrittenToDatabaseListener {
+    void onReportWrittenSuccess();
+    void onReportWrittenFailed(String error);
 }

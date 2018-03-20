@@ -3,32 +3,44 @@ package magazoo.magazine.langa.tine.base;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import butterknife.ButterKnife;
 import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.utils.MyAlertDialog;
 
 public abstract class BaseActivity extends AppCompatActivity implements IGeneralView {
+
+    private MyAlertDialog mAlertDialog;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        mAlertDialog = new MyAlertDialog(this);
         ButterKnife.bind(this);
         setUpToolbar();
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     private void setUpToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(getString(setActionBarTitle()));
     }
 
     public Context getContext() {
         return getApplicationContext();
+    }
+
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    public MyAlertDialog getAlertDialog() {
+        return mAlertDialog;
     }
 
     protected abstract int getLayoutId();

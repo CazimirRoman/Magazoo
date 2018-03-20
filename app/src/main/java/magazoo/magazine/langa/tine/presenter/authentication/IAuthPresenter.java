@@ -7,10 +7,14 @@ import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 import magazoo.magazine.langa.tine.ui.profile.OnResetInstructionsSent;
 import magazoo.magazine.langa.tine.ui.register.OnRegisterWithEmailFinishedListener;
 
-public interface IAuthenticationPresenter {
+public interface IAuthPresenter {
     void login (OnLoginWithEmailFinishedListener listener, String email, String password);
     void register (OnRegisterWithEmailFinishedListener listener, String email, String password);
-    void checkIfLoggedIn();
+    boolean isLoggedIn();
+    String getUserEmail();
+    String getUserId();
     FacebookCallback<LoginResult> loginWithFacebook(OnLoginWithFacebookFinishedListener listener);
     void sendResetInstructions(OnResetInstructionsSent listener, String email);
+    void checkIfUserLoggedInAndRedirectToMap();
+    void signOut();
 }
