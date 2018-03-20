@@ -17,7 +17,7 @@ import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class ForgotPasswordActivityView extends BaseBackActivity implements IResetPasswordActivity, OnResetInstructionsSent {
+public class ForgotPasswordActivityView extends BaseBackActivity implements IResetPasswordActivity {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -34,7 +34,18 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
                     String email = etEmail.getText().toString().trim();
 
                     if(isFormDataValid()){
-                        mAuthPresenter.sendResetInstructions(ForgotPasswordActivityView.this, email);
+                        mAuthPresenter.sendResetInstructions(new OnResetInstructionsSent() {
+                            @Override
+                            public void onResetInstructionsSentSuccess() {
+                                showToast(getString(R.string.email_reset_sent));
+                                finish();
+                            }
+
+                            @Override
+                            public void onResetInstructionsSentFailed() {
+                                showToast(getString(R.string.email_reset_sent_error));
+                            }
+                        }, email);
                     }
                 }
     }
@@ -92,16 +103,6 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @Override
     public void redirectToLogin() {
         finish();
-    }
-
-    @Override
-    public void onResetInstructionsSentSuccess() {
-        showToast(getString(R.string.email_reset_sent));
-    }
-
-    @Override
-    public void onResetInstructionsSentFailed() {
-        showToast(getString(R.string.email_reset_sent_error));
     }
 
     @Override
