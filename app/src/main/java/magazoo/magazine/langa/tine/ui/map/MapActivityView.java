@@ -26,8 +26,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.blankj.utilcode.util.NetworkUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -103,7 +100,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
-        onboardingNeeded();
+        checkIfOnboardingNeeded();
         initUI();
         setupNavigationDrawer();
         setUpMap();
@@ -121,7 +118,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return R.string.app_name;
     }
 
-    private void onboardingNeeded() {
+    private void checkIfOnboardingNeeded() {
 
         if (isFirstRun()) {
             startTutorialActivity();
@@ -271,9 +268,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private void initUI() {
 
-        //floating button for adding shops
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabAddShop = findViewById(R.id.fabAddShop);
+        fabAddShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -440,7 +436,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
-
     }
 
     public void showReportThanksPopup() {
@@ -472,8 +467,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         mMarkersInBounds = markers;
     }
-
-
 
     private void navigateToShop() {
         if (mCurrentLocation != null && mCurrentOpenShopLatLng != null) {
@@ -589,8 +582,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private void setMapTheme() {
         try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
             boolean success = mMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.map_style));
@@ -609,14 +600,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-                mShopDetails.setVisibility(View.GONE);
+                closeShopDetails();
             }
         });
 
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-
                 setZoomLevel();
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
                     mMap.clear();

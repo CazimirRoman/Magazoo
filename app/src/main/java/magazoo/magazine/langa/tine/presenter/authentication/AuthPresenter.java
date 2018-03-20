@@ -53,12 +53,12 @@ public class AuthPresenter implements IAuthPresenter {
     }
 
     @Override
-    public void register(final OnRegisterWithEmailFinishedListener listener, String email, String password) {
+    public void register(final OnRegisterWithEmailFinishedListener registerPresenter, String email, String password) {
         mAuthManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    listener.onRegisterWithEmailFailed(task.getException().getMessage());
+                    registerPresenter.onRegisterWithEmailFailed(task.getException().getMessage());
                 } else {
                     final FirebaseUser user = mAuthManager.getCurrentUser();
                     if (user != null && !user.isEmailVerified()) {
@@ -66,11 +66,10 @@ public class AuthPresenter implements IAuthPresenter {
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-
                                         if (task.isSuccessful()) {
-                                            listener.onRegisterWithEmailSuccess(user.getEmail());
+                                            registerPresenter.onRegisterWithEmailSuccess(user.getEmail());
                                         } else {
-                                            listener.onRegisterWithEmailFailed(task.getException().getMessage());
+                                            registerPresenter.onRegisterWithEmailFailed(task.getException().getMessage());
                                         }
                                     }
                                 });
@@ -122,7 +121,7 @@ public class AuthPresenter implements IAuthPresenter {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             listener.onResetInstructionsSentSuccess();
-                            } else {
+                        } else {
                             listener.onResetInstructionsSentFailed();
                         }
                     }
