@@ -114,15 +114,15 @@ public class AuthPresenter implements IAuthPresenter {
     }
 
     @Override
-    public void sendResetInstructions(final OnResetInstructionsSent listener, String email) {
+    public void sendResetInstructions(final OnResetInstructionsSent forgotPasswordActivityView, String email) {
         mAuthManager.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            listener.onResetInstructionsSentSuccess();
+                            forgotPasswordActivityView.onResetInstructionsSentSuccess();
                         } else {
-                            listener.onResetInstructionsSentFailed();
+                            forgotPasswordActivityView.onResetInstructionsSentFailed();
                         }
                     }
                 });
@@ -130,7 +130,7 @@ public class AuthPresenter implements IAuthPresenter {
 
     @Override
     public void checkIfUserLoggedInAndRedirectToMap() {
-        if (mAuthManager.getCurrentUser() != null) {
+        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified()) {
             ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
             view.goToMap();
         }
