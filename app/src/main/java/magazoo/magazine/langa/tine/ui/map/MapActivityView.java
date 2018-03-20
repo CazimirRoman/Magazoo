@@ -406,6 +406,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
