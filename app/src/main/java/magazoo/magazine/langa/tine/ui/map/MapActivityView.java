@@ -273,7 +273,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                    if (true) {
+                    if (isUserAccuratelyLocated()) {
                         if (mPresenter.isUserLoggedIn()) {
                             mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
                                 @Override
@@ -303,7 +303,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     }
 
-    private boolean checkIfCorrectAccuracy() {
+    private boolean isUserAccuratelyLocated() {
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
     }
 

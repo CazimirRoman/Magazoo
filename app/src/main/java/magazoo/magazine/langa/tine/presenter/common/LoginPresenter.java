@@ -9,7 +9,7 @@ import magazoo.magazine.langa.tine.presenter.authentication.OnLoginWithFacebookF
 import magazoo.magazine.langa.tine.ui.login.ILoginActivityView;
 import magazoo.magazine.langa.tine.ui.login.OnLoginWithEmailFinishedListener;
 
-public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinishedListener, OnLoginWithFacebookFinishedListener {
+public class LoginPresenter implements ILoginPresenter, OnLoginWithFacebookFinishedListener {
 
     private IGeneralView mView;
     private AuthPresenter mAuthPresenter;
@@ -20,24 +20,24 @@ public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinished
     }
 
     public void performLoginWithEmail(String email, String password) {
-        mAuthPresenter.login(this, email, password);
+        mAuthPresenter.login(new OnLoginWithEmailFinishedListener() {
+            @Override
+            public void onLoginWithEmailSuccess() {
+                getLoginActivityView().hideProgressBar();
+                getLoginActivityView().goToMap();
+            }
+
+            @Override
+            public void onLoginWithEmailFailed(String error) {
+                getLoginActivityView().hideProgressBar();
+                getLoginActivityView().showToast(error);
+            }
+        }, email, password);
     }
 
     @Override
     public FacebookCallback<LoginResult> performLoginWithFacebook() {
         return mAuthPresenter.loginWithFacebook(this);
-    }
-
-    @Override
-    public void onLoginWithEmailSuccess() {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().goToMap();
-    }
-
-    @Override
-    public void onLoginWithEmailFailed(String error) {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().showToast(error);
     }
 
     @Override
