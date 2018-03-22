@@ -19,6 +19,8 @@ android {
     }
 }
 
+def powerMockVersion =  '1.7.3'
+
 dependencies {
     implementation 'com.android.support:support-v4:27.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -32,6 +34,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.16.0"
+    testCompile "org.powermock:powermock-module-junit4:$powerMockVersion"
+    testCompile "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
+    testCompile "org.powermock:powermock-api-mockito2:$powerMockVersion"
+    testCompile "org.powermock:powermock-classloading-xstream:$powerMockVersion"
     compile 'com.google.android.gms:play-services-maps:11.8.0'
     compile 'com.google.android.gms:play-services-location:11.8.0'
     compile 'com.google.maps.android:android-maps-utils:0.5'
