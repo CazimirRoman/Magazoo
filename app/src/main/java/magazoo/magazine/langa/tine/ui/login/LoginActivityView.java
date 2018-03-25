@@ -26,7 +26,7 @@ import magazoo.magazine.langa.tine.ui.profile.ForgotPasswordActivityView;
 import magazoo.magazine.langa.tine.ui.register.RegisterActivityView;
 import magazoo.magazine.langa.tine.utils.UtilHelperClass;
 
-public class LoginActivityView extends BaseActivity implements ILoginActivityView, OnFormValidatedListener {
+public class LoginActivityView extends BaseActivity implements ILoginActivityView {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -80,7 +80,36 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                 showProgressBar();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                UtilHelperClass.validateFormData(this, email, password, Constants.PASSWORD_MATCH_NA);
+                UtilHelperClass.validateFormData(new OnFormValidatedListener() {
+                    @Override
+                    public void onValidateSuccess(String email, String password) {
+                        mLoginPresenter.performLoginWithEmail(email, password);
+                    }
+
+                    @Override
+                    public void onValidateFail(String what) {
+
+                        hideProgressBar();
+
+                        switch (what) {
+                            case Constants.EMAIL_EMPTY:
+                                setEmailError(getString(R.string.email_missing));
+                                break;
+
+                            case Constants.EMAIL_INVALID:
+                                setEmailError(getString(R.string.email_invalid));
+                                break;
+
+                            case Constants.PASSWORD_EMPTY:
+                                setPasswordError(getString(R.string.password_missing));
+                                break;
+
+                            case Constants.PASSWORD_INVALID:
+                                setPasswordError(getString(R.string.password_minimum));
+                                break;
+                        }
+                    }
+                }, email, password, Constants.PASSWORD_MATCH_NA);
                 break;
             case R.id.login_button_dummy:
                 btnFacebook.performClick();
@@ -131,35 +160,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         super.onActivityResult(requestCode, resultCode, data);
         // Pass the activity result back to the Facebook SDK
         mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onValidateSuccess(String email, String password) {
-        mLoginPresenter.performLoginWithEmail(email, password);
-    }
-
-    @Override
-    public void onValidateFail(String what) {
-
-        hideProgressBar();
-
-        switch (what) {
-            case Constants.EMAIL_EMPTY:
-                setEmailError(getString(R.string.email_missing));
-                break;
-
-            case Constants.EMAIL_INVALID:
-                setEmailError(getString(R.string.email_invalid));
-                break;
-
-            case Constants.PASSWORD_EMPTY:
-                setPasswordError(getString(R.string.password_missing));
-                break;
-
-            case Constants.PASSWORD_INVALID:
-                setPasswordError(getString(R.string.password_minimum));
-                break;
-        }
     }
 
     private void setPasswordError(String error) {
