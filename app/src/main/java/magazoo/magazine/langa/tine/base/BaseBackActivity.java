@@ -1,8 +1,11 @@
 package magazoo.magazine.langa.tine.base;
 
+import android.graphics.drawable.Drawable;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import magazoo.magazine.langa.tine.R;
 
 public abstract class BaseBackActivity extends BaseActivity {
     @Override

@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.AwesomeTextView;
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
+import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,18 +35,22 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     EditText etEmail;
     @BindView(R.id.etPassword)
     EditText etPassword;
-    @BindView(R.id.btnFBLogin)
+    @BindView(R.id.btnLoginWithFacebook)
     LoginButton btnFacebook;
     @BindView(R.id.login_button_dummy)
-    TextView btnDummyLoginButton;
+    AwesomeTextView btnDummyLoginButton;
     @BindView(R.id.btnForgotPassword)
-    TextView btnForgotPassword;
+    BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
     @BindView(R.id.btnLoginWithEmail)
-    TextView btnLoginWithEmail;
+    BootstrapButton btnLoginWithEmail;
     @BindView(R.id.btnGoToRegister)
-    TextView btnGoToRegister;
+    BootstrapButton btnGoToRegister;
+    @BindView(R.id.expandableLayout)
+    ExpandableRelativeLayout expandableLayout;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
@@ -55,8 +62,16 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         mLoginPresenter = new LoginPresenter(this);
         mFacebookCallbackManager = CallbackManager.Factory.create();
         mAuthPresenter = new AuthPresenter(this);
+        initUI();
         redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
+    }
+
+    private void initUI() {
+        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
+        btnGoToRegister.setBootstrapBrand(getBootrapBrand());
+        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
+        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
     }
 
     private void redirectToMapScreenIfLoggedIn() {
@@ -77,39 +92,44 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnLoginWithEmail:
-                showProgressBar();
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                UtilHelperClass.validateFormData(new OnFormValidatedListener() {
-                    @Override
-                    public void onValidateSuccess(String email, String password) {
-                        mLoginPresenter.performLoginWithEmail(email, password);
-                    }
-
-                    @Override
-                    public void onValidateFail(String what) {
-
-                        hideProgressBar();
-
-                        switch (what) {
-                            case Constants.EMAIL_EMPTY:
-                                setEmailError(getString(R.string.email_missing));
-                                break;
-
-                            case Constants.EMAIL_INVALID:
-                                setEmailError(getString(R.string.email_invalid));
-                                break;
-
-                            case Constants.PASSWORD_EMPTY:
-                                setPasswordError(getString(R.string.password_missing));
-                                break;
-
-                            case Constants.PASSWORD_INVALID:
-                                setPasswordError(getString(R.string.password_minimum));
-                                break;
+                if (expandableLayout.isExpanded()) {
+                    showProgressBar();
+                    String email = etEmail.getText().toString();
+                    String password = etPassword.getText().toString();
+                    UtilHelperClass.validateFormData(new OnFormValidatedListener() {
+                        @Override
+                        public void onValidateSuccess(String email, String password) {
+                            mLoginPresenter.performLoginWithEmail(email, password);
                         }
-                    }
-                }, email, password, Constants.PASSWORD_MATCH_NA);
+
+                        @Override
+                        public void onValidateFail(String what) {
+
+                            hideProgressBar();
+
+                            switch (what) {
+                                case Constants.EMAIL_EMPTY:
+                                    setEmailError(getString(R.string.email_missing));
+                                    break;
+
+                                case Constants.EMAIL_INVALID:
+                                    setEmailError(getString(R.string.email_invalid));
+                                    break;
+
+                                case Constants.PASSWORD_EMPTY:
+                                    setPasswordError(getString(R.string.password_missing));
+                                    break;
+
+                                case Constants.PASSWORD_INVALID:
+                                    setPasswordError(getString(R.string.password_minimum));
+                                    break;
+                            }
+                        }
+                    }, email, password, Constants.PASSWORD_MATCH_NA);
+                } else {
+                    expandableLayout.expand();
+                }
+
                 break;
             case R.id.login_button_dummy:
                 btnFacebook.performClick();

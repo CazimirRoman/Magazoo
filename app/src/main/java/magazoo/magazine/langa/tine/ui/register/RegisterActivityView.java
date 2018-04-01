@@ -40,6 +40,7 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new RegisterPresenter(this);
+        btnRegisterWithEmail.setBootstrapBrand(getBootrapBrand());
     }
 
     @Override

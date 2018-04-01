@@ -23,6 +23,11 @@
         <item name="android:paddingBottom">10dp</item>
     </style>
 
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="text.regular">
         <item name="android:textSize">18sp</item>
     </style>
@@ -65,11 +70,10 @@
     </style>
 
     <style name="logo">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">210dp</item>
-        <item name="android:padding">20dp</item>
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">250dp</item>
+        <item name="android:src">@drawable/magazoo_logo</item>
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:scaleType">fitCenter</item>
     </style>
 
 </resources>

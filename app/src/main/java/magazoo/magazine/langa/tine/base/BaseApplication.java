@@ -7,6 +7,7 @@ import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.facebook.FacebookSdk;
 
 import java.security.MessageDigest;
@@ -17,5 +18,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
+        TypefaceProvider.registerDefaultIconSets();
     }
 }

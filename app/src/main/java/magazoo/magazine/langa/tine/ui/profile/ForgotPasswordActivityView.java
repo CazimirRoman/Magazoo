@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import magazoo.magazine.langa.tine.R;
@@ -22,7 +24,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.btnForgotPassword)
-    TextView btnForgotPassword;
+    BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
 
@@ -54,6 +56,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthPresenter = new AuthPresenter(this);
+        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
     }
 
     private boolean isFormDataValid() {

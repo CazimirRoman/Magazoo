@@ -19,7 +19,7 @@
     <string name="title_activity_profile">Firebase</string>
     <string name="title_activity_login">Sign in</string>
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">Parola</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
@@ -115,7 +115,7 @@
     <string name="details_adding">Your shop has been added to the map!</string>
     <string name="close">Inchide</string>
     <string name="password_minimum">Parola este prea scurta, minim 6 caractere</string>
-    <string name="login">Logheza-te</string>
+    <string name="login">Login cu email</string>
     <string name="facebook_login">Login cu facebook</string>
     <string name="register">Inregistreaza-te</string>
     <string name="password_forgot">Ai uitat parola?</string>
@@ -127,6 +127,7 @@
     <string name="email_reset_sent">Te rog sa verifici mailul. Ti-am trimis instructiunile de resetare a parolei.</string>
     <string name="email_reset_sent_error">Nu am putut sa iti trimitem mailul. Te rog sa incerci din nou</string>
     <string name="forgot_password">Ai uitat parola?</string>
+    <string name="password_repeat">Repeta parola</string>
 
     <!--report shop popup end-->
 

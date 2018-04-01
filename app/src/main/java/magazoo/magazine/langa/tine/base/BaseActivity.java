@@ -9,11 +9,17 @@ import android.support.v7.widget.Toolbar;
 import butterknife.ButterKnife;
 import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.utils.MyAlertDialog;
+import magazoo.magazine.langa.tine.utils.PrimaryBootstrapBrand;
 
 public abstract class BaseActivity extends AppCompatActivity implements IGeneralView {
 
     private MyAlertDialog mAlertDialog;
     private Toolbar mToolbar;
+    PrimaryBootstrapBrand bootstrapBrand;
+
+    public PrimaryBootstrapBrand getBootrapBrand() {
+        return bootstrapBrand;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         ButterKnife.bind(this);
         setUpToolbar();
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        bootstrapBrand = new PrimaryBootstrapBrand(this);
     }
 
     private void setUpToolbar() {
