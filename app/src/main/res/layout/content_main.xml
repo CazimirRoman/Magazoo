@@ -27,92 +27,97 @@
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/shop_details"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="15dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="10dp">
+        card_view:cardCornerRadius="10dp"
+        tools:visibility="visible">
 
-        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.beardedhen.androidbootstrap.AwesomeTextView
+                android:id="@+id/shop_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:textSize="30sp"
+                card_view:fontAwesomeIcon="fa_shopping_bag"
+                tools:text="icon" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/shop_image"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/shop" />
+                <TextView
+                    android:id="@+id/shop_type_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="20sp" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/nonstop_label"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:text="@string/nonstop"
+                    android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/shop_type_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/pos_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos"
+                    android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/nonstop_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nonstop"
-                        android:visibility="visible" />
+                <TextView
+                    android:id="@+id/tickets_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tickets_label"
+                    android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/pos_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pos"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/tickets_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tickets_label"
-                        android:visibility="visible" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/button_report"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@null"
-                        android:src="@drawable/report" />
-
-                    <ImageButton
-                        android:id="@+id/button_navigate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@null"
-                        android:src="@drawable/navigation" />
-
-                </LinearLayout>
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/button_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:textSize="30sp"
+                    app:bootstrapBrand="warning"
+                    app:fontAwesomeIcon="fa_exclamation_triangle"
+                    tools:text="test" />
 
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="0.2"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/button_navigate"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:textSize="60sp"
+                    app:bootstrapBrand="info"
+                    app:fontAwesomeIcon="fa_location_arrow"
+                    tools:text="test" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

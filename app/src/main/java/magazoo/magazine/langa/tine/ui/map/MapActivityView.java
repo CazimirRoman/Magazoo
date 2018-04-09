@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.beardedhen.androidbootstrap.AwesomeTextView;
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -197,9 +199,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                         mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
                         if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Marker d : mMarkersInBounds) {
-                                if (d.getId() != null && d.getId().contains(marker.getTitle())) {
-                                    showShopDetails(d);
+                            for (Marker marker1 : mMarkersInBounds) {
+                                if (marker1.getId() != null && marker1.getId().contains(marker.getTitle())) {
+                                    showShopDetails(marker1);
                                 }
                             }
                         }
@@ -340,8 +342,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mPosLabel = mShopDetails.findViewById(R.id.pos_label);
         mTicketsLabel = mShopDetails.findViewById(R.id.tickets_label);
 
-        ImageButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
-        ImageButton buttonReport = mShopDetails.findViewById(R.id.button_report);
+        BootstrapButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
+        BootstrapButton buttonReport = mShopDetails.findViewById(R.id.button_report);
 
         buttonNavigate.setOnClickListener(new OnClickListener() {
             @Override
