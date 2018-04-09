@@ -1,6 +1,5 @@
 package magazoo.magazine.langa.tine.base;
 
-import android.media.AudioTrack;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -10,6 +9,7 @@ public abstract class BaseBackActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setBackArrowColour();
         }
     }
 
@@ -18,4 +18,6 @@ public abstract class BaseBackActivity extends BaseActivity {
         onBackPressed();
         return true;
     }
+
+    protected abstract void setBackArrowColour();
 }

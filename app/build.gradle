@@ -42,10 +42,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.ramotion.paperonboarding:paper-onboarding:1.1.1'
     compile 'com.beardedhen:androidbootstrap:2.3.2'
+    compile 'com.github.aakira:expandable-layout:1.6.0@aar'
 
 }
 
 apply plugin: 'com.google.gms.google-services'
+
 
 
 

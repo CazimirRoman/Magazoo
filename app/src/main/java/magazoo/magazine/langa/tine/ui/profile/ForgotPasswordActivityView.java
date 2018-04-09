@@ -1,6 +1,8 @@
 package magazoo.magazine.langa.tine.ui.profile;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,7 +26,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.btnForgotPassword)
-    TextView btnForgotPassword;
+    BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
     ProgressBar progress;
 
@@ -54,6 +58,14 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthPresenter = new AuthPresenter(this);
+        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+    }
+
+    @Override
+    protected void setBackArrowColour() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     private boolean isFormDataValid() {
