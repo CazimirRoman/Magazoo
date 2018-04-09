@@ -2,6 +2,8 @@ package magazoo.magazine.langa.tine.ui.register;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -41,6 +43,13 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
         super.onCreate(savedInstanceState);
         mPresenter = new RegisterPresenter(this);
         btnRegisterWithEmail.setBootstrapBrand(getBootrapBrand());
+    }
+
+    @Override
+    protected void setBackArrowColour() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     @Override

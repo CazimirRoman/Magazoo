@@ -1,6 +1,8 @@
 package magazoo.magazine.langa.tine.ui.profile;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -57,6 +59,13 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
         super.onCreate(savedInstanceState);
         mAuthPresenter = new AuthPresenter(this);
         btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+    }
+
+    @Override
+    protected void setBackArrowColour() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     private boolean isFormDataValid() {

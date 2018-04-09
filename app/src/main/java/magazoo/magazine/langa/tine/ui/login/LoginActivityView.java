@@ -85,7 +85,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     @Override
     protected int setActionBarTitle() {
-        return R.string.login;
+        return R.string.nothing;
     }
 
     @OnClick({R.id.btnLoginWithEmail, R.id.btnForgotPassword, R.id.btnGoToRegister, R.id.login_button_dummy})

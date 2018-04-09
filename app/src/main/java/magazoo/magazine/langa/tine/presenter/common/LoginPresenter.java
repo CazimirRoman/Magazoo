@@ -30,8 +30,8 @@ public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinished
 
     @Override
     public void onLoginWithEmailSuccess() {
-        getLoginActivityView().hideProgressBar();
         getLoginActivityView().goToMap();
+        getLoginActivityView().hideProgressBar();
     }
 
     @Override
