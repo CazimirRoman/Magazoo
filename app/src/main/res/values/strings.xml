@@ -129,6 +129,8 @@
     <string name="forgot_password">Ai uitat parola?</string>
     <string name="password_repeat">Repeta parola</string>
     <string name="nothing" />
+    <string name="shop_type">Shop type</string>
+    <string name="report">Raporteaza</string>
 
     <!--report shop popup end-->
 
