@@ -2,7 +2,7 @@ package magazoo.magazine.langa.tine.model;
 
 import java.util.Date;
 
-public class Marker {
+public class Shop {
 
     private String id;
     private String name;
@@ -19,10 +19,10 @@ public class Marker {
     private String createdBy;
 
 
-    public Marker() {
+    public Shop() {
     }
 
-    public Marker(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
+    public Shop(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
         this.id = id;
         this.name = name;
         this.lat = lat;

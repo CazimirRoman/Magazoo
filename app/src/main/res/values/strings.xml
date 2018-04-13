@@ -61,17 +61,18 @@
 
     <string name="popup_add_shop_title">Add shop</string>
     <string name="popup_add_shop_type">Please select shop type</string>
-    <string name="popup_add_shop_farmer">farmer\'s market</string>
-    <string name="popup_add_shop_supermarket">supermarket</string>
-    <string name="popup_add_shop_type_small">small shop</string>
-    <string name="popup_add_shop_type_hypermarket">hypermarket</string>
+    <string name="popup_add_shop_farmer">Farmer\'s market</string>
+    <string name="popup_add_shop_supermarket">Supermarket</string>
+    <string name="popup_add_shop_type_small">Small shop</string>
+    <string name="popup_add_shop_type_hypermarket">Hypermarket</string>
 
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
     <string name="popup_add_shop_error">Please select shop type</string>
     <string name="ok">OK</string>
     <string name="nonstop">24/7</string>
-    <string name="pos">credit cards accepted</string>
+    <string name="pos">Credit cards accepted</string>
+    <string name="tickets">Meal tickets accepted</string>
     <string name="enter_shop_description">Enter shop description</string>
     <string name="pos_label">pos</string>
     <string name="tickets_label">tickets</string>
@@ -131,6 +132,7 @@
     <string name="nothing" />
     <string name="shop_type">Shop type</string>
     <string name="report">Raporteaza</string>
+    <string name="navigate">Navigheaza</string>
 
     <!--report shop popup end-->
 

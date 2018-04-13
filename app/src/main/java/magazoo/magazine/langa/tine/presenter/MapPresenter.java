@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.repository.Repository;
@@ -59,7 +59,7 @@ public class MapPresenter implements IMapPresenter {
             @Override
             public void isNotDuplicateReport(String regards) {
                 getMapActivityView().closeReportDialog();
-                Marker currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
+                Shop currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
                 mRepository.writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
                     @Override
                     public void onReportWrittenSuccess() {
@@ -90,7 +90,7 @@ public class MapPresenter implements IMapPresenter {
     public void addListenerForNewMarkerAdded() {
         mRepository.addChildEventListenerForMarker(new OnAddListenerForNewMarkerAdded() {
             @Override
-            public void onAddListenerForNewMarkerAddedSuccess(Marker marker, String title) {
+            public void onAddListenerForNewMarkerAddedSuccess(Shop marker, String title) {
                 getMapActivityView().addNewlyAddedMarkerToMap(marker, title);
             }
 
@@ -105,7 +105,7 @@ public class MapPresenter implements IMapPresenter {
     public void getAllMarkers(LatLngBounds bounds) {
         mRepository.getAllMarkers(new OnGetAllMarkersListener() {
             @Override
-            public void onGetAllMarkersSuccess(ArrayList<Marker> markers) {
+            public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
                 getMapActivityView().addMarkersToMap(markers);
             }
 
@@ -117,7 +117,7 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void addMarkerToFirebase(Marker markerToAdd) {
+    public void addMarkerToFirebase(Shop markerToAdd) {
         markerToAdd.setCreatedBy(mAuthenticationPresenter.getUserId());
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
@@ -141,7 +141,7 @@ public class MapPresenter implements IMapPresenter {
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
         mRepository.getShopsAddedToday(new OnGetShopsAddedTodayListener() {
             @Override
-            public void onGetShopsAddedTodaySuccess(ArrayList<Marker> shopsAddedToday) {
+            public void onGetShopsAddedTodaySuccess(ArrayList<Shop> shopsAddedToday) {
                 if (isUnderTheAddLimit(shopsAddedToday)) {
                     mapActivityView.isAllowedToAdd();
                 } else {
@@ -156,7 +156,7 @@ public class MapPresenter implements IMapPresenter {
         }, userId);
     }
 
-    private boolean isUnderTheAddLimit(ArrayList<Marker> shopsAddedToday) {
+    private boolean isUnderTheAddLimit(ArrayList<Shop> shopsAddedToday) {
         return shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT;
     }
 

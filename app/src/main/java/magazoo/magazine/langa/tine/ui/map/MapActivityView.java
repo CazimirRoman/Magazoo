@@ -30,12 +30,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,7 +60,7 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
@@ -85,11 +83,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
-    private Marker mCurrentSelectedShop;
+    private Shop mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
-    private ArrayList<Marker> mMarkersInBounds;
+    private ArrayList<Shop> mMarkersInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
@@ -147,7 +145,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return false;
     }
 
-    public Marker getCurrentSelectedShop() {
+    public Shop getCurrentSelectedShop() {
         return mCurrentSelectedShop;
     }
 
@@ -199,7 +197,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                         mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
                         if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Marker marker1 : mMarkersInBounds) {
+                            for (Shop marker1 : mMarkersInBounds) {
                                 if (marker1.getId() != null && marker1.getId().contains(marker.getTitle())) {
                                     showShopDetails(marker1);
                                 }
@@ -451,7 +449,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void addNewlyAddedMarkerToMap(Marker marker, String title) {
+    public void addNewlyAddedMarkerToMap(Shop marker, String title) {
 
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(marker.getLat(), marker.getLon()))
@@ -459,7 +457,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void addMarkersToMap(ArrayList<Marker> markers) {
+    public void addMarkersToMap(ArrayList<Shop> markers) {
         mMap.clear();
         for (int i = 0; i < markers.size(); i++) {
             mMap.addMarker(new MarkerOptions()
@@ -555,7 +553,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
-    private void showShopDetails(Marker marker) {
+    private void showShopDetails(Shop marker) {
 
         mCurrentSelectedShop = marker;
         mCurrentOpenShopLatLng = new LatLng(marker.getLat(), marker.getLon());
@@ -727,7 +725,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                    mPresenter.addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, ""));
                 } else {

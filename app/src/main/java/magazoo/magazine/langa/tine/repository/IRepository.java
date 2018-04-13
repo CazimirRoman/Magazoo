@@ -2,7 +2,7 @@ package magazoo.magazine.langa.tine.repository;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.presenter.OnAddListenerForNewMarkerAdded;
 import magazoo.magazine.langa.tine.presenter.OnAddMarkerToDatabaseListener;
 import magazoo.magazine.langa.tine.presenter.OnGetAllMarkersListener;
@@ -14,5 +14,5 @@ public interface IRepository {
     void getShopsAddedToday(OnGetShopsAddedTodayListener listener, String userId);
     void addChildEventListenerForMarker(OnAddListenerForNewMarkerAdded listener);
     void getAllMarkers(OnGetAllMarkersListener listener, LatLngBounds bounds);
-    void addMarkerToDatabase(OnAddMarkerToDatabaseListener listener, Marker markerToAdd);
+    void addMarkerToDatabase(OnAddMarkerToDatabaseListener listener, Shop markerToAdd);
 }

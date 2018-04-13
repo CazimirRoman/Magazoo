@@ -1,10 +1,8 @@
 package magazoo.magazine.langa.tine.ui.map;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
 
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 
 /**
  * TODO: Add a class header comment!
@@ -16,11 +14,11 @@ public interface IMapActivityView {
     void showReportThanksPopup();
     void showAddThanksPopup();
     void showDuplicateReportErrorDialog(String regards);
-    Marker getCurrentSelectedShop();
+    Shop getCurrentSelectedShop();
     void showShopLimitErrorDialog();
     void closeShopDetails();
     void closeReportDialog();
-    void addNewlyAddedMarkerToMap(Marker marker, String title);
-    void addMarkersToMap(ArrayList<Marker> markers);
+    void addNewlyAddedMarkerToMap(Shop marker, String title);
+    void addMarkersToMap(ArrayList<Shop> markers);
     void closeAddShopDialog();
 }
