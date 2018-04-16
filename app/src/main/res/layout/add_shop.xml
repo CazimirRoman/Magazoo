@@ -8,26 +8,35 @@
     <fr.ganfra.materialspinner.MaterialSpinner
         android:id="@+id/spinner_type"
         android:layout_width="fill_parent"
-        app:ms_hint="@string/popup_add_shop_type"
-        android:layout_height="wrap_content" />
-
-    <CheckBox
-        android:id="@+id/checkPos"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pos_label" />
+        app:ms_hint="@string/popup_add_shop_type" />
 
-    <CheckBox
-        android:id="@+id/checkTickets"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tickets_label" />
+        android:padding="5dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/checkNonstop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nonstop_label" />
+        <CheckBox
+            android:id="@+id/checkPos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pos_label" />
+
+        <CheckBox
+            android:id="@+id/checkTickets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tickets_label" />
+
+        <CheckBox
+            android:id="@+id/checkNonstop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nonstop_label" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editDescription"
@@ -36,17 +45,36 @@
         android:ems="10"
         android:hint="@string/enter_shop_description"
         android:inputType="textMultiLine"
-        android:maxLines="5" />
+        android:maxLines="5"
+        android:visibility="gone" />
 
-    <Button
-        android:id="@+id/buttonAdd"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_add_shop_button_add" />
+        android:layout_marginTop="10dp"
+        android:gravity="end"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/buttonCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/popup_add_shop_button_cancel" />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/buttonAdd"
+            android:layout_width="wrap_content"
+            app:roundedCorners="true"
+            app:showOutline="true"
+            app:bootstrapBrand="primary"
+            android:layout_height="wrap_content"
+            android:text="@string/popup_add_shop_button_add" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/buttonCancel"
+            app:bootstrapBrand="warning"
+            app:roundedCorners="true"
+            app:showOutline="true"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/popup_add_shop_button_cancel" />
+
+    </LinearLayout>
 </LinearLayout>
