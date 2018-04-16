@@ -17,6 +17,7 @@ public interface IMapActivityView {
     Shop getCurrentSelectedShop();
     void showShopLimitErrorDialog();
     void closeShopDetails();
+    void openShopDetails();
     void closeReportDialog();
     void addNewlyAddedMarkerToMap(Shop marker, String title);
     void addMarkersToMap(ArrayList<Shop> markers);

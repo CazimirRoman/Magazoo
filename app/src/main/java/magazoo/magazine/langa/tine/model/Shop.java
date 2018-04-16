@@ -15,7 +15,6 @@ public class Shop {
     private String description;
     private Double rating;
     private long createdAt;
-
     private String createdBy;
 
 
@@ -35,10 +34,6 @@ public class Shop {
         this.rating = rating;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
-    }
-
-    public boolean getTickets() {
-        return tickets;
     }
 
     public void setTickets(boolean tickets) {
@@ -73,10 +68,6 @@ public class Shop {
         return description;
     }
 
-    public Double getRating() {
-        return rating;
-    }
-
     public long getCreatedAt() {
         return createdAt;
     }
@@ -85,15 +76,15 @@ public class Shop {
         this.createdBy = createdBy;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
     public boolean getPos() {
         return pos;
     }
 
     public boolean getNonstop() {
         return nonstop;
+    }
+
+    public boolean getTickets() {
+        return tickets;
     }
 }

@@ -43,18 +43,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
             android:orientation="horizontal">
 
             <com.beardedhen.androidbootstrap.AwesomeTextView
                 android:id="@+id/shop_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="0.3"
                 android:padding="10dp"
                 android:textSize="50sp"
-                card_view:fontAwesomeIcon="fa_shopping_bag"
+                card_view:fontAwesomeIcon="fa_question"
                 tools:text="icon" />
 
             <LinearLayout
@@ -100,37 +100,42 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:gravity="center_vertical"
                 android:layout_height="match_parent"
-                android:paddingRight="10dp"
                 android:layout_weight="0.3"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:id="@+id/button_report"
                     android:layout_width="match_parent"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    card_view:fontAwesomeIcon="fa_exclamation_circle"
+                    android:textSize="30sp"
+                    tools:text="@string/report"
+                    card_view:roundedCorners="true"
                     app:bootstrapBrand="warning"
                     card_view:bootstrapSize="lg"
+                    card_view:fontAwesomeIcon="fa_exclamation_circle"
                     card_view:showOutline="true" />
 
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:id="@+id/button_navigate"
+                    card_view:roundedCorners="true"
                     android:layout_width="match_parent"
-                    card_view:fontAwesomeIcon="fa_location_arrow"
+                    tools:text="@string/navigate"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     app:bootstrapBrand="info"
                     card_view:bootstrapSize="lg"
+                    card_view:fontAwesomeIcon="fa_location_arrow"
                     card_view:showOutline="true" />
-
 
             </LinearLayout>
 

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,6 +47,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -95,6 +98,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private TextView mTicketsLabel;
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
+    private AwesomeTextView mShopImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,6 +325,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mShopDetails.setVisibility(View.GONE);
     }
 
+    @Override
+    public void openShopDetails() {
+        mShopDetails.setVisibility(View.VISIBLE);
+    }
+
     public void showDuplicateReportErrorDialog(String regards) {
         showErrorDialog(String.format(getString(R.string.popup_report_duplicate_error_title), regards), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
     }
@@ -339,6 +348,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mNonStopLabel = mShopDetails.findViewById(R.id.nonstop_label);
         mPosLabel = mShopDetails.findViewById(R.id.pos_label);
         mTicketsLabel = mShopDetails.findViewById(R.id.tickets_label);
+        mShopImage = mShopDetails.findViewById(R.id.shop_image);
 
         BootstrapButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
         BootstrapButton buttonReport = mShopDetails.findViewById(R.id.button_report);
@@ -403,13 +413,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-
-
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
-
-
         });
 
         report_247.setOnClickListener(new OnClickListener() {
@@ -444,25 +450,30 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void closeReportDialog() {
         //TODO: need to find a way to update the cardview without closing it
-        mShopDetails.setVisibility(View.GONE);
+        closeShopDetails();
         mReportDialog.dismiss();
     }
 
     @Override
     public void addNewlyAddedMarkerToMap(Shop marker, String title) {
 
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
+
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(marker.getLat(), marker.getLon()))
-                .title(title));
+                .title(title).icon(icon));
     }
 
     @Override
     public void addMarkersToMap(ArrayList<Shop> markers) {
         mMap.clear();
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
+
         for (int i = 0; i < markers.size(); i++) {
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(markers.get(i).getLat(), markers.get(i).getLon()))
-                    .title(markers.get(i).getId()));
+                    .title(markers.get(i).getId()).icon(icon));
         }
 
         mMarkersInBounds = markers;
@@ -553,31 +564,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
-    private void showShopDetails(Shop marker) {
+    private void showShopDetails(Shop shop) {
 
-        mCurrentSelectedShop = marker;
-        mCurrentOpenShopLatLng = new LatLng(marker.getLat(), marker.getLon());
-        mShopTypeLabel.setText(marker.getType());
+        mCurrentSelectedShop = shop;
+        mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
+        mShopTypeLabel.setText(shop.getType());
 
-        if (marker.getNonstop()) {
+        if(shop.getType().equals(getString(R.string.popup_add_shop_small))){
+            mShopImage.setFontAwesomeIcon("fa_building");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_farmer))){
+            mShopImage.setFontAwesomeIcon("fa_lemon_o");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_supermarket))){
+            mShopImage.setFontAwesomeIcon("fa_shopping_basket");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))){
+            mShopImage.setFontAwesomeIcon("fa_shopping_cart");
+        }
+
+        if (shop.getNonstop()) {
             mNonStopLabel.setVisibility(View.VISIBLE);
         } else {
             mNonStopLabel.setVisibility(View.GONE);
         }
 
-        if (marker.getPos()) {
+        if (shop.getPos()) {
             mPosLabel.setVisibility(View.VISIBLE);
         } else {
             mPosLabel.setVisibility(View.GONE);
         }
 
-        if (marker.getTickets()) {
+        if (shop.getTickets()) {
             mTicketsLabel.setVisibility(View.VISIBLE);
         } else {
             mTicketsLabel.setVisibility(View.GONE);
         }
 
-        mShopDetails.setVisibility(View.VISIBLE);
+        openShopDetails();
     }
 
     private void setMapTheme() {
@@ -699,10 +720,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
 
         List<String> categories = new ArrayList<>();
-        categories.add(getString(R.string.popup_add_shop_type_small));
+        categories.add(getString(R.string.popup_add_shop_small));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
-        categories.add(getString(R.string.popup_add_shop_type_hypermarket));
+        categories.add(getString(R.string.popup_add_shop_hypermarket));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
