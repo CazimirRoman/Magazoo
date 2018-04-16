@@ -30,11 +30,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.beardedhen.androidbootstrap.AwesomeTextView;
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -46,6 +47,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -60,7 +63,7 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
@@ -83,11 +86,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private float mCurrentAccuracy = 0;
     private LatLng mCurrentLocation;
     private LatLng mCurrentOpenShopLatLng;
-    private Marker mCurrentSelectedShop;
+    private Shop mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
     private LatLngBounds mBounds;
-    private ArrayList<Marker> mMarkersInBounds;
+    private ArrayList<Shop> mMarkersInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
@@ -95,6 +98,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private TextView mTicketsLabel;
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
+    private AwesomeTextView mShopImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +149,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return false;
     }
 
-    public Marker getCurrentSelectedShop() {
+    public Shop getCurrentSelectedShop() {
         return mCurrentSelectedShop;
     }
 
@@ -197,9 +201,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                         mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
                         if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Marker d : mMarkersInBounds) {
-                                if (d.getId() != null && d.getId().contains(marker.getTitle())) {
-                                    showShopDetails(d);
+                            for (Shop marker1 : mMarkersInBounds) {
+                                if (marker1.getId() != null && marker1.getId().contains(marker.getTitle())) {
+                                    showShopDetails(marker1);
                                 }
                             }
                         }
@@ -321,6 +325,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mShopDetails.setVisibility(View.GONE);
     }
 
+    @Override
+    public void openShopDetails() {
+        mShopDetails.setVisibility(View.VISIBLE);
+    }
+
     public void showDuplicateReportErrorDialog(String regards) {
         showErrorDialog(String.format(getString(R.string.popup_report_duplicate_error_title), regards), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
     }
@@ -339,9 +348,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mNonStopLabel = mShopDetails.findViewById(R.id.nonstop_label);
         mPosLabel = mShopDetails.findViewById(R.id.pos_label);
         mTicketsLabel = mShopDetails.findViewById(R.id.tickets_label);
+        mShopImage = mShopDetails.findViewById(R.id.shop_image);
 
-        ImageButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
-        ImageButton buttonReport = mShopDetails.findViewById(R.id.button_report);
+        BootstrapButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
+        BootstrapButton buttonReport = mShopDetails.findViewById(R.id.button_report);
 
         buttonNavigate.setOnClickListener(new OnClickListener() {
             @Override
@@ -403,13 +413,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-
-
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
-
-
         });
 
         report_247.setOnClickListener(new OnClickListener() {
@@ -444,25 +450,30 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void closeReportDialog() {
         //TODO: need to find a way to update the cardview without closing it
-        mShopDetails.setVisibility(View.GONE);
+        closeShopDetails();
         mReportDialog.dismiss();
     }
 
     @Override
-    public void addNewlyAddedMarkerToMap(Marker marker, String title) {
+    public void addNewlyAddedMarkerToMap(Shop marker, String title) {
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
 
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(marker.getLat(), marker.getLon()))
-                .title(title));
+                .title(title).icon(icon));
     }
 
     @Override
-    public void addMarkersToMap(ArrayList<Marker> markers) {
+    public void addMarkersToMap(ArrayList<Shop> markers) {
         mMap.clear();
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
+
         for (int i = 0; i < markers.size(); i++) {
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(markers.get(i).getLat(), markers.get(i).getLon()))
-                    .title(markers.get(i).getId()));
+                    .title(markers.get(i).getId()).icon(icon));
         }
 
         mMarkersInBounds = markers;
@@ -553,31 +564,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
-    private void showShopDetails(Marker marker) {
+    private void showShopDetails(Shop shop) {
 
-        mCurrentSelectedShop = marker;
-        mCurrentOpenShopLatLng = new LatLng(marker.getLat(), marker.getLon());
-        mShopTypeLabel.setText(marker.getType());
+        mCurrentSelectedShop = shop;
+        mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
+        mShopTypeLabel.setText(shop.getType());
 
-        if (marker.getNonstop()) {
+        if(shop.getType().equals(getString(R.string.popup_add_shop_small))){
+            mShopImage.setFontAwesomeIcon("fa_building");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_farmer))){
+            mShopImage.setFontAwesomeIcon("fa_lemon_o");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_supermarket))){
+            mShopImage.setFontAwesomeIcon("fa_shopping_basket");
+        }else if(shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))){
+            mShopImage.setFontAwesomeIcon("fa_shopping_cart");
+        }
+
+        if (shop.getNonstop()) {
             mNonStopLabel.setVisibility(View.VISIBLE);
         } else {
             mNonStopLabel.setVisibility(View.GONE);
         }
 
-        if (marker.getPos()) {
+        if (shop.getPos()) {
             mPosLabel.setVisibility(View.VISIBLE);
         } else {
             mPosLabel.setVisibility(View.GONE);
         }
 
-        if (marker.getTickets()) {
+        if (shop.getTickets()) {
             mTicketsLabel.setVisibility(View.VISIBLE);
         } else {
             mTicketsLabel.setVisibility(View.GONE);
         }
 
-        mShopDetails.setVisibility(View.VISIBLE);
+        openShopDetails();
     }
 
     private void setMapTheme() {
@@ -699,10 +720,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
 
         List<String> categories = new ArrayList<>();
-        categories.add(getString(R.string.popup_add_shop_type_small));
+        categories.add(getString(R.string.popup_add_shop_small));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
-        categories.add(getString(R.string.popup_add_shop_type_hypermarket));
+        categories.add(getString(R.string.popup_add_shop_hypermarket));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
@@ -725,7 +746,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                    mPresenter.addMarkerToFirebase(new Marker(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, ""));
                 } else {

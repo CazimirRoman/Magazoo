@@ -2,7 +2,7 @@ package magazoo.magazine.langa.tine.model;
 
 import java.util.Date;
 
-public class Marker {
+public class Shop {
 
     private String id;
     private String name;
@@ -15,14 +15,13 @@ public class Marker {
     private String description;
     private Double rating;
     private long createdAt;
-
     private String createdBy;
 
 
-    public Marker() {
+    public Shop() {
     }
 
-    public Marker(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
+    public Shop(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -35,10 +34,6 @@ public class Marker {
         this.rating = rating;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
-    }
-
-    public boolean getTickets() {
-        return tickets;
     }
 
     public void setTickets(boolean tickets) {
@@ -73,10 +68,6 @@ public class Marker {
         return description;
     }
 
-    public Double getRating() {
-        return rating;
-    }
-
     public long getCreatedAt() {
         return createdAt;
     }
@@ -85,15 +76,15 @@ public class Marker {
         this.createdBy = createdBy;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
     public boolean getPos() {
         return pos;
     }
 
     public boolean getNonstop() {
         return nonstop;
+    }
+
+    public boolean getTickets() {
+        return tickets;
     }
 }

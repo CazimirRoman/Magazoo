@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import magazoo.magazine.langa.tine.model.Marker;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.OnAddListenerForNewMarkerAdded;
 import magazoo.magazine.langa.tine.presenter.OnAddMarkerToDatabaseListener;
@@ -74,7 +74,7 @@ public class Repository implements IRepository {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Marker marker = dataSnapshot.getValue(Marker.class);
+                Shop marker = dataSnapshot.getValue(Shop.class);
                 assert marker != null;
                 mapPresenter.onAddListenerForNewMarkerAddedSuccess(marker, s);
             }
@@ -107,9 +107,9 @@ public class Repository implements IRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<Marker> markersInVisibleArea = new ArrayList<>();
+                ArrayList<Shop> markersInVisibleArea = new ArrayList<>();
                     for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                        Marker marker = markerSnapshot.getValue(Marker.class);
+                        Shop marker = markerSnapshot.getValue(Shop.class);
                         //update model with id from firebase
                         if(marker != null){
                             marker.setId(markerSnapshot.getKey());
@@ -131,7 +131,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Marker markerToAdd) {
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Shop markerToAdd) {
         mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -146,7 +146,7 @@ public class Repository implements IRepository {
 
     public void getShopsAddedToday(final OnGetShopsAddedTodayListener mapPresenter, String userId) {
 
-        final ArrayList<Marker> addedShopsToday = new ArrayList<>();
+        final ArrayList<Shop> addedShopsToday = new ArrayList<>();
         //filter data based on logged in user
         Query query = mStoreRef.orderByChild("createdBy").equalTo(userId);
 
@@ -155,7 +155,7 @@ public class Repository implements IRepository {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Marker store = markerSnapshot.getValue(Marker.class);
+                    Shop store = markerSnapshot.getValue(Shop.class);
                     Date createdAt = new Date(store.getCreatedAt());
                     long now = new Date().getTime();
                     Date nowDate = new Date(now);
@@ -203,7 +203,7 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final String userId, final Marker shop, final String reportTarget, final boolean howisit) {
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final String userId, final Shop shop, final String reportTarget, final boolean howisit) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
