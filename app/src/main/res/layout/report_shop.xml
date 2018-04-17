@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
-        android:text="@string/popup_report_question"/>
+        android:text="@string/popup_report_question"
+        app:fontFamily="sans-serif" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_report_location"/>
+        android:text="@string/popup_report_location"
+        app:bootstrapBrand="info"
+        app:roundedCorners="true"
+        app:showOutline="true" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_247"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_report_247_yes"/>
+        android:layout_marginTop="5dp"
+        android:text="@string/popup_report_247_yes"
+        app:bootstrapBrand="info"
+        app:roundedCorners="true"
+        app:showOutline="true" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_pos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_report_credit_card_yes"/>
+        android:layout_marginTop="5dp"
+        android:text="@string/popup_report_credit_card_yes"
+        app:bootstrapBrand="info"
+        app:roundedCorners="true"
+        app:showOutline="true" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_tickets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_report_tickets_yes"/>
-
+        android:layout_marginTop="5dp"
+        android:text="@string/popup_report_tickets_yes"
+        app:bootstrapBrand="info"
+        app:roundedCorners="true"
+        app:showOutline="true" />
 
 </LinearLayout>

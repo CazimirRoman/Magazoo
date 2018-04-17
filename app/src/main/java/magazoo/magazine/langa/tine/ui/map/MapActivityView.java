@@ -386,10 +386,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     public void showReportDialog() {
 
         mReportDialog = buildCustomDialog(getString(R.string.popup_report_shop_title), R.layout.report_shop).show();
-        Button report_location = (Button) mReportDialog.findViewById(R.id.button_report_location);
-        Button report_247 = (Button) mReportDialog.findViewById(R.id.button_report_247);
-        Button report_pos = (Button) mReportDialog.findViewById(R.id.button_report_pos);
-        Button report_tickets = (Button) mReportDialog.findViewById(R.id.button_report_tickets);
+        BootstrapButton report_location = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_location);
+        BootstrapButton report_247 = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_247);
+        BootstrapButton report_pos = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_pos);
+        BootstrapButton report_tickets = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_tickets);
 
         if (mNonStopLabel.getVisibility() == View.GONE) {
             report_247.setText(getString(R.string.popup_report_247_yes));
