@@ -9,7 +9,7 @@ public class Constants {
     public static final int ACCURACY_DESIRED = 20;
     public static final int ZOOM_LEVEL_DESIRED = 15;
     public static final int ADD_SHOP_LIMIT = 5;
-    public static final int REPORT_SHOP_LIMIT = 5;
+    public static final int REPORT_SHOP_LIMIT = 9999;
     public static final int ERROR_ACCURACY = 567;
     public static final int ERROR_INTERNET = 876;
     public static final int ERROR_LOCATION = 159;

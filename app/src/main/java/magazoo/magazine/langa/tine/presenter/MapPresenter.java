@@ -1,5 +1,7 @@
 package magazoo.magazine.langa.tine.presenter;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.presenter.authentication.AuthPresenter;
 import magazoo.magazine.langa.tine.repository.Repository;
 import magazoo.magazine.langa.tine.ui.map.IMapActivityView;
+import magazoo.magazine.langa.tine.ui.map.MapActivityView;
 import magazoo.magazine.langa.tine.ui.map.OnGetReportsFromDatabaseListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToAddListener;
 import magazoo.magazine.langa.tine.ui.map.OnIsAllowedToReportListener;
@@ -20,6 +23,9 @@ import magazoo.magazine.langa.tine.ui.map.OnReportWrittenToDatabaseListener;
  * TODO: Add a class header comment!
  */
 public class MapPresenter implements IMapPresenter {
+
+    private static final String TAG = MapPresenter.class.getSimpleName();
+
 
     private Repository mRepository;
     private IGeneralView mView;
@@ -51,27 +57,29 @@ public class MapPresenter implements IMapPresenter {
     public void checkIfDuplicateReport(Report currentReportedShop) {
         mRepository.checkIfDuplicateReport(new OnDuplicateReportListener() {
             @Override
-            public void isDuplicateReport(String regards) {
+            public void isDuplicateReport() {
                 getMapActivityView().closeReportDialog();
-                getMapActivityView().showDuplicateReportErrorDialog(regards);
+                getMapActivityView().showReportThanksPopup();
+                Log.d(TAG, "Duplicate " + getMapActivityView().getCurrentReportedShop().getRegards() + " report");
             }
 
             @Override
-            public void isNotDuplicateReport(String regards) {
+            public void isNotDuplicateReport() {
                 getMapActivityView().closeReportDialog();
-                Shop currentReportedShopMarker = getMapActivityView().getCurrentSelectedShop();
+                Report currentReportedShop = getMapActivityView().getCurrentReportedShop();
                 mRepository.writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
                     @Override
                     public void onReportWrittenSuccess() {
                         getMapActivityView().closeReportDialog();
                         getMapActivityView().showReportThanksPopup();
+                        Log.d(TAG, "Report for " + getMapActivityView().getCurrentReportedShop().getRegards() + " written to DB");
                     }
 
                     @Override
                     public void onReportWrittenFailed(String error) {
                         getMapActivityView().showToast(error);
                     }
-                }, userId, currentReportedShopMarker, regards, false);
+                }, currentReportedShop);
             }
         }, userId, currentReportedShop);
     }

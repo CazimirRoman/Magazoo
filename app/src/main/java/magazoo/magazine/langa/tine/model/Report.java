@@ -4,74 +4,51 @@ public class Report {
 
     private String shopId;
     private String regards;
-    private boolean howisit;
+    private boolean howIsIt;
     private String reportedBy;
     private long reportedAt;
 
-    public Report() {
-    }
-
-    public Report(String shopId, String regards, boolean howisit, String reportedBy, long reportedAt) {
+    public Report(String shopId, String regards, boolean howIsIt, String reportedBy, long reportedAt) {
         this.shopId = shopId;
         this.regards = regards;
-        this.howisit = howisit;
+        this.howIsIt = howIsIt;
         this.reportedBy = reportedBy;
         this.reportedAt = reportedAt;
     }
 
-    public String getShopId() {
-        return shopId;
-    }
+    public Report(){
 
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
     }
 
     public String getRegards() {
         return regards;
     }
 
-    public void setRegards(String regards) {
-        this.regards = regards;
-    }
+    public String getShopId() { return shopId; }
 
-    public boolean isHowisit() {
-        return howisit;
-    }
-
-    public void setHowisit(boolean howisit) {
-        this.howisit = howisit;
+    public boolean getHowIsIt() {
+        return howIsIt;
     }
 
     public String getReportedBy() {
         return reportedBy;
     }
 
-    public void setReportedBy(String reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
     public long getReportedAt() {
         return reportedAt;
     }
 
-    public void setReportedAt(long reportedAt) {
-        this.reportedAt = reportedAt;
-    }
-
     @Override
-    public boolean equals(Object o){
-      if(o == this) return true;
-        if(!(o instanceof Report)){
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Report)) {
             return false;
         }
 
         Report report = (Report) o;
 
         return report.getReportedBy().equals(reportedBy)
-                && report.getRegards().equals(regards) && report.isHowisit() == howisit;
+                && report.getRegards().equals(regards) && report.getHowIsIt() == howIsIt && report.getShopId().equals(shopId);
     }
-
-
 }
 

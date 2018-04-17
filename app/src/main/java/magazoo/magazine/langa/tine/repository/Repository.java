@@ -178,21 +178,21 @@ public class Repository implements IRepository {
     public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, String userId, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
-        Query query = mReportRef.orderByChild("reportedBy").equalTo(userId);
+        Query query = mReportRef.orderByChild("reportedBy").equalTo(currentReportedShop.getReportedBy());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Report report = markerSnapshot.getValue(Report.class);
+                for (DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {
+                    Report report = reportSnapshot.getValue(Report.class);
                     reports.add(report);
                 }
 
                 if (reports.contains(currentReportedShop)) {
-                    mapPresenter.isDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isDuplicateReport();
                 } else {
-                    mapPresenter.isNotDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isNotDuplicateReport();
                 }
             }
 
@@ -203,14 +203,17 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final String userId, final Shop shop, final String reportTarget, final boolean howisit) {
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final Report report) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
-                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, userId, new Date().getTime());
-                    mReportRef.push().setValue(reportedShop);
-                    mapPresenter.onReportWrittenSuccess();
+                    mReportRef.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            mapPresenter.onReportWrittenSuccess();
+                        }
+                    });
                 }
             }
 

@@ -2,6 +2,7 @@ package magazoo.magazine.langa.tine.ui.map;
 
 import java.util.ArrayList;
 
+import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.model.Shop;
 
 /**
@@ -13,9 +14,7 @@ public interface IMapActivityView {
     void showReportDialog();
     void showReportThanksPopup();
     void showAddThanksPopup();
-    void showDuplicateReportErrorDialog(String regards);
-    Shop getCurrentSelectedShop();
-    void showShopLimitErrorDialog();
+    Report getCurrentReportedShop();
     void closeShopDetails();
     void openShopDetails();
     void closeReportDialog();
