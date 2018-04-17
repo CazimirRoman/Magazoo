@@ -14,7 +14,6 @@ public class Constants {
     public static final int ERROR_INTERNET = 876;
     public static final int ERROR_LOCATION = 159;
     public static final int ERROR_PERMISSION = 670;
-    public static final int ERROR_MAX_ZOOM = 109;
     public static final int ERROR_LIMIT = 643;
     public static final String REPORT_LOCATION = "location";
     public static final String REPORT_POS = "pos";
