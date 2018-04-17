@@ -731,8 +731,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         spinner.setAdapter(dataAdapter);
 
-        Button buttonAdd = (Button) mAddShopDialog.findViewById(R.id.buttonAdd);
-        Button buttonCancel = (Button) mAddShopDialog.findViewById(R.id.buttonCancel);
+        BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
+        BootstrapButton buttonCancel = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonCancel);
 
         buttonCancel.setOnClickListener(new OnClickListener() {
             @Override
