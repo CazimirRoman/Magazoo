@@ -277,27 +277,27 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                    if (true) {
-                        if (mPresenter.isUserLoggedIn()) {
-                            mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
-                                @Override
-                                public void isAllowedToAdd() {
-                                    showAddShopDialog();
-                                }
+                if (true) {
+                    if (mPresenter.isUserLoggedIn()) {
+                        mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
+                            @Override
+                            public void isAllowedToAdd() {
+                                showAddShopDialog();
+                            }
 
-                                @Override
-                                public void isNotAllowedToAdd() {
-                                    showAddLimitAlertPopup();
+                            @Override
+                            public void isNotAllowedToAdd() {
+                                showAddLimitAlertPopup();
 
-                                }
-                            });
-                        } else {
-                            startLoginActivity();
-                            finish();
-                        }
+                            }
+                        });
                     } else {
-                        showAccuracyErrorDialog();
+                        startLoginActivity();
+                        finish();
                     }
+                } else {
+                    showAccuracyErrorDialog();
+                }
 
             }
         });
@@ -447,6 +447,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     public void showReportThanksPopup() {
         Util.buildDialog(this, getString(R.string.thanks_report), getString(R.string.details_report), 0).show();
     }
+
     @Override
     public void closeReportDialog() {
         //TODO: need to find a way to update the cardview without closing it
@@ -548,7 +549,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private void sendContactEmail() {
         Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
         feedbackEmail.setType("text/email");
-        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {"cazimir.developer@gmail.com"});
+        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{"cazimir.developer@gmail.com"});
         feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, mPresenter.getUserEmail() + " has left a feedback");
         startActivity(Intent.createChooser(feedbackEmail, "Send Feedback:"));
     }
@@ -570,13 +571,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
         mShopTypeLabel.setText(shop.getType());
 
-        if(shop.getType().equals(getString(R.string.popup_add_shop_small))){
+        if (shop.getType().equals(getString(R.string.popup_add_shop_small))) {
             mShopImage.setFontAwesomeIcon("fa_building");
-        }else if(shop.getType().equals(getString(R.string.popup_add_shop_farmer))){
+        } else if (shop.getType().equals(getString(R.string.popup_add_shop_farmer))) {
             mShopImage.setFontAwesomeIcon("fa_lemon_o");
-        }else if(shop.getType().equals(getString(R.string.popup_add_shop_supermarket))){
+        } else if (shop.getType().equals(getString(R.string.popup_add_shop_supermarket))) {
             mShopImage.setFontAwesomeIcon("fa_shopping_basket");
-        }else if(shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))){
+        } else if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
             mShopImage.setFontAwesomeIcon("fa_shopping_cart");
         }
 
@@ -629,17 +630,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onCameraIdle() {
                 setZoomLevel();
-                if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
-                    mMap.clear();
-                    getMapBounds();
-                    getShopMarkers();
-                    onNewShopMarkerAdded();
-                } else {
-                    //first run only
-                    if (mCurrentZoomLevel != 2) {
-                        Util.buildDialog(MapActivityView.this, "Max zoom reached", "Max zoom", Constants.ERROR_MAX_ZOOM).show();
-                    }
-                }
+                mMap.clear();
+                getMapBounds();
+                getShopMarkers();
+                onNewShopMarkerAdded();
             }
         });
     }

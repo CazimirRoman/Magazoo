@@ -56,10 +56,6 @@ public class Util {
                             case Constants.ERROR_PERMISSION:
                                 listener.requestLocationPermissions();
                                 break;
-                            case Constants.ERROR_MAX_ZOOM:
-                                dialog.dismiss();
-                                listener.zoomToCurrentLocation();
-                                break;
                             default:
                                 dialog.dismiss();
                                 break;
