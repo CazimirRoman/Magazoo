@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,8 +62,8 @@ import magazoo.magazine.langa.tine.R;
 import magazoo.magazine.langa.tine.base.BaseActivity;
 import magazoo.magazine.langa.tine.base.IGeneralView;
 import magazoo.magazine.langa.tine.constants.Constants;
-import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.model.Report;
+import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
@@ -89,8 +88,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private Shop mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
-    private LatLngBounds mBounds;
-    private ArrayList<Shop> mMarkersInBounds;
+    private ArrayList<Shop> mShopsInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
@@ -110,6 +108,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         setUpMap();
         setupApiClientLocation();
         createLocationRequest();
+        onNewShopMarkerAdded();
     }
 
     @Override
@@ -149,8 +148,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return false;
     }
 
-    public Shop getCurrentSelectedShop() {
-        return mCurrentSelectedShop;
+    @Override
+    public Report getCurrentReportedShop() {
+        return mCurrentReportedShop;
     }
 
     private void setupApiClientLocation() {
@@ -198,12 +198,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mMap = googleMap;
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-
                         mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
                         if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Shop marker1 : mMarkersInBounds) {
-                                if (marker1.getId() != null && marker1.getId().contains(marker.getTitle())) {
-                                    showShopDetails(marker1);
+                            for (Shop shop : mShopsInBounds) {
+                                if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
+                                    populateShopDetails(shop);
+                                    openShopDetails();
+                                    mCurrentSelectedShop = shop;
                                 }
                             }
                         }
@@ -217,7 +218,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 setMyLocationEnabled();
                 setOnCameraChangeListener();
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
-                    getShopMarkers();
+                    getShopMarkers(getMapBounds());
                 }
             }
         });
@@ -316,11 +317,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void showShopLimitErrorDialog() {
-
-    }
-
-    @Override
     public void closeShopDetails() {
         mShopDetails.setVisibility(View.GONE);
     }
@@ -328,10 +324,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void openShopDetails() {
         mShopDetails.setVisibility(View.VISIBLE);
-    }
-
-    public void showDuplicateReportErrorDialog(String regards) {
-        showErrorDialog(String.format(getString(R.string.popup_report_duplicate_error_title), regards), String.format(getString(R.string.popup_report_duplicate_error_text), regards), Constants.ERROR_LIMIT);
     }
 
     private void showNoInternetErrorDialog() {
@@ -456,28 +448,29 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void addNewlyAddedMarkerToMap(Shop marker, String title) {
-
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
+    public void addNewlyAddedMarkerToMap(Shop shop, String title) {
 
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(marker.getLat(), marker.getLon()))
-                .title(title).icon(icon));
+                .position(new LatLng(shop.getLat(), shop.getLon()))
+                .title(title).icon(getIconForShop()));
+
+        populateShopDetails(shop);
+    }
+
+    private BitmapDescriptor getIconForShop() {
+       return BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
     }
 
     @Override
-    public void addMarkersToMap(ArrayList<Shop> markers) {
-        mMap.clear();
+    public void addMarkersToMap(ArrayList<Shop> shops) {
 
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
-
-        for (int i = 0; i < markers.size(); i++) {
+        for (int i = 0; i < shops.size(); i++) {
             mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(markers.get(i).getLat(), markers.get(i).getLon()))
-                    .title(markers.get(i).getId()).icon(icon));
+                    .position(new LatLng(shops.get(i).getLat(), shops.get(i).getLon()))
+                    .title(shops.get(i).getId()).icon(getIconForShop()));
         }
 
-        mMarkersInBounds = markers;
+        mShopsInBounds = shops;
     }
 
     private void navigateToShop() {
@@ -512,8 +505,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mPresenter.addListenerForNewMarkerAdded();
     }
 
-    private void getShopMarkers() {
-        mPresenter.getAllMarkers(mBounds);
+    private void getShopMarkers(LatLngBounds bounds) {
+        mPresenter.getAllMarkers(bounds);
     }
 
     public void showAddThanksPopup() {
@@ -565,9 +558,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
-    private void showShopDetails(Shop shop) {
-
-        mCurrentSelectedShop = shop;
+    private void populateShopDetails(Shop shop) {
         mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
         mShopTypeLabel.setText(shop.getType());
 
@@ -598,8 +589,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             mTicketsLabel.setVisibility(View.GONE);
         }
-
-        openShopDetails();
     }
 
     private void setMapTheme() {
@@ -629,11 +618,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                setZoomLevel();
                 mMap.clear();
-                getMapBounds();
-                getShopMarkers();
-                onNewShopMarkerAdded();
+                setZoomLevel();
+                getShopMarkers(getMapBounds());
             }
         });
     }
@@ -642,8 +629,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mCurrentZoomLevel = mMap.getCameraPosition().zoom;
     }
 
-    private void getMapBounds() {
-        mBounds = MapActivityView.this.mMap
+    private LatLngBounds getMapBounds() {
+        return MapActivityView.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -711,7 +698,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
-        final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_small));
@@ -726,23 +712,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         spinner.setAdapter(dataAdapter);
 
         BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
-        BootstrapButton buttonCancel = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonCancel);
-
-        buttonCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAddShopDialog.dismiss();
-            }
-        });
 
         buttonAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, ""));
+                            chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId()));
                 } else {
                     spinner.setError(getString(R.string.popup_add_shop_type));
                 }

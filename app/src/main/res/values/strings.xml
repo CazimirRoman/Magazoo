@@ -60,7 +60,7 @@
     <!--add shop popup start-->
 
     <string name="popup_add_shop_title">Add shop</string>
-    <string name="popup_add_shop_type">Please select shop type</string>
+    <string name="popup_add_shop_type">Shop type</string>
     <string name="popup_add_shop_farmer">Farmer\'s market</string>
     <string name="popup_add_shop_supermarket">Supermarket</string>
     <string name="popup_add_shop_small">Small shop</string>
@@ -68,7 +68,6 @@
 
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
-    <string name="popup_add_shop_error">Please select shop type</string>
     <string name="ok">OK</string>
     <string name="nonstop">24/7</string>
     <string name="pos">Credit cards accepted</string>
@@ -133,6 +132,7 @@
     <string name="shop_type">Shop type</string>
     <string name="report">Raporteaza</string>
     <string name="navigate">Navigheaza</string>
+    <string name="shop_id">534tgfdgfdgfdgdfg</string>
 
     <!--report shop popup end-->
 

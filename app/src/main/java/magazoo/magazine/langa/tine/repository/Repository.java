@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -76,7 +77,7 @@ public class Repository implements IRepository {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Shop marker = dataSnapshot.getValue(Shop.class);
                 assert marker != null;
-                mapPresenter.onAddListenerForNewMarkerAddedSuccess(marker, s);
+                mapPresenter.onAddListenerForNewMarkerAddedSuccess(marker, marker.getId());
             }
 
             @Override
@@ -108,16 +109,16 @@ public class Repository implements IRepository {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayList<Shop> markersInVisibleArea = new ArrayList<>();
-                    for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                        Shop marker = markerSnapshot.getValue(Shop.class);
-                        //update model with id from firebase
-                        if(marker != null){
-                            marker.setId(markerSnapshot.getKey());
-                            if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
-                                markersInVisibleArea.add(marker);
-                            }
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                    Shop marker = markerSnapshot.getValue(Shop.class);
+                    //update model with id from firebase
+                    if (marker != null) {
+                        marker.setId(markerSnapshot.getKey());
+                        if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
+                            markersInVisibleArea.add(marker);
                         }
                     }
+                }
 
                 mapPresenter.onGetAllMarkersSuccess(markersInVisibleArea);
             }
@@ -131,15 +132,24 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Shop markerToAdd) {
-        mStoreRef.push().setValue(markerToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Shop shop) {
+
+        String shopId = mStoreRef.push().getKey();
+        shop.setId(shopId);
+
+        mStoreRef.child(shopId).setValue(shop).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     mapPresenter.onAddMarkerSuccess();
-                } else{
+                } else {
                     mapPresenter.onAddMarkerFailed(task.getException().getMessage());
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mapPresenter.onAddMarkerFailed(e.getMessage());
             }
         });
     }
@@ -178,21 +188,21 @@ public class Repository implements IRepository {
     public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, String userId, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
-        Query query = mReportRef.orderByChild("reportedBy").equalTo(userId);
+        Query query = mReportRef.orderByChild("reportedBy").equalTo(currentReportedShop.getReportedBy());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Report report = markerSnapshot.getValue(Report.class);
+                for (DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {
+                    Report report = reportSnapshot.getValue(Report.class);
                     reports.add(report);
                 }
 
                 if (reports.contains(currentReportedShop)) {
-                    mapPresenter.isDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isDuplicateReport();
                 } else {
-                    mapPresenter.isNotDuplicateReport(currentReportedShop.getRegards());
+                    mapPresenter.isNotDuplicateReport();
                 }
             }
 
@@ -203,20 +213,23 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final String userId, final Shop shop, final String reportTarget, final boolean howisit) {
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final Report report) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 {
-                    Report reportedShop = new Report(shop.getId(), reportTarget, howisit, userId, new Date().getTime());
-                    mReportRef.push().setValue(reportedShop);
-                    mapPresenter.onReportWrittenSuccess();
+                    mReportRef.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            mapPresenter.onReportWrittenSuccess();
+                        }
+                    });
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                    mapPresenter.onReportWrittenFailed(databaseError.getMessage());
+                mapPresenter.onReportWrittenFailed(databaseError.getMessage());
             }
         });
     }

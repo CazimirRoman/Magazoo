@@ -5,15 +5,12 @@ import java.util.Date;
 public class Shop {
 
     private String id;
-    private String name;
     private Double lat;
     private Double lon;
     private String type;
     private boolean pos;
     private boolean nonstop;
     private boolean tickets;
-    private String description;
-    private Double rating;
     private long createdAt;
     private String createdBy;
 
@@ -21,27 +18,20 @@ public class Shop {
     public Shop() {
     }
 
-    public Shop(String id, String name, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String description, Double rating, String userId) {
+    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId) {
         this.id = id;
-        this.name = name;
         this.lat = lat;
         this.lon = lon;
         this.type = type;
         this.pos = pos;
         this.nonstop = nonstop;
         this.tickets = tickets;
-        this.description = description;
-        this.rating = rating;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
     }
 
     public void setTickets(boolean tickets) {
         this.tickets = tickets;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getId() {
@@ -62,10 +52,6 @@ public class Shop {
 
     public String getType() {
         return type;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public long getCreatedAt() {

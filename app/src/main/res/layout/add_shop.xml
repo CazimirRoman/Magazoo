@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <CheckBox
@@ -53,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
         android:gravity="end"
         android:orientation="horizontal">
 
@@ -68,19 +66,6 @@
             app:bootstrapBrand="info"
             android:layout_height="wrap_content"
             />
-
-        <com.beardedhen.androidbootstrap.BootstrapButton
-            android:id="@+id/buttonCancel"
-            app:bootstrapBrand="warning"
-            app:roundedCorners="true"
-            app:showOutline="true"
-            tools:text="cancel"
-            app:bootstrapSize="xl"
-            app:fontAwesomeIcon="fa_times"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp" />
 
     </LinearLayout>
 </LinearLayout>
