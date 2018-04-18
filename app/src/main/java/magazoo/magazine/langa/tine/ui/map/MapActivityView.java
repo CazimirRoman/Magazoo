@@ -88,7 +88,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private Shop mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
-    private LatLngBounds mBounds;
     private ArrayList<Shop> mShopsInBounds;
     private CardView mShopDetails;
     private TextView mShopTypeLabel;
@@ -109,6 +108,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         setUpMap();
         setupApiClientLocation();
         createLocationRequest();
+        onNewShopMarkerAdded();
     }
 
     @Override
@@ -146,10 +146,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         }
 
         return false;
-    }
-
-    public Shop getCurrentSelectedShop() {
-        return mCurrentSelectedShop;
     }
 
     @Override
@@ -206,7 +202,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         if (mShopDetails.getVisibility() == View.GONE) {
                             for (Shop shop : mShopsInBounds) {
                                 if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
-                                    showShopDetails(shop);
+                                    populateShopDetails(shop);
+                                    openShopDetails();
                                     mCurrentSelectedShop = shop;
                                 }
                             }
@@ -221,7 +218,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 setMyLocationEnabled();
                 setOnCameraChangeListener();
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
-                    getShopMarkers();
+                    getShopMarkers(getMapBounds());
                 }
             }
         });
@@ -456,6 +453,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(shop.getLat(), shop.getLon()))
                 .title(title).icon(getIconForShop()));
+
+        populateShopDetails(shop);
     }
 
     private BitmapDescriptor getIconForShop() {
@@ -506,8 +505,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mPresenter.addListenerForNewMarkerAdded();
     }
 
-    private void getShopMarkers() {
-        mPresenter.getAllMarkers(mBounds);
+    private void getShopMarkers(LatLngBounds bounds) {
+        mPresenter.getAllMarkers(bounds);
     }
 
     public void showAddThanksPopup() {
@@ -559,7 +558,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         startActivity(new Intent(MapActivityView.this, LoginActivityView.class));
     }
 
-    private void showShopDetails(Shop shop) {
+    private void populateShopDetails(Shop shop) {
         mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
         mShopTypeLabel.setText(shop.getType());
 
@@ -590,8 +589,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             mTicketsLabel.setVisibility(View.GONE);
         }
-
-        openShopDetails();
     }
 
     private void setMapTheme() {
@@ -623,9 +620,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onCameraIdle() {
                 mMap.clear();
                 setZoomLevel();
-                getMapBounds();
-                getShopMarkers();
-                onNewShopMarkerAdded();
+                getShopMarkers(getMapBounds());
             }
         });
     }
@@ -634,8 +629,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mCurrentZoomLevel = mMap.getCameraPosition().zoom;
     }
 
-    private void getMapBounds() {
-        mBounds = MapActivityView.this.mMap
+    private LatLngBounds getMapBounds() {
+        return MapActivityView.this.mMap
                 .getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -703,7 +698,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
-        final EditText editDescription = (EditText) mAddShopDialog.findViewById(R.id.editDescription);
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_small));
@@ -724,9 +718,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, "name", mCurrentLocation.latitude, mCurrentLocation.longitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), chkTickets.isChecked(), editDescription.getText().toString(), 0.00, ""));
+                            chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId()));
                 } else {
                     spinner.setError(getString(R.string.popup_add_shop_type));
                 }

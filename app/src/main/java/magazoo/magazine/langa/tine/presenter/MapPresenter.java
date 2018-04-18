@@ -98,8 +98,8 @@ public class MapPresenter implements IMapPresenter {
     public void addListenerForNewMarkerAdded() {
         mRepository.addChildEventListenerForMarker(new OnAddListenerForNewMarkerAdded() {
             @Override
-            public void onAddListenerForNewMarkerAddedSuccess(Shop marker, String title) {
-                getMapActivityView().addNewlyAddedMarkerToMap(marker, title);
+            public void onAddListenerForNewMarkerAddedSuccess(Shop shop, String title) {
+                getMapActivityView().addNewlyAddedMarkerToMap(shop, title);
             }
 
             @Override
@@ -125,8 +125,8 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void addMarkerToFirebase(Shop markerToAdd) {
-        markerToAdd.setCreatedBy(mAuthenticationPresenter.getUserId());
+    public void addMarkerToFirebase(Shop shop) {
+        shop.setCreatedBy(mAuthenticationPresenter.getUserId());
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
@@ -139,7 +139,7 @@ public class MapPresenter implements IMapPresenter {
                 getMapActivityView().closeAddShopDialog();
                 getMapActivityView().showToast(error);
             }
-        }, markerToAdd);
+        }, shop);
     }
 
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {
