@@ -39,7 +39,6 @@
             android:name=".ui.register.RegisterActivityView"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.profile.ForgotPasswordActivityView" />
-        <activity android:name=".ui.profile.ProfileActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

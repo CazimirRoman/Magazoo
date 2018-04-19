@@ -33,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,7 +65,6 @@ import magazoo.magazine.langa.tine.model.Report;
 import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
-import magazoo.magazine.langa.tine.ui.profile.ProfileActivity;
 import magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity;
 import magazoo.magazine.langa.tine.utils.OnErrorHandledListener;
 import magazoo.magazine.langa.tine.utils.Util;
@@ -239,9 +237,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
 
-                if (id == R.id.nav_profile) {
-                    startProfileActivity();
-                } else if (id == R.id.nav_share) {
+                if (id == R.id.nav_share) {
 
                 } else if (id == R.id.nav_signout) {
                     signOut();
@@ -262,7 +258,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         if (mPresenter.isUserLoggedIn()) {
             navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
-            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(true);
             View headerLayout = navigationView.getHeaderView(0);
             TextView headerText = headerLayout.findViewById(R.id.signedInUserEmail);
             headerText.setText(mPresenter.getUserEmail());
@@ -542,10 +537,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             super.onBackPressed();
         }
-    }
-
-    private void startProfileActivity() {
-        startActivity(new Intent(MapActivityView.this, ProfileActivity.class));
     }
 
     private void sendContactEmail() {

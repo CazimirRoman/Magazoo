@@ -63,7 +63,6 @@
             app:fontAwesomeIcon="fa_check_circle"
             app:showOutline="true"
             tools:text="add"
-            app:bootstrapBrand="info"
             android:layout_height="wrap_content"
             />
 

@@ -9,7 +9,8 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="16sp"
         android:layout_height="wrap_content"
         android:text="@string/popup_report_question"
         app:fontFamily="sans-serif" />
@@ -17,39 +18,43 @@
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_location"
         android:layout_width="match_parent"
+        android:lines="2"
         android:layout_height="wrap_content"
         android:text="@string/popup_report_location"
-        app:bootstrapBrand="info"
         app:roundedCorners="true"
+        app:bootstrapSize="md"
         app:showOutline="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_247"
         android:layout_width="match_parent"
+        android:lines="2"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        app:bootstrapSize="md"
         android:text="@string/popup_report_247_yes"
-        app:bootstrapBrand="info"
         app:roundedCorners="true"
         app:showOutline="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_pos"
         android:layout_width="match_parent"
+        android:lines="2"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        app:bootstrapSize="md"
         android:text="@string/popup_report_credit_card_yes"
-        app:bootstrapBrand="info"
         app:roundedCorners="true"
         app:showOutline="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/button_report_tickets"
         android:layout_width="match_parent"
+        app:bootstrapSize="md"
+        android:lines="2"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/popup_report_tickets_yes"
-        app:bootstrapBrand="info"
         app:roundedCorners="true"
         app:showOutline="true" />
 

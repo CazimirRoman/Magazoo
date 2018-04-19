@@ -2,35 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Profile"
-        android:visible="false" />
-
-    <item
         android:id="@+id/nav_tutorial"
-        android:icon="@drawable/ic_menu_camera"
-        android:title="Tutorial" />
+        android:icon="@drawable/ic_action_icon_menu_tutorial"
+        android:title="@string/tutorial" />
 
     <item
         android:id="@+id/nav_share"
-        android:icon="@drawable/ic_menu_share"
-        android:title="Share" />
+        android:icon="@drawable/ic_action_icon_menu_share"
+        android:title="@string/share" />
 
     <item
         android:id="@+id/nav_contact"
-        android:icon="@drawable/ic_menu_send"
-        android:title="Send Feedback" />
+        android:icon="@drawable/ic_action_icon_menu_message"
+        android:title="@string/send_feedback" />
     <item
         android:id="@+id/nav_signout"
-        android:icon="@drawable/ic_menu_send"
-        android:title="Signout"
+        android:icon="@drawable/ic_action_icon_menu_logout"
+        android:title="@string/signout"
         android:visible="false" />
 
     <item
         android:id="@+id/nav_signin"
         android:icon="@drawable/ic_menu_send"
-        android:title="Sign in"
+        android:title="@string/sign_in"
         android:visible="false" />
 
 </menu>
