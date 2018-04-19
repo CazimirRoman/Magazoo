@@ -46,15 +46,14 @@
             android:layout_height="130dp"
             android:orientation="horizontal">
 
-            <com.beardedhen.androidbootstrap.AwesomeTextView
+            <ImageView
                 android:id="@+id/shop_image"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.3"
-                android:padding="10dp"
-                android:textSize="50sp"
-                card_view:fontAwesomeIcon="fa_question"
+                android:padding="5dp"
+                android:src="@drawable/small_shop_image"
                 tools:text="icon" />
 
             <LinearLayout

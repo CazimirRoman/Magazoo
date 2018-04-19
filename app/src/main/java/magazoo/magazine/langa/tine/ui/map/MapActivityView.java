@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,7 +96,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private TextView mTicketsLabel;
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
-    private AwesomeTextView mShopImage;
+    private ImageView mShopImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -452,13 +452,22 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(shop.getLat(), shop.getLon()))
-                .title(title).icon(getIconForShop()));
+                .title(title).icon(getIconForShop(shop.getType())));
 
         populateShopDetails(shop);
     }
 
-    private BitmapDescriptor getIconForShop() {
-       return BitmapDescriptorFactory.fromResource(R.drawable.icon_generic);
+    private BitmapDescriptor getIconForShop(String type) {
+
+        if(type.equals(getString(R.string.popup_add_shop_small))){
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
+        }else if(type.equals(getString(R.string.popup_add_shop_farmer))){
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
+        }else if(type.equals(getString(R.string.popup_add_shop_farmer))){
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
+        } else {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
+        }
     }
 
     @Override
@@ -467,7 +476,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         for (int i = 0; i < shops.size(); i++) {
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(shops.get(i).getLat(), shops.get(i).getLon()))
-                    .title(shops.get(i).getId()).icon(getIconForShop()));
+                    .title(shops.get(i).getId()).icon(getIconForShop(shops.get(i).getType())));
         }
 
         mShopsInBounds = shops;
@@ -563,13 +572,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mShopTypeLabel.setText(shop.getType());
 
         if (shop.getType().equals(getString(R.string.popup_add_shop_small))) {
-            mShopImage.setFontAwesomeIcon("fa_building");
+            mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.small_shop_image));
         } else if (shop.getType().equals(getString(R.string.popup_add_shop_farmer))) {
-            mShopImage.setFontAwesomeIcon("fa_lemon_o");
+            mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.farmers_market_image));
         } else if (shop.getType().equals(getString(R.string.popup_add_shop_supermarket))) {
-            mShopImage.setFontAwesomeIcon("fa_shopping_basket");
+            mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.supermarket_image));
         } else if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
-            mShopImage.setFontAwesomeIcon("fa_shopping_cart");
+            mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.hypermarket_image));
         }
 
         if (shop.getNonstop()) {
