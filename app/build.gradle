@@ -43,7 +43,8 @@ dependencies {
     compile 'com.ramotion.paperonboarding:paper-onboarding:1.1.1'
     compile 'com.beardedhen:androidbootstrap:2.3.2'
     compile 'com.github.aakira:expandable-layout:1.6.0@aar'
-
+    compile 'com.julienvey.trello:trello-java-wrapper:0.3.2'
+    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
 }
 
 apply plugin: 'com.google.gms.google-services'
