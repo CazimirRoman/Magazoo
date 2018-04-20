@@ -133,6 +133,11 @@
     <string name="report">Raporteaza</string>
     <string name="navigate">Navigheaza</string>
     <string name="shop_id">534tgfdgfdgfdgdfg</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="share">Share</string>
+    <string name="send_feedback">Trimite un mesaj</string>
+    <string name="signout">Delogheaza-te</string>
+    <string name="sign_in">Logheaza-te</string>
 
     <!--report shop popup end-->
 
