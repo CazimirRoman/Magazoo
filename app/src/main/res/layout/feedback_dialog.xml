@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:layout_width="match_parent"
+        android:lines="10"
+        android:padding="5dp"
+        android:gravity="top|start"
+        app:roundedCorners="true"
+        android:hint="@string/send_feedback_hint"
+        android:id="@+id/editTextFeedbackText"
+        android:layout_height="wrap_content" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/buttonSendFeedback"
+        android:layout_width="wrap_content"
+        app:roundedCorners="true"
+        android:layout_margin="5dp"
+        app:bootstrapSize="xl"
+        app:fontAwesomeIcon="fa_check_circle"
+        app:showOutline="true"
+        android:layout_gravity="end"
+        tools:text="add"
+        android:layout_height="wrap_content"
+        />
+
+</LinearLayout>

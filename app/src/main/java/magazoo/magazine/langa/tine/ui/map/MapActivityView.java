@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -51,6 +54,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.julienvey.trello.Trello;
+import com.julienvey.trello.domain.Card;
+import com.julienvey.trello.impl.TrelloImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,6 +76,9 @@ import magazoo.magazine.langa.tine.utils.OnErrorHandledListener;
 import magazoo.magazine.langa.tine.utils.Util;
 
 import static magazoo.magazine.langa.tine.R.id.map;
+import static magazoo.magazine.langa.tine.constants.Constants.TRELLO_ACCESS_TOKEN;
+import static magazoo.magazine.langa.tine.constants.Constants.TRELLO_APP_KEY;
+import static magazoo.magazine.langa.tine.constants.Constants.TRELLO_FEEDBACK_LIST;
 
 public class MapActivityView extends BaseActivity implements IMapActivityView, LocationListener, OnErrorHandledListener {
 
@@ -94,6 +103,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private TextView mTicketsLabel;
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
+    private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
 
     @Override
@@ -238,7 +248,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 int id = item.getItemId();
 
                 if (id == R.id.nav_share) {
-
+                    shareApplication();
                 } else if (id == R.id.nav_signout) {
                     signOut();
                 } else if (id == R.id.nav_signin) {
@@ -247,7 +257,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 } else if (id == R.id.nav_tutorial) {
                     startTutorialActivity();
                 } else if (id == R.id.nav_contact) {
-                    sendContactEmail();
+                    showFeedbackDialog();
                 }
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -263,6 +273,60 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             headerText.setText(mPresenter.getUserEmail());
         } else {
             navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
+        }
+    }
+
+    private void shareApplication() {
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = getString(R.string.share_text);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
+    }
+
+    private void showFeedbackDialog() {
+        mFeedbackDialog = buildCustomDialog(getString(R.string.send_feedback), R.layout.feedback_dialog).show();
+        final BootstrapEditText etFeedbackText = (BootstrapEditText) mFeedbackDialog.findViewById(R.id.editTextFeedbackText);
+        BootstrapButton btnSendFeedback = (BootstrapButton) mFeedbackDialog.findViewById(R.id.buttonSendFeedback);
+
+        btnSendFeedback.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(TextUtils.isEmpty(etFeedbackText.getText())){
+                    etFeedbackText.setError(getString(R.string.feedback_empty));
+                    return;
+                }
+
+                sendFeedbackToTrello(etFeedbackText.getText().toString());
+            }
+        });
+
+    }
+
+    private void sendFeedbackToTrello(String feedback) {
+        new sendFeedbackToTrello().execute(feedback);
+    }
+
+    private class sendFeedbackToTrello extends AsyncTask<String, Integer, Card> {
+
+        Trello trelloApi = new TrelloImpl(TRELLO_APP_KEY, TRELLO_ACCESS_TOKEN);
+
+        @Override
+        protected Card doInBackground(String... params) {
+            Card feedBack = new Card();
+            feedBack.setName(params[0]);
+            feedBack.setDesc(mPresenter.getUserEmail());
+            return trelloApi.createCard(TRELLO_FEEDBACK_LIST, feedBack);
+        }
+
+        @Override
+        protected void onPostExecute(Card result) {
+            super.onPostExecute(result);
+            showToast(getString(R.string.feedback_sent));
+            mFeedbackDialog.dismiss();
         }
     }
 
@@ -284,7 +348,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                             @Override
                             public void isNotAllowedToAdd() {
                                 showAddLimitAlertPopup();
-
                             }
                         });
                     } else {
@@ -294,13 +357,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 } else {
                     showAccuracyErrorDialog();
                 }
-
             }
         });
 
-        // cardview for shop details
         initUIShopDetails();
-
     }
 
     private boolean checkIfCorrectAccuracy() {
@@ -429,6 +489,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
+
+
     }
 
     public void showReportThanksPopup() {

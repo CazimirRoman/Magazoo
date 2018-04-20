@@ -138,6 +138,11 @@
     <string name="send_feedback">Trimite un mesaj</string>
     <string name="signout">Delogheaza-te</string>
     <string name="sign_in">Logheaza-te</string>
+    <string name="feedback_empty">Nu ai introdus nici un feedback</string>
+    <string name="feedback_sent">Am primit feedbackul tau</string>
+    <string name="send_feedback_hint">Adauga feedbackul tau aici...</string>
+    <string name="share_text">Aplicatia Magazoo iti arata cele mai apropiate magazine din zona ta</string>
+    <string name="share_via">Impartaseste cu</string>
 
     <!--report shop popup end-->
 
