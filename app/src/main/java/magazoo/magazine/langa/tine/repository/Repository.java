@@ -184,7 +184,7 @@ public class Repository implements IRepository {
             }
         });
     }
-
+    //resolved reports are not taken into account for this check
     public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
@@ -196,7 +196,9 @@ public class Repository implements IRepository {
 
                 for (DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {
                     Report report = reportSnapshot.getValue(Report.class);
-                    reports.add(report);
+                    if(report.isNotResolved()){
+                        reports.add(report);
+                    }
                 }
 
                 if (reports.contains(currentReportedShop)) {

@@ -7,6 +7,7 @@ public class Report {
     private boolean howIsIt;
     private String reportedBy;
     private long reportedAt;
+    private boolean resolved;
 
     public Report(String shopId, String regards, boolean howIsIt, String reportedBy, long reportedAt) {
         this.shopId = shopId;
@@ -14,6 +15,7 @@ public class Report {
         this.howIsIt = howIsIt;
         this.reportedBy = reportedBy;
         this.reportedAt = reportedAt;
+        this.resolved = false;
     }
 
     public Report(){
@@ -28,6 +30,14 @@ public class Report {
 
     public boolean getHowIsIt() {
         return howIsIt;
+    }
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public boolean isNotResolved() {
+        return !resolved;
     }
 
     public String getReportedBy() {
