@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,7 +29,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @BindView(R.id.btnForgotPassword)
     BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
-    ProgressBar progress;
+    AVLoadingIndicatorView progress;
 
     private AuthPresenter mAuthPresenter;
 
@@ -103,12 +104,12 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
 
     @Override
     public void showProgress() {
-        progress.setVisibility(View.VISIBLE);
+        progress.smoothToShow();
     }
 
     @Override
     public void hideProgress() {
-        progress.setVisibility(View.GONE);
+        progress.smoothToHide();
 
     }
 

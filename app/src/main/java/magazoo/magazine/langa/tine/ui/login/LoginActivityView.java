@@ -14,6 +14,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,7 +43,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @BindView(R.id.btnForgotPassword)
     BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
-    ProgressBar progress;
+    AVLoadingIndicatorView progress;
     @BindView(R.id.btnLoginWithEmail)
     BootstrapButton btnLoginWithEmail;
     @BindView(R.id.btnGoToRegister)
@@ -72,6 +73,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         btnGoToRegister.setBootstrapBrand(getBootrapBrand());
         btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
         btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+        expandableLayout.collapse();
     }
 
     private void redirectToMapScreenIfLoggedIn() {
@@ -145,11 +147,11 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     public void showProgressBar() {
-        progress.setVisibility(View.VISIBLE);
+        progress.smoothToShow();
     }
 
     public void hideProgressBar() {
-        progress.setVisibility(View.GONE);
+        progress.smoothToHide();
     }
 
     public void goToMap() {

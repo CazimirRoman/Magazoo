@@ -39,20 +39,6 @@ public class MapPresenter implements IMapPresenter {
         this.userId = mAuthenticationPresenter.getUserId();
     }
 
-    public void checkIfAllowedToReport(final OnIsAllowedToReportListener mapActivityView) {
-
-        mRepository.getReportsAddedToday(new OnGetReportsFromDatabaseListener() {
-            @Override
-            public void onDataFetched(ArrayList<Report> reportsAddedToday) {
-                if (isUnderTheReportLimit(reportsAddedToday)) {
-                    mapActivityView.isAllowedToReport();
-                } else {
-                    mapActivityView.isNotAllowedToReport();
-                }
-            }
-        }, userId);
-    }
-
     @Override
     public void checkIfDuplicateReport(Report currentReportedShop) {
         mRepository.checkIfDuplicateReport(new OnDuplicateReportListener() {
@@ -81,7 +67,7 @@ public class MapPresenter implements IMapPresenter {
                     }
                 }, currentReportedShop);
             }
-        }, userId, currentReportedShop);
+        }, currentReportedShop);
     }
 
     @Override
