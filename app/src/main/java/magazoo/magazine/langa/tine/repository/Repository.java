@@ -185,7 +185,7 @@ public class Repository implements IRepository {
         });
     }
 
-    public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, String userId, final Report currentReportedShop) {
+    public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
         Query query = mReportRef.orderByChild("reportedBy").equalTo(currentReportedShop.getReportedBy());

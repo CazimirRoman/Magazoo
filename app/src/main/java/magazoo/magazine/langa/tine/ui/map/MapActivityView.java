@@ -295,7 +295,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View v) {
 
-                if(TextUtils.isEmpty(etFeedbackText.getText())){
+                if (TextUtils.isEmpty(etFeedbackText.getText())) {
                     etFeedbackText.setError(getString(R.string.feedback_empty));
                     return;
                 }
@@ -410,22 +410,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         buttonReport.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mPresenter.isUserLoggedIn()) {
-                    mPresenter.checkIfAllowedToReport(new OnIsAllowedToReportListener() {
-                        @Override
-                        public void isAllowedToReport() {
-                            showReportDialog();
-                        }
-
-                        @Override
-                        public void isNotAllowedToReport() {
-                            showReportLimitPopup();
-                        }
-                    });
-                } else {
-                    startLoginActivity();
-                    finish();
-                }
+                showReportDialog();
             }
         });
     }
@@ -516,11 +501,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private BitmapDescriptor getIconForShop(String type) {
 
-        if(type.equals(getString(R.string.popup_add_shop_small))){
+        if (type.equals(getString(R.string.popup_add_shop_small))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
-        }else if(type.equals(getString(R.string.popup_add_shop_farmer))){
+        } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
-        }else if(type.equals(getString(R.string.popup_add_shop_farmer))){
+        } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
         } else {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);

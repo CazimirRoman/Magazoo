@@ -66,7 +66,6 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 app:ael_duration="500"
-                app:ael_expanded="false"
                 app:ael_interpolator="bounce"
                 app:ael_orientation="vertical">
 
@@ -150,14 +149,15 @@
                     app:showOutline="true" />
             </LinearLayout>
 
-            <ProgressBar
+            <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/progress"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center|bottom"
-                android:layout_marginBottom="20dp"
+                tools:visibility="visible"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorName="BallPulseIndicator"
+                />
 
         </LinearLayout>
 

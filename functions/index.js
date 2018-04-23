@@ -3,13 +3,14 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-exports.deleteReportedShop = functions.database
+exports.modifyShopProperty = functions.database
   .ref('/Reports/{pushId}')
-  .onWrite(event => {
-    
-    var reportedShopId = event.data.child("shopId").val();
-    var typeOfReport = event.data.child("regards").val();
-    var valueOfReport = event.data.child("howisit").val();
+  .onWrite((change, context) => {
+
+    var reportedShopId = change.after.child("shopId").val();
+    var typeOfReport = change.after.child("regards").val();
+    var valueOfReport = change.after.child("howIsIt").val();
+
     var numberOfLocationReports = 0;
     var numberOfTicketReports = 0;
     var numberOfNonstopReports = 0;
@@ -31,7 +32,7 @@ exports.deleteReportedShop = functions.database
                      });
                      ref.update(updates);
                      console.log("Deleted shop with id: " + reportedShopId);
-                     return false;
+                     //return false;
                 });
                };
         } else if(childSnapshot.child("regards").val() === "tickets"){
@@ -44,10 +45,11 @@ exports.deleteReportedShop = functions.database
                     snapshot.ref.update({ tickets: valueOfReport })
                     });
                     console.log("Updated shop with ticket value set to: " + valueOfReport);
-                    return false;
+                    numberOfTicketReports = 0;
+                    //return false;
                 };
-                
-            } else if(childSnapshot.child("regards").val() === "nonstop"){
+
+            }else if(childSnapshot.child("regards").val() === "nonstop"){
             numberOfNonstopReports++;
             if(numberOfNonstopReports >= 3){
                 console.log("Nonstop report threshold reached!")
@@ -57,9 +59,10 @@ exports.deleteReportedShop = functions.database
                     snapshot.ref.update({ nonstop: valueOfReport })
                     });
                     console.log("Updated shop with nonstop value set to: " + valueOfReport);
-                    return false;
+                    numberOfNonstopReports = 0;
+                    //return false;
                 };
-                
+
             }else if(childSnapshot.child("regards").val() === "pos"){
             numberOfPosReports++;
             if(numberOfPosReports >= 3){
@@ -70,9 +73,9 @@ exports.deleteReportedShop = functions.database
                     snapshot.ref.update({ pos: valueOfReport })
                     });
                     console.log("Updated shop with pos value set to: " + valueOfReport);
-                    return false;
+                    numberOfPosReports = 0;
+                    //return false;
                 };
-                
             }
         });
   });

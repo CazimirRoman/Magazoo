@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,7 +35,7 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     @BindView(R.id.btnRegisterWithEmail)
     BootstrapButton btnRegisterWithEmail;
     @BindView(R.id.progress)
-    ProgressBar progress;
+    AVLoadingIndicatorView progress;
 
     private RegisterPresenter mPresenter;
 
@@ -103,22 +104,16 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     }
 
     public void showProgressBar() {
-        progress.setVisibility(View.VISIBLE);
+        progress.smoothToShow();
     }
 
     public void hideProgressBar() {
-        progress.setVisibility(View.GONE);
+        progress.smoothToHide();
     }
 
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        progress.setVisibility(View.GONE);
     }
 
     @Override
