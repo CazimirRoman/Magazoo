@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -474,8 +475,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
         });
-
-
     }
 
     public void showReportThanksPopup() {

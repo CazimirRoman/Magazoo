@@ -13,6 +13,7 @@ import com.ramotion.paperonboarding.listeners.PaperOnboardingOnRightOutListener;
 import java.util.ArrayList;
 
 import magazoo.magazine.langa.tine.R;
+import magazoo.magazine.langa.tine.utils.CustomPaperOnboardingEngine;
 
 public class TutorialActivity extends AppCompatActivity {
 
@@ -21,19 +22,11 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.onboarding_main_layout);
 
-        PaperOnboardingEngine engine = new PaperOnboardingEngine(findViewById(R.id.onboardingRootView), getDataForOnboarding(), getApplicationContext());
-
-        engine.setOnChangeListener(new PaperOnboardingOnChangeListener() {
-            @Override
-            public void onPageChanged(int oldElementIndex, int newElementIndex) {
-                Toast.makeText(getApplicationContext(), "Swiped from " + oldElementIndex + " to " + newElementIndex, Toast.LENGTH_SHORT).show();
-            }
-        });
+        CustomPaperOnboardingEngine engine = new CustomPaperOnboardingEngine(findViewById(R.id.onboardingRootView), getDataForOnboarding(), getApplicationContext());
 
         engine.setOnRightOutListener(new PaperOnboardingOnRightOutListener() {
             @Override
             public void onRightOut() {
-                // Probably here will be your exit action
                 finish();
             }
         });
@@ -42,17 +35,23 @@ public class TutorialActivity extends AppCompatActivity {
 
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // prepare data
-        PaperOnboardingPage scr1 = new PaperOnboardingPage("Hotels", "All hotels and hostels are sorted by hospitality rating",
-                Color.parseColor("#678FB4"), R.drawable.hotels, R.drawable.key);
-        PaperOnboardingPage scr2 = new PaperOnboardingPage("Banks", "We carefully verify all banks before add them into the app",
-                Color.parseColor("#65B0B4"), R.drawable.banks, R.drawable.wallet);
-        PaperOnboardingPage scr3 = new PaperOnboardingPage("Stores", "All local stores are categorized for your convenience",
-                Color.parseColor("#9B90BC"), R.drawable.stores, R.drawable.shopping_cart);
+        PaperOnboardingPage start = new PaperOnboardingPage("Bine ai venit!", "Magazoo este aplicația pentru magazine si buticuri care se bazeaza pe comunitate pentru a putea oferi cele mai apropiate magazine.",
+                Color.parseColor("#04d2ae"), R.drawable.tutorial_welcome, R.drawable.ic_first);
+        PaperOnboardingPage add = new PaperOnboardingPage("Adauga magazine", "Daca stii un magazin care nu este in Magazoo adauga-l chiar tu pe harta.",
+                Color.parseColor("#7ae582"), R.drawable.tutorial_add_shop, R.drawable.ic_add);
+        PaperOnboardingPage type = new PaperOnboardingPage("Tipuri de magazine", "Magazoo iti arata magazine de cartier, piete, supermarketuri si hypermarketuri.",
+                Color.parseColor("#75dddd"), R.drawable.tutorial_shop_type, R.drawable.ic_type);
+        PaperOnboardingPage report = new PaperOnboardingPage("Raporteaza un magazin", "Daca observi ceva in neregula cu un magazin poti raporta acest lucru.",
+                Color.parseColor("#508991"), R.drawable.tutorial_report_shop, R.drawable.ic_report);
+        PaperOnboardingPage navigate = new PaperOnboardingPage("Navigheaza", "Navigheaza rapid catre cel mai aproape magazin.",
+                Color.parseColor("#004346"), R.drawable.tutorial_navigate_shop, R.drawable.ic_navigate);
 
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
-        elements.add(scr1);
-        elements.add(scr2);
-        elements.add(scr3);
+        elements.add(start);
+        elements.add(add);
+        elements.add(type);
+        elements.add(report);
+        elements.add(navigate);
         return elements;
     }
 }
