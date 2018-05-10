@@ -22,31 +22,21 @@
             android:id="@+id/checkPos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pos_label" />
+            android:text="@string/checkbox_pos" />
 
         <CheckBox
             android:id="@+id/checkTickets"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tickets_label" />
+            android:text="@string/checkbox_tickets" />
 
         <CheckBox
             android:id="@+id/checkNonstop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nonstop_label" />
+            android:text="@string/checkbox_nonstop" />
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/enter_shop_description"
-        android:inputType="textMultiLine"
-        android:maxLines="5"
-        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"

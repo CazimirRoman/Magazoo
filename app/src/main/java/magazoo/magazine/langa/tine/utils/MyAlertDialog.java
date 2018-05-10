@@ -20,7 +20,7 @@ public class MyAlertDialog extends AlertDialog {
 
         if (dialog == null) {
             dialog = new Builder(context).create();
-            dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.close), new OnClickListener() {
+            dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.popup_close), new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

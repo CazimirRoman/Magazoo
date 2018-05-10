@@ -1,86 +1,74 @@
 <resources>
     <string name="app_name">Magazoo</string>
-
     <string name="facebook_app_id">1561514127227022</string>
     <string name="fb_login_protocol_scheme">fb1561514127227022</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nothing" />
 
-    <string name="email">Email</string>
-    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
-    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
-    <string name="check_email">Check your email for a confirmation link and then log in again</string>
-    <string name="change_email">Change Email</string>
-    <string name="change_password">Change Password</string>
-    <string name="send_password_reset_email">Send Password reset email</string>
-    <string name="remove_user">Remove user</string>
-    <string name="new_pass">New Password</string>
-    <string name="title_activity_profile">Firebase</string>
-    <string name="title_activity_login">Sign in</string>
+    <!--login, register start-->
+    <string name="email_missing">Enter email address!</string>
+    <string name="email_invalid">Not a valid email. Please check!</string>
+    <string name="password_missing">Enter password!</string>
+    <string name="login_failed">Login failed! Please check your email or password!</string>
     <string name="hint_email">Email</string>
-    <string name="hint_password">Parola</string>
-    <string name="hint_name">Fullname</string>
-    <string name="btn_login">Login</string>
-    <string name="btn_register">Register</string>
-    <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
-    <string name="title_activity_reset_password">ResetPasswordActivity</string>
-    <string name="btn_forgot_password">Forgot your password?</string>
-    <string name="btn_reset_password">Reset Password</string>
-    <string name="btn_back"><![CDATA[<< Back]]></string>
-    <string name="hint_new_email">New Email</string>
-    <string name="btn_change">Change</string>
-    <string name="btn_send">Send</string>
-    <string name="btn_remove">Remove</string>
-    <string name="btn_sign_out">Sign Out</string>
-    <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">Avem nevoie doar de adresa ta de email pentru a-ti putea trimite instructiunile de resetare.</string>
+    <string name="hint_password">Password</string>
+    <string name="forgot_password_msg">We just need your email address to send you the reset instructions.</string>
     <string name="action_settings">Settings</string>
-    <string name="prompt_password">New password</string>
-    <string name="btn_link_skip">Skip for now</string>
+    <string name="password_minimum">The password is to short. Please enter a minimum of 6 characters.</string>
+    <string name="login">Login with email</string>
+    <string name="facebook_login">  Login with facebook</string>
+    <string name="register">Register</string>
+    <string name="password_forgot">Forgot password?</string>
+    <string name="password_not_matching">Passwords do not match</string>
+    <string name="resetPassword">Reset password</string>
+    <string name="email_reset_sent">Please check your email. We will send you the reset instructions.</string>
+    <string name="email_reset_sent_error">We could not send you the email. Please try again later.</string>
+    <string name="password_repeat">Repeat password</string>
+    <!--login, register end-->
 
-    <!--errors-->
+    <!--popups start-->
     <string name="popup_accuracy_error_title">"Location accuracy"</string>
-    <string name="popup_accuracy_error_text">Please wait for a better accuracy (8 meters or below) in order to add a shop \n</string>
+    <string name="popup_accuracy_error_text">Please wait while we are locating you…</string>
     <string name="popup_current_accuracy">Current accuracy:</string>
-
     <string name="popup_connection_error_title">"You are offline"</string>
     <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>
-
     <string name="popup_gps_error_title">"No location access"</string>
     <string name="popup_gps_error_text">Make sure device location is turned on, then try again.</string>
-
     <string name="popup_location_permission_error_title">"Allow location permissions"</string>
     <string name="popup_location_permission_error_text">The app needs your location to search for nearby shops.</string>
-
     <string name="popup_shop_limit_error_title">"Limit reached"</string>
     <string name="popup_shop_limit_error_text">You have reached your daily add limit. Come back again tomorrow to add more shops.</string>
+    <string name="popup_close">Close</string>
+    <!--popups end-->
 
-    <!--add shop popup start-->
-
+    <!--add shop start-->
     <string name="popup_add_shop_title">Add shop</string>
     <string name="popup_add_shop_type">Shop type</string>
+    <string name="popup_add_shop_small">Small shop</string>
     <string name="popup_add_shop_farmer">Farmer\'s market</string>
     <string name="popup_add_shop_supermarket">Supermarket</string>
-    <string name="popup_add_shop_small">Small shop</string>
     <string name="popup_add_shop_hypermarket">Hypermarket</string>
-
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="nonstop">24/7</string>
+    <string name="checkbox_pos">pos</string>
+    <string name="checkbox_tickets">tickets</string>
+    <string name="checkbox_nonstop">nonstop</string>
+    <string name="thanks_adding_title">Thanks for adding</string>
+    <string name="thanks_adding_text">Your shop has been added to the map</string>
+    <!--add shop end-->
+
+    <!--shop details start-->
+    <string name="shop_type">Shop type</string>
     <string name="pos">Credit cards accepted</string>
     <string name="tickets">Meal tickets accepted</string>
-    <string name="enter_shop_description">Enter shop description</string>
-    <string name="pos_label">pos</string>
-    <string name="tickets_label">tickets</string>
-    <string name="nonstop_label">nonstop</string>
+    <string name="nonstop">24/7</string>
+    <string name="report">Report</string>
+    <string name="navigate">Navigate</string>
+    <!--shop details end-->
 
-    <!--add shop popup end-->
-
-    <!--report shop popup start-->
-
+    <!--report shop start-->
     <string name="popup_report_shop_title">Report shop</string>
     <string name="popup_report_question">What would you like to report?</string>
     <string name="popup_report_location">The shop is not here</string>
@@ -90,60 +78,36 @@
     <string name="popup_report_credit_card_no">Credit cards are not accepted</string>
     <string name="popup_report_tickets_yes">Meal tickets are accepted</string>
     <string name="popup_report_tickets_no">Meal tickets are not accepted</string>
-
     <string name="popup_report_limit_error_title">"Limit reached"</string>
     <string name="popup_report_limit_error_text">You have reached your daily report limit.</string>
-
-    <string name="popup_report_duplicate_error_title">Duplicate %s report</string>
-    <string name="popup_report_duplicate_error_text">You have already reported the %s on this shop. Thank you!</string>
-
-    <string name="email_missing">Enter email address!</string>
-    <string name="email_invalid">Not a valid email. Please check!</string>
-    <string name="password_missing">Enter password!</string>
-    <string name="login_failed">Login failed! Please check your email or password!</string>
-    <string name="no_internet">No internet</string>
-    <string name="authentication_success">Authentication succeeded.</string>
-    <string name="registration_failed">Registration failed</string>
-    <string name="welcome">Welcome to Magazoo</string>
-    <string name="reminder_to_add">You have not added any shop lately! Please add.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="thanks_report">Thank you!</string>
     <string name="details_report">Your report has been submitted! Thank you!</string>
-    <string name="thanks_adding">Thanks for adding</string>
-    <string name="details_adding">Your shop has been added to the map!</string>
-    <string name="close">Inchide</string>
-    <string name="password_minimum">Parola este prea scurta, minim 6 caractere</string>
-    <string name="login">Login cu email</string>
-    <string name="facebook_login">Login cu facebook</string>
-    <string name="register">Inregistreaza-te</string>
-    <string name="password_forgot">Ai uitat parola?</string>
-    <string name="profile">Profilul meu</string>
-    <string name="email_sent">"Ti-am trimis un email la adresa: "</string>
-    <string name="hint_password_confirm">Confirma parola</string>
-    <string name="password_not_matching">Parola nu este aceeasi</string>
-    <string name="resetPassword">Reseteaza parola</string>
-    <string name="email_reset_sent">Te rog sa verifici mailul. Ti-am trimis instructiunile de resetare a parolei.</string>
-    <string name="email_reset_sent_error">Nu am putut sa iti trimitem mailul. Te rog sa incerci din nou</string>
-    <string name="forgot_password">Ai uitat parola?</string>
-    <string name="password_repeat">Repeta parola</string>
-    <string name="nothing" />
-    <string name="shop_type">Shop type</string>
-    <string name="report">Raporteaza</string>
-    <string name="navigate">Navigheaza</string>
-    <string name="shop_id">534tgfdgfdgfdgdfg</string>
+    <!--report shop end-->
+
+    <!--navigation drawer start-->
     <string name="tutorial">Tutorial</string>
     <string name="share">Share</string>
-    <string name="send_feedback">Trimite un mesaj</string>
-    <string name="signout">Delogheaza-te</string>
-    <string name="sign_in">Logheaza-te</string>
-    <string name="feedback_empty">Nu ai introdus nici un feedback</string>
-    <string name="feedback_sent">Am primit feedbackul tau</string>
-    <string name="send_feedback_hint">Adauga feedbackul tau aici...</string>
-    <string name="share_text">Aplicatia Magazoo iti arata cele mai apropiate magazine din zona ta</string>
-    <string name="share_via">Impartaseste cu</string>
+    <string name="send_feedback">Send a message</string>
+    <string name="signout">Logout</string>
+    <string name="sign_in">Sign in</string>
+    <string name="feedback_empty">You did not enter any text.</string>
+    <string name="feedback_sent">Feedback received</string>
+    <string name="send_feedback_hint">Add your feedback here…</string>
+    <string name="share_text">Magazoo will show you the closest shops in your area.</string>
+    <string name="share_via">Share with</string>
+    <!--navigation drawer end-->
 
-    <!--report shop popup end-->
+    <!--tutorial start-->
+    <string name="tutorial_welcome_title">Welcome</string>
+    <string name="tutorial_welcome_text">Magazoo is a community based application that shows you the neareast shops and supermarkets in your area.</string>
+    <string name="tutorial_add_shop_title">Add shops</string>
+    <string name="tutorial_add_shop_text">If you know a shop that is not yet on the map, add it to the map and help other users find it.</string>
+    <string name="tutorial_shop_type_title">Type of shops</string>
+    <string name="tutorial_shop_type_text">Magazoo shows you small shops, farmer\'s markets, supermarkets and shopping malls.</string>
+    <string name="tutorial_report_shop_title">Report a shop</string>
+    <string name="tutorial_report_shop_text">If you notice something wrong about the shop, report it.</string>
+    <string name="tutorial_navigate_title">Navigate</string>
+    <string name="tutorial_navigate_text">Quickly navigate to the nearest shop.</string>
+    <!--tutorial end-->
 
 </resources>

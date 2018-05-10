@@ -35,15 +35,15 @@ public class TutorialActivity extends AppCompatActivity {
 
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
         // prepare data
-        PaperOnboardingPage start = new PaperOnboardingPage("Bine ai venit!", "Magazoo este aplicația pentru magazine si buticuri care se bazeaza pe comunitate pentru a putea oferi cele mai apropiate magazine.",
+        PaperOnboardingPage start = new PaperOnboardingPage(getString(R.string.tutorial_welcome_title), getString(R.string.tutorial_welcome_text),
                 Color.parseColor("#04d2ae"), R.drawable.tutorial_welcome, R.drawable.ic_first);
-        PaperOnboardingPage add = new PaperOnboardingPage("Adauga magazine", "Daca stii un magazin care nu este in Magazoo adauga-l chiar tu pe harta.",
+        PaperOnboardingPage add = new PaperOnboardingPage(getString(R.string.tutorial_add_shop_title), getString(R.string.tutorial_add_shop_text),
                 Color.parseColor("#7ae582"), R.drawable.tutorial_add_shop, R.drawable.ic_add);
-        PaperOnboardingPage type = new PaperOnboardingPage("Tipuri de magazine", "Magazoo iti arata magazine de cartier, piete, supermarketuri si hypermarketuri.",
+        PaperOnboardingPage type = new PaperOnboardingPage(getString(R.string.tutorial_shop_type_title), getString(R.string.tutorial_shop_type_text),
                 Color.parseColor("#75dddd"), R.drawable.tutorial_shop_type, R.drawable.ic_type);
-        PaperOnboardingPage report = new PaperOnboardingPage("Raporteaza un magazin", "Daca observi ceva in neregula cu un magazin poti raporta acest lucru.",
+        PaperOnboardingPage report = new PaperOnboardingPage(getString(R.string.tutorial_report_shop_title), getString(R.string.tutorial_report_shop_text),
                 Color.parseColor("#508991"), R.drawable.tutorial_report_shop, R.drawable.ic_report);
-        PaperOnboardingPage navigate = new PaperOnboardingPage("Navigheaza", "Navigheaza rapid catre cel mai aproape magazin.",
+        PaperOnboardingPage navigate = new PaperOnboardingPage(getString(R.string.tutorial_navigate_title), getString(R.string.tutorial_navigate_text),
                 Color.parseColor("#004346"), R.drawable.tutorial_navigate_shop, R.drawable.ic_navigate);
 
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();

@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -338,7 +337,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                if (true) {
+                if (correctAccuracy()) {
                     if (mPresenter.isUserLoggedIn()) {
                         mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
                             @Override
@@ -364,7 +363,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         initUIShopDetails();
     }
 
-    private boolean checkIfCorrectAccuracy() {
+    private boolean correctAccuracy() {
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
     }
 
@@ -560,7 +559,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     public void showAddThanksPopup() {
-        Util.buildDialog(this, getString(R.string.thanks_adding), getString(R.string.details_adding), 0).show();
+        Util.buildDialog(this, getString(R.string.thanks_adding_title), getString(R.string.thanks_adding_text), 0).show();
     }
 
     @Override
