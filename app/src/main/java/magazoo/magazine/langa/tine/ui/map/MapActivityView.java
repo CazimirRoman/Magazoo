@@ -58,6 +58,7 @@ import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.impl.TrelloImpl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +73,7 @@ import magazoo.magazine.langa.tine.model.Shop;
 import magazoo.magazine.langa.tine.presenter.MapPresenter;
 import magazoo.magazine.langa.tine.ui.login.LoginActivityView;
 import magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity;
+import magazoo.magazine.langa.tine.utils.CSVFile;
 import magazoo.magazine.langa.tine.utils.OnErrorHandledListener;
 import magazoo.magazine.langa.tine.utils.Util;
 
@@ -117,6 +119,34 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         setupApiClientLocation();
         createLocationRequest();
         onNewShopMarkerAdded();
+        importShopsFromCSV();
+    }
+
+    private void importShopsFromCSV() {
+        InputStream inputStream = getResources().openRawResource(R.raw.magazine);
+        CSVFile csvFile = new CSVFile(inputStream);
+        final List<String[]> scoreList = csvFile.read();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String[] shop : scoreList) {
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, Double.valueOf(shop[0]), Double.valueOf(shop[1]),
+                            shop[2], Boolean.valueOf(shop[3]),
+                            Boolean.valueOf(shop[4]), Boolean.valueOf(shop[5]), mPresenter.getUserId()));
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("Done importing shops!" + " Imported: " + scoreList.size() + " shops");
+                    }
+                });
+            }
+        }).start();
+
+
+
     }
 
     @Override
@@ -337,26 +367,28 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                if (correctAccuracy()) {
-                    if (mPresenter.isUserLoggedIn()) {
-                        mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
-                            @Override
-                            public void isAllowedToAdd() {
-                                showAddShopDialog();
-                            }
+                showAddShopDialog();
 
-                            @Override
-                            public void isNotAllowedToAdd() {
-                                showAddLimitAlertPopup();
-                            }
-                        });
-                    } else {
-                        startLoginActivity();
-                        finish();
-                    }
-                } else {
-                    showAccuracyErrorDialog();
-                }
+//                if (correctAccuracy()) {
+//                    if (mPresenter.isUserLoggedIn()) {
+//                        mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
+//                            @Override
+//                            public void isAllowedToAdd() {
+//                                showAddShopDialog();
+//                            }
+//
+//                            @Override
+//                            public void isNotAllowedToAdd() {
+//                                showAddLimitAlertPopup();
+//                            }
+//                        });
+//                    } else {
+//                        startLoginActivity();
+//                        finish();
+//                    }
+//                } else {
+//                    showAccuracyErrorDialog();
+//                }
             }
         });
 
