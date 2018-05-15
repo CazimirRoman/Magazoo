@@ -98,16 +98,16 @@
     <!--navigation drawer end-->
 
     <!--tutorial start-->
-    <string name="tutorial_welcome_title">Welcome to Magazoo</string>
+    <string name="tutorial_welcome_title">Welcome!</string>
     <string name="tutorial_welcome_text">With Magazoo you can find small shops, farmer\'s markets, supermarkets and hypermarkets, all within reach!</string>
     <string name="tutorial_add_shop_title">Add shops</string>
-    <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
+    <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? \n Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
     <string name="tutorial_shop_type_title">Type of shops</string>
     <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, super and hypermarkets.</string>
     <string name="tutorial_report_shop_title">Report a shop</string>
     <string name="tutorial_report_shop_text">The shop is not there anymore, does not accept credit cards or meal tickets? Report it and Magazoo will change that for you.</string>
     <string name="tutorial_navigate_title">Navigate</string>
-    <string name="tutorial_navigate_text">Magazoo locates you on the map and immediately shows you the shortest route to it.</string>
+    <string name="tutorial_navigate_text">Magazoo locates you on the map and immediately shows you the shortest route to your favourite shop.</string>
     <!--tutorial end-->
 
 </resources>

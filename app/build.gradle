@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "magazoo.magazine.langa.tine"
+        applicationId "cazimir.com.magazoo"
         minSdkVersion 15
         targetSdkVersion 27
         multiDexEnabled true
