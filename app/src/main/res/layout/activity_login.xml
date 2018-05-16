@@ -51,7 +51,7 @@
                     android:drawableStart="@drawable/com_facebook_button_icon_white"
                     app:bootstrapBrand="primary"
                     app:bootstrapSize="lg"
-                    app:bootstrapText="  Login cu facebook"
+                    app:bootstrapText="@string/facebook_login"
                     app:buttonMode="regular"
                     app:roundedCorners="true"
                     tools:text="fb icon" />

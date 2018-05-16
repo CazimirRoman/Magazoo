@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993900064140:android:9f0332d43eab7bee",
+        "mobilesdk_app_id": "1:993900064140:android:c519dae1a881fe1d",
         "android_client_info": {
-          "package_name": "magazoo.magazine.langa.tine"
+          "package_name": "cazimir.com.magazoo"
         }
       },
       "oauth_client": [

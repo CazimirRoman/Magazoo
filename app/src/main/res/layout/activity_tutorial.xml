@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="magazoo.magazine.langa.tine.ui.tutorial.TutorialActivity">
+    tools:context="cazimir.com.magazoo.ui.tutorial.TutorialActivity">
 
 </android.support.constraint.ConstraintLayout>
