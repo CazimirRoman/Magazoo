@@ -49,7 +49,6 @@ public class Util {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         switch (errorType) {
-
                             case Constants.ERROR_ACCURACY:
                                 dialog.dismiss();
                                 break;
@@ -60,6 +59,20 @@ public class Util {
                                 dialog.dismiss();
                                 break;
                         }
+                    }
+                });
+    }
+
+    public static MaterialDialog.Builder buildAccuracyDialog(final Context context, String title, final String content, final int errorType) {
+
+        final OnErrorHandledListener listener = (OnErrorHandledListener) context;
+
+        return new MaterialDialog.Builder(context)
+                .customView(R.layout.accuracy_dialog, true)
+                .onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
                     }
                 });
     }
