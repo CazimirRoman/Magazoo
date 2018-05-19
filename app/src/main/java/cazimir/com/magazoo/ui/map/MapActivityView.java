@@ -105,6 +105,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mAddShopDialog;
     private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
+    private MaterialDialog mAccuracyDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -368,7 +369,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAccuracyErrorDialog() {
-        showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_error_text) + "\n" + getString(R.string.popup_current_accuracy) + " " + mCurrentAccuracy, Constants.ERROR_ACCURACY);
+        showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_text), Constants.ERROR_ACCURACY);
     }
 
     @Override
@@ -781,17 +782,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void showErrorDialog(String title, String message, int errorType) {
-        Util.buildDialog(this, title, message, errorType).show();
+        mAccuracyDialog = Util.buildAccuracyDialog(this, title, message, errorType).show();
     }
 
     @Override
     public void onLocationChanged(Location location) {
         mCurrentAccuracy = location.getAccuracy();
+        if(mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing()){
+            mAccuracyDialog.dismiss();
+        }
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-    }
-
-    private void showReportLimitPopup() {
-        Util.buildDialog(this, getString(R.string.popup_report_limit_error_title), getString(R.string.popup_report_limit_error_text), Constants.ERROR_LIMIT).show();
     }
 
     private void showAddLimitAlertPopup() {
