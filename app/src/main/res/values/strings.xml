@@ -108,6 +108,7 @@
     <string name="tutorial_report_shop_text">The shop is not there anymore, does not accept credit cards or meal tickets? Report it and Magazoo will change that for you.</string>
     <string name="tutorial_navigate_title">Navigate</string>
     <string name="tutorial_navigate_text">Magazoo locates you on the map and immediately shows you the shortest route to your favourite shop.</string>
+    <string name="about">About</string>
     <!--tutorial end-->
 
 </resources>

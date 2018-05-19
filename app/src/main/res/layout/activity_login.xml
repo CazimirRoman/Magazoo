@@ -149,15 +149,20 @@
                     app:showOutline="true" />
             </LinearLayout>
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/progress"
-                tools:visibility="visible"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:indicatorName="BallPulseIndicator"
-                />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/progress"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:indicatorName="BallPulseIndicator"
+                    />
+            </FrameLayout>
 
         </LinearLayout>
 

@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseActivity;
 import cazimir.com.magazoo.base.IGeneralView;
@@ -76,6 +77,7 @@ import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
+import static cazimir.com.magazoo.constants.Constants.ERROR_ACCURACY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
@@ -259,6 +261,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     startTutorialActivity();
                 } else if (id == R.id.nav_contact) {
                     showFeedbackDialog();
+                } else if(id == R.id.nav_about){
+                    showAboutDialog();
                 }
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -275,6 +279,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
         }
+    }
+
+    private void showAboutDialog() {
+        Util.buildDialog(this, getString(R.string.about), "Application version is: " + BuildConfig.VERSION_NAME, 0).show();
     }
 
     private void shareApplication() {
