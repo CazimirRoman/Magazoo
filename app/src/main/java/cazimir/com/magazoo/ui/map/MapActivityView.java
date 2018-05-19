@@ -501,8 +501,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         if (type.equals(getString(R.string.popup_add_shop_small))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
-        } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
-            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
+        } else if (type.equals(getString(R.string.popup_add_shop_supermarket))) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_supermarket);
         } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
         } else {

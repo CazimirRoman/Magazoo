@@ -22,7 +22,7 @@ public class RegisterPresenter implements IRegisterPresenter {
         mAuthPresenter.register(new OnRegisterWithEmailFinishedListener() {
             @Override
             public void onRegisterWithEmailSuccess(String email) {
-                getRegisterActivityView().showToast("Ti-am trimis un email de verificare la adresa: " + email);
+                getRegisterActivityView().showToast("Confirmation email sent to: " + email);
                 getRegisterActivityView().redirectToLoginPage();
                 getRegisterActivityView().hideProgressBar();
             }

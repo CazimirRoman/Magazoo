@@ -121,13 +121,13 @@ public class MapPresenter implements IMapPresenter {
         mRepository.addMarkerToDatabase(new cazimir.com.magazoo.presenter.OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
-                //getMapActivityView().closeAddShopDialog();
-                //getMapActivityView().showAddThanksPopup();
+                getMapActivityView().closeAddShopDialog();
+                getMapActivityView().showAddThanksPopup();
             }
 
             @Override
             public void onAddMarkerFailed(String error) {
-                //getMapActivityView().closeAddShopDialog();
+                getMapActivityView().closeAddShopDialog();
                 getMapActivityView().showToast(error);
             }
         }, shop);
