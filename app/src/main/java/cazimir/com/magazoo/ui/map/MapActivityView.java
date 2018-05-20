@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -77,7 +78,6 @@ import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
-import static cazimir.com.magazoo.constants.Constants.ERROR_ACCURACY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
@@ -262,7 +262,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     startTutorialActivity();
                 } else if (id == R.id.nav_contact) {
                     showFeedbackDialog();
-                } else if(id == R.id.nav_about){
+                } else if (id == R.id.nav_about) {
                     showAboutDialog();
                 }
 
@@ -341,36 +341,55 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void initUI() {
+        initAddShopDialog();
+        initAddShop();
+        initShopDetails();
+    }
 
+    private void initAddShop() {
         FloatingActionButton fabAddShop = findViewById(R.id.fabAddShop);
-        fabAddShop.setOnClickListener(new View.OnClickListener() {
+        fabAddShop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (correctAccuracy()) {
-                    if (mPresenter.isUserLoggedIn()) {
-                        mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
-                            @Override
-                            public void isAllowedToAdd() {
-                                showAddShopDialog();
-                            }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (correctAccuracy()) {
+                            mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
+                                @Override
+                                public void isAllowedToAdd() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showAddShopDialog();
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void isNotAllowedToAdd() {
-                                showAddLimitAlertPopup();
-                            }
-                        });
-                    } else {
-                        startLoginActivity();
-                        finish();
+                                @Override
+                                public void isNotAllowedToAdd() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showAddLimitAlertPopup();
+                                        }
+                                    });
+
+                                }
+                            });
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showAccuracyErrorDialog();
+                                }
+                            });
+                        }
                     }
-                } else {
-                    showAccuracyErrorDialog();
-                }
+                }).start();
             }
         });
-
-        initUIShopDetails();
     }
 
     private boolean correctAccuracy() {
@@ -399,7 +418,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         showErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION);
     }
 
-    private void initUIShopDetails() {
+    private void initShopDetails() {
         mShopDetails = findViewById(R.id.shop_details);
         mShopTypeLabel = mShopDetails.findViewById(R.id.shop_type_label);
         mNonStopLabel = mShopDetails.findViewById(R.id.nonstop_label);
@@ -749,13 +768,64 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showAddShopDialog() {
-
-        mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).show();
+    private void initAddShopDialog() {
+        mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).build();
         final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
         final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
+        BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
+        buttonAdd.setBootstrapBrand(new BootstrapBrand() {
+            @Override
+            public int defaultFill(Context context) {
+                return context.getResources().getColor(R.color.colorPrimary);
+            }
+
+            @Override
+            public int defaultEdge(Context context) {
+                return context.getResources().getColor(R.color.colorPrimary);
+            }
+
+            @Override
+            public int defaultTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int activeFill(Context context) {
+                return context.getResources().getColor(R.color.colorAccent);
+            }
+
+            @Override
+            public int activeEdge(Context context) {
+                return context.getResources().getColor(R.color.colorAccent);
+            }
+
+            @Override
+            public int activeTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledFill(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledEdge(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int getColor() {
+                return 0;
+            }
+        });
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_small));
@@ -769,8 +839,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         spinner.setAdapter(dataAdapter);
 
-        BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
-
         buttonAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -780,11 +848,17 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId()));
                 } else {
-                    spinner.setError(getString(R.string.popup_add_shop_type));
+                    spinner.setError(getString(R.string.popup_add_shop_type_error));
                 }
 
             }
         });
+    }
+
+    private void showAddShopDialog(){
+        if(mAddShopDialog != null){
+            mAddShopDialog.show();
+        }
     }
 
     @Override
@@ -800,8 +874,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
         mCurrentAccuracy = location.getAccuracy();
-        if(mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing()){
+        if (mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing()) {
             mAccuracyDialog.dismiss();
+            showAddShopDialog();
         }
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }

@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.3"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:src="@drawable/small_shop_image"
                 tools:text="icon" />
 
