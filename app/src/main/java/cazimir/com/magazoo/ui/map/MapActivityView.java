@@ -102,6 +102,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private TextView mShopTypeLabel;
     private TextView mNonStopLabel;
     private TextView mPosLabel;
+    private TextView mCashOnlyLabel;
     private TextView mTicketsLabel;
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
@@ -403,6 +404,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mShopTypeLabel = mShopDetails.findViewById(R.id.shop_type_label);
         mNonStopLabel = mShopDetails.findViewById(R.id.nonstop_label);
         mPosLabel = mShopDetails.findViewById(R.id.pos_label);
+        mCashOnlyLabel = mShopDetails.findViewById(R.id.cash_only_label);
         mTicketsLabel = mShopDetails.findViewById(R.id.tickets_label);
         mShopImage = mShopDetails.findViewById(R.id.shop_image);
 
@@ -634,8 +636,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         if (shop.getPos()) {
             mPosLabel.setVisibility(View.VISIBLE);
+            mCashOnlyLabel.setVisibility(View.GONE);
         } else {
             mPosLabel.setVisibility(View.GONE);
+            mCashOnlyLabel.setVisibility(View.VISIBLE);
         }
 
         if (shop.getTickets()) {
