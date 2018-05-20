@@ -94,6 +94,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/pos"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/cash_only_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cash_only"
                             android:visibility="visible" />
 
                         <TextView
