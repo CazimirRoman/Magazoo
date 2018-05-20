@@ -45,6 +45,7 @@
     <!--add shop start-->
     <string name="popup_add_shop_title">Add shop</string>
     <string name="popup_add_shop_type">Shop type</string>
+    <string name="popup_add_shop_type_error">Please select shop type</string>
     <string name="popup_add_shop_small">Small shop</string>
     <string name="popup_add_shop_farmer">Farmer\'s market</string>
     <string name="popup_add_shop_supermarket">Supermarket</string>
