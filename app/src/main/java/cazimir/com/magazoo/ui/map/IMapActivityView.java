@@ -21,4 +21,5 @@ public interface IMapActivityView {
     void addNewlyAddedMarkerToMap(Shop marker, String title);
     void addMarkersToMap(ArrayList<Shop> markers);
     void closeAddShopDialog();
+    void refreshMarkersOnMap();
 }

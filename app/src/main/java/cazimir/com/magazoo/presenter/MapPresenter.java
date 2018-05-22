@@ -49,14 +49,12 @@ public class MapPresenter implements IMapPresenter {
         mRepository.checkIfDuplicateReport(new cazimir.com.magazoo.presenter.OnDuplicateReportListener() {
             @Override
             public void isDuplicateReport() {
-                getMapActivityView().closeReportDialog();
                 getMapActivityView().showReportThanksPopup();
                 Log.d(TAG, "Duplicate " + getMapActivityView().getCurrentReportedShop().getRegards() + " report");
             }
 
             @Override
             public void isNotDuplicateReport() {
-                getMapActivityView().closeReportDialog();
                 Report currentReportedShop = getMapActivityView().getCurrentReportedShop();
                 mRepository.writeReportToDatabase(new OnReportWrittenToDatabaseListener() {
                     @Override
@@ -118,19 +116,34 @@ public class MapPresenter implements IMapPresenter {
     @Override
     public void addMarkerToFirebase(Shop shop) {
         shop.setCreatedBy(mAuthenticationPresenter.getUserId());
-        mRepository.addMarkerToDatabase(new cazimir.com.magazoo.presenter.OnAddMarkerToDatabaseListener() {
+        mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
-                getMapActivityView().closeAddShopDialog();
                 getMapActivityView().showAddThanksPopup();
             }
 
             @Override
             public void onAddMarkerFailed(String error) {
-                getMapActivityView().closeAddShopDialog();
                 getMapActivityView().showToast(error);
             }
         }, shop);
+    }
+
+    @Override
+    public void deleteShopFromDB(String shopId) {
+        mRepository.deleteShop(new OnDeleteShopListener() {
+            @Override
+            public void onDeleteSuccess() {
+                getMapActivityView().showToast("Sters!");
+                getMapActivityView().closeShopDetails();
+                getMapActivityView().refreshMarkersOnMap();
+            }
+
+            @Override
+            public void onDeleteFailed(String error) {
+                getMapActivityView().showToast(error);
+            }
+        }, shopId);
     }
 
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {

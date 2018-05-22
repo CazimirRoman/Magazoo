@@ -317,6 +317,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void sendFeedbackToTrello(String feedback) {
+        mFeedbackDialog.dismiss();
         new sendFeedbackToTrello().execute(feedback);
     }
 
@@ -336,12 +337,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         protected void onPostExecute(Card result) {
             super.onPostExecute(result);
             showToast(getString(R.string.feedback_sent));
-            mFeedbackDialog.dismiss();
         }
     }
 
     private void initUI() {
-        initAddShopDialog();
         initAddShop();
         initShopDetails();
     }
@@ -429,6 +428,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         BootstrapButton buttonNavigate = mShopDetails.findViewById(R.id.button_navigate);
         BootstrapButton buttonReport = mShopDetails.findViewById(R.id.button_report);
+        BootstrapButton buttonDeleteShop = mShopDetails.findViewById(R.id.button_delete);
+        buttonDeleteShop.setVisibility(View.GONE);
+
+        if(mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")){
+            buttonDeleteShop.setVisibility(View.VISIBLE);
+        }
 
         buttonNavigate.setOnClickListener(new OnClickListener() {
             @Override
@@ -441,6 +446,14 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 showReportDialog();
+            }
+        });
+
+        buttonDeleteShop.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeShopDetails();
+                mPresenter.deleteShopFromDB(mCurrentSelectedShop.getId());
             }
         });
     }
@@ -474,7 +487,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_location.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                closeReportDialog();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -483,6 +496,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_247.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeReportDialog();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -491,6 +505,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_pos.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeReportDialog();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -500,6 +515,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         report_tickets.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeReportDialog();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -614,14 +630,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         }
     }
 
-    private void sendContactEmail() {
-        Intent feedbackEmail = new Intent(Intent.ACTION_SEND);
-        feedbackEmail.setType("text/email");
-        feedbackEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{"cazimir.developer@gmail.com"});
-        feedbackEmail.putExtra(Intent.EXTRA_SUBJECT, mPresenter.getUserEmail() + " has left a feedback");
-        startActivity(Intent.createChooser(feedbackEmail, "Send Feedback:"));
-    }
-
     private void signOut() {
         mPresenter.signOut();
         startLoginActivity();
@@ -695,11 +703,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                mMap.clear();
-                setZoomLevel();
-                getShopMarkers(getMapBounds());
+                refreshMarkersOnMap();
             }
         });
+    }
+
+    @Override
+    public void refreshMarkersOnMap() {
+        mMap.clear();
+        setZoomLevel();
+        getShopMarkers(getMapBounds());
     }
 
     private void setZoomLevel() {
@@ -768,7 +781,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void initAddShopDialog() {
+    private void showAddShopDialog() {
         mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).build();
         final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
         final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
@@ -843,7 +856,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-
+                    closeAddShopDialog();
                     mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId()));
@@ -853,12 +866,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
             }
         });
-    }
 
-    private void showAddShopDialog(){
-        if(mAddShopDialog != null){
-            mAddShopDialog.show();
-        }
+        mAddShopDialog.show();
     }
 
     @Override
