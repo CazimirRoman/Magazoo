@@ -23,6 +23,7 @@ import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.presenter.OnAddListenerForNewMarkerAdded;
 import cazimir.com.magazoo.presenter.OnAddMarkerToDatabaseListener;
+import cazimir.com.magazoo.presenter.OnDeleteShopListener;
 import cazimir.com.magazoo.presenter.OnDuplicateReportListener;
 import cazimir.com.magazoo.presenter.OnGetAllMarkersListener;
 import cazimir.com.magazoo.presenter.OnGetShopsAddedTodayListener;
@@ -151,6 +152,20 @@ public class Repository implements IRepository {
             @Override
             public void onFailure(@NonNull Exception e) {
                 mapPresenter.onAddMarkerFailed(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void deleteShop(final OnDeleteShopListener mapPresenter, String id) {
+        mStoreRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    mapPresenter.onDeleteSuccess();
+                }else{
+                    mapPresenter.onDeleteFailed(task.getException().toString());
+                }
             }
         });
     }

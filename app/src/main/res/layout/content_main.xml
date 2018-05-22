@@ -151,6 +151,19 @@
                     card_view:fontAwesomeIcon="fa_location_arrow"
                     card_view:showOutline="true" />
 
+                <com.beardedhen.androidbootstrap.BootstrapButton
+                    android:id="@+id/button_delete"
+                    card_view:roundedCorners="true"
+                    android:layout_width="match_parent"
+                    tools:text="@string/navigate"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    app:bootstrapBrand="danger"
+                    card_view:bootstrapSize="lg"
+                    card_view:fontAwesomeIcon="fa_remove"
+                    card_view:showOutline="true" />
+
             </LinearLayout>
 
         </LinearLayout>
