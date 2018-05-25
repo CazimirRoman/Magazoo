@@ -30,4 +30,5 @@ public class Constants {
     public static final java.lang.String TRELLO_ACCESS_TOKEN = "ba92d8c063b0669a93759bc5835e74f3a2be25e57cf2008c38d28b0fde99771c";
     public static final String TRELLO_FEEDBACK_LIST = "5ad9b2bf00638ba0f3023928";
 
+    public static final int GPS_SETTINGS_REQUEST_CODE = 875;
 }

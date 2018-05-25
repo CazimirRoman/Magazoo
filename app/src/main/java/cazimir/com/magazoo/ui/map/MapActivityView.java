@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -109,6 +110,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
     private MaterialDialog mAccuracyDialog;
+    private MaterialDialog mNoGpsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,35 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         setupApiClientLocation();
         createLocationRequest();
         onNewShopMarkerAdded();
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(isGpsActive()){
+            zoomToCurrentLocation();
+        }
+    }
+
+    private boolean isGpsActive() {
+        if (!Util.isGPSAvailable()) {
+            showNoGPSErrorDialog();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -396,7 +427,20 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAccuracyErrorDialog() {
-        showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_text), Constants.ERROR_ACCURACY);
+        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.accuracy_dialog).show();
+    }
+
+    private void showNoGPSErrorDialog() {
+        mNoGpsDialog = Util.buildCustomDialog(this, R.layout.no_gps_dialog).show();
+        mNoGpsDialog.getCustomView().findViewById(R.id.buttonGpsSettings).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                mNoGpsDialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -407,14 +451,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void openShopDetails() {
         mShopDetails.setVisibility(View.VISIBLE);
-    }
-
-    private void showNoInternetErrorDialog() {
-        showErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), Constants.ERROR_INTERNET);
-    }
-
-    private void showNoGPSErrorDialog() {
-        showErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION);
     }
 
     private void initShopDetails() {
@@ -431,7 +467,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         BootstrapButton buttonDeleteShop = mShopDetails.findViewById(R.id.button_delete);
         buttonDeleteShop.setVisibility(View.GONE);
 
-        if(mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")){
+        if (mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")) {
             buttonDeleteShop.setVisibility(View.VISIBLE);
         }
 
@@ -609,18 +645,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -730,7 +754,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
         }
@@ -873,11 +896,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void closeAddShopDialog() {
         mAddShopDialog.dismiss();
-    }
-
-    @Override
-    public void showErrorDialog(String title, String message, int errorType) {
-        mAccuracyDialog = Util.buildAccuracyDialog(this, title, message, errorType).show();
     }
 
     @Override

@@ -6,6 +6,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nothing" />
 
+    <string name="gps_settings">Open GPS settings</string>
+
     <!--login, register start-->
     <string name="email_missing">Enter email address!</string>
     <string name="email_invalid">Not a valid email. Please check!</string>
@@ -34,7 +36,7 @@
     <string name="popup_connection_error_title">"You are offline"</string>
     <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>
     <string name="popup_gps_error_title">"No location access"</string>
-    <string name="popup_gps_error_text">Make sure device location is turned on, then try again.</string>
+    <string name="popup_gps_error_text">Please turn on your GPS so we can locate you on the map.</string>
     <string name="popup_location_permission_error_title">"Allow location permissions"</string>
     <string name="popup_location_permission_error_text">The app needs your location to search for nearby shops.</string>
     <string name="popup_shop_limit_error_title">"Limit reached"</string>

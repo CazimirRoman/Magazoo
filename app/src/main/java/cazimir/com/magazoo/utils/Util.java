@@ -1,8 +1,12 @@
 package cazimir.com.magazoo.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.text.Layout;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,7 +34,7 @@ public class Util {
     }
 
     public static boolean isGPSAvailable() {
-        if (!LocationUtils.isLocationEnabled()) {
+        if (!LocationUtils.isGpsEnabled()) {
             return false;
         }
 
@@ -63,18 +67,12 @@ public class Util {
                 });
     }
 
-    public static MaterialDialog.Builder buildAccuracyDialog(final Context context, String title, final String content, final int errorType) {
+    public static MaterialDialog.Builder buildCustomDialog(final Context context, int customLayout) {
 
         final OnErrorHandledListener listener = (OnErrorHandledListener) context;
 
         return new MaterialDialog.Builder(context)
-                .customView(R.layout.accuracy_dialog, true)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    }
-                });
+                .customView(customLayout, true);
     }
 
     public static boolean isSameDay(Date day1, Date day2) {
