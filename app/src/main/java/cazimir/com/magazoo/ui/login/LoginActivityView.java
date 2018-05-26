@@ -2,12 +2,7 @@ package cazimir.com.magazoo.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -20,9 +15,6 @@ import com.facebook.login.widget.LoginButton;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import cazimir.com.magazoo.R;
@@ -30,10 +22,10 @@ import cazimir.com.magazoo.base.BaseActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.presenter.common.LoginPresenter;
-import cazimir.com.magazoo.ui.OnFormValidatedListener;
+import cazimir.com.magazoo.presenter.login.LoginPresenter;
+import cazimir.com.magazoo.utils.OnFormValidatedListener;
 import cazimir.com.magazoo.ui.map.MapActivityView;
-import cazimir.com.magazoo.ui.profile.ForgotPasswordActivityView;
+import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
 import cazimir.com.magazoo.utils.UtilHelperClass;
 

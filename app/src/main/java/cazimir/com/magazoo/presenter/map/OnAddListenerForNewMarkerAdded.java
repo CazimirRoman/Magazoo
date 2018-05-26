@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter;
+package cazimir.com.magazoo.presenter.map;
 
 import cazimir.com.magazoo.model.Shop;
 

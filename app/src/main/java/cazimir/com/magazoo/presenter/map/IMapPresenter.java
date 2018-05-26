@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter;
+package cazimir.com.magazoo.presenter.map;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 

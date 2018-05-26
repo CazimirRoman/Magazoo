@@ -8,12 +8,14 @@
 
     <TextView
         android:layout_width="match_parent"
+        android:padding="15dp"
         android:layout_height="wrap_content"
         android:text="@string/popup_gps_error_text" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:id="@+id/buttonGpsSettings"
         app:bootstrapSize="md"
+        android:layout_margin="10dp"
         android:text="@string/gps_settings"
         app:roundedCorners="true"
         app:showOutline="true"

@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.ui.profile;
+package cazimir.com.magazoo.ui.reset;
 
 /**
  * TODO: Add a class header comment!

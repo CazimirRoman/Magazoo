@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.ui.OnFormValidatedListener;
 
 public class UtilHelperClass {
 

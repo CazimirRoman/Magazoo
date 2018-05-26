@@ -31,7 +31,7 @@
 
     <!--popups start-->
     <string name="popup_accuracy_error_title">"Location accuracy"</string>
-    <string name="popup_accuracy_text">Please wait while we are locating you…</string>
+    <string name="popup_accuracy_text">Please wait while we are locating you…\n\nIf you are inside a building, go to a window or take a few steps outside and try again.</string>
     <string name="popup_current_accuracy">Current accuracy:</string>
     <string name="popup_connection_error_title">"You are offline"</string>
     <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>
@@ -113,6 +113,7 @@
     <string name="tutorial_navigate_title">Navigate</string>
     <string name="tutorial_navigate_text">Magazoo locates you on the map and immediately shows you the shortest route to your favourite shop.</string>
     <string name="about">About</string>
+    <string name="popup_add_shop_text">This shop will be added at your current location</string>
     <!--tutorial end-->
 
 </resources>

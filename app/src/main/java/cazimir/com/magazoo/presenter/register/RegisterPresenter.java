@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter;
+package cazimir.com.magazoo.presenter.register;
 
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;

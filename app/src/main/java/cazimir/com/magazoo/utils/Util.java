@@ -1,12 +1,8 @@
 package cazimir.com.magazoo.utils;
 
 import android.content.Context;
-import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.text.Layout;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,7 +13,6 @@ import java.util.Date;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.utils.data.NetworkStatus;
 
 public class Util {
 
@@ -27,10 +22,6 @@ public class Util {
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
-    }
-
-    public static boolean isInternetAvailable(Context context) {
-        return NetworkStatus.getInstance(context).isOnline();
     }
 
     public static boolean isGPSAvailable() {
@@ -67,12 +58,12 @@ public class Util {
                 });
     }
 
-    public static MaterialDialog.Builder buildCustomDialog(final Context context, int customLayout) {
-
-        final OnErrorHandledListener listener = (OnErrorHandledListener) context;
+    public static MaterialDialog.Builder buildCustomDialog(final Context context, int customLayout, boolean isCancelable, String tag) {
 
         return new MaterialDialog.Builder(context)
-                .customView(customLayout, true);
+                .tag(tag)
+                .customView(customLayout, true)
+                .cancelable(isCancelable);
     }
 
     public static boolean isSameDay(Date day1, Date day2) {

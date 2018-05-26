@@ -1,15 +1,11 @@
-package cazimir.com.magazoo.presenter.common;
+package cazimir.com.magazoo.presenter.login;
 
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.presenter.authentication.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
-import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.presenter.authentication.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
 
 public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinishedListener, OnLoginWithFacebookFinishedListener {

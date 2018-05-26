@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter.common;
+package cazimir.com.magazoo.presenter.login;
 
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
