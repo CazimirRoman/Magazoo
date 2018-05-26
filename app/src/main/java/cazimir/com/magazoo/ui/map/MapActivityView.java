@@ -413,7 +413,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    showAccuracyErrorDialog(ACCURACY_TAG);
+                                    showAccuracyErrorDialog(ACCURACY_TAG, true);
                                 }
                             });
                         }
@@ -427,10 +427,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
     }
 
-    private void showAccuracyErrorDialog(String tag) {
-        if(mAccuracyDialog == null){
-            mAccuracyDialog = Util.buildCustomDialog(this, R.layout.accuracy_dialog, true, tag).show();
-        }
+    private void showAccuracyErrorDialog(String tag, boolean isCancelable) {
+        mAccuracyDialog = null;
+        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.accuracy_dialog, isCancelable, tag).show();
     }
 
     private void showNoGPSErrorDialog() {
@@ -910,7 +909,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         if (mMap == null) {
             setUpMap();
-            showAccuracyErrorDialog(LOCATION_TAG);
+            showAccuracyErrorDialog(LOCATION_TAG, false);
         } else {
             if (worldMapShowing()) {
                 zoomToCurrentLocation();
