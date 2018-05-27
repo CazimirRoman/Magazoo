@@ -17,9 +17,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import cazimir.com.magazoo.base.IGeneralView;
+import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
-import cazimir.com.magazoo.ui.profile.OnResetInstructionsSent;
+import cazimir.com.magazoo.ui.reset.OnResetInstructionsSent;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;

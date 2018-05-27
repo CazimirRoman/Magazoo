@@ -10,7 +10,6 @@ import cazimir.com.magazoo.model.Shop;
  */
 public interface IMapActivityView {
     void showToast(String message);
-    void showErrorDialog(String title, String message, int errorType);
     void showReportDialog();
     void showReportThanksPopup();
     void showAddThanksPopup();

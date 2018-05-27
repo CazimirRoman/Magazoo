@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +63,7 @@ import com.julienvey.trello.impl.TrelloImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
@@ -70,7 +72,7 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.MapPresenter;
+import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
@@ -78,6 +80,8 @@ import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
+import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
+import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
@@ -109,18 +113,42 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
     private MaterialDialog mAccuracyDialog;
+    private MaterialDialog mNoGpsDialog;
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
+        setupApiClientLocation();
         checkIfOnboardingNeeded();
         initUI();
         setupNavigationDrawer();
-        setUpMap();
-        setupApiClientLocation();
-        createLocationRequest();
-        onNewShopMarkerAdded();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (gpsActive()) {
+            setUpMap();
+        } else {
+            showNoGPSErrorDialog();
+        }
+    }
+
+    private boolean gpsActive() {
+        return Util.isGPSAvailable();
     }
 
     @Override
@@ -166,38 +194,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void setupApiClientLocation() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(new ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(@Nullable Bundle bundle) {
-                            if (ActivityCompat.checkSelfPermission(MapActivityView.this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                                        mGoogleApiClient);
-                                if (mLastLocation != null) {
-                                    LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, Constants.ZOOM_LEVEL_DESIRED));
-                                }
-
-                                LocationServices.FusedLocationApi.requestLocationUpdates(
-                                        mGoogleApiClient, mLocationRequest, MapActivityView.this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(new ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+                        if (ActivityCompat.checkSelfPermission(MapActivityView.this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                                    mGoogleApiClient);
+                            if (mLastLocation != null) {
+                                LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, Constants.ZOOM_LEVEL_DESIRED));
                             }
-                        }
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-
+                            LocationServices.FusedLocationApi.requestLocationUpdates(
+                                    mGoogleApiClient, mLocationRequest, MapActivityView.this);
                         }
-                    })
-                    .addOnConnectionFailedListener(new OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                    }
 
-                        }
-                    })
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+                    @Override
+                    public void onConnectionSuspended(int i) {
+
+                    }
+                })
+                .addOnConnectionFailedListener(new OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }
+                })
+                .addApi(LocationServices.API)
+                .build();
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(Constants.INTERVAL);
+        mLocationRequest.setFastestInterval(Constants.FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     private void setUpMap() {
@@ -229,6 +260,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 getMapBounds();
                 setMyLocationEnabled();
                 setOnCameraChangeListener();
+                registerListenerForNewMarkerAdded();
                 if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
                     getShopMarkers(getMapBounds());
                 }
@@ -381,7 +413,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    showAccuracyErrorDialog();
+                                    showAccuracyErrorDialog(ACCURACY_TAG, true);
                                 }
                             });
                         }
@@ -395,8 +427,22 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
     }
 
-    private void showAccuracyErrorDialog() {
-        showErrorDialog(getString(R.string.popup_accuracy_error_title), getString(R.string.popup_accuracy_text), Constants.ERROR_ACCURACY);
+    private void showAccuracyErrorDialog(String tag, boolean isCancelable) {
+        mAccuracyDialog = null;
+        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.accuracy_dialog, isCancelable, tag).show();
+    }
+
+    private void showNoGPSErrorDialog() {
+        mNoGpsDialog = Util.buildCustomDialog(this, R.layout.no_gps_dialog, false, Constants.GPS_TAG).show();
+        mNoGpsDialog.getCustomView().findViewById(R.id.buttonGpsSettings).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                closeNoGpsDialog();
+            }
+        });
     }
 
     @Override
@@ -407,14 +453,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void openShopDetails() {
         mShopDetails.setVisibility(View.VISIBLE);
-    }
-
-    private void showNoInternetErrorDialog() {
-        showErrorDialog(getString(R.string.popup_connection_error_title), getString(R.string.popup_connection_error_text), Constants.ERROR_INTERNET);
-    }
-
-    private void showNoGPSErrorDialog() {
-        showErrorDialog(getString(R.string.popup_gps_error_title), getString(R.string.popup_gps_error_text), Constants.ERROR_LOCATION);
     }
 
     private void initShopDetails() {
@@ -431,7 +469,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         BootstrapButton buttonDeleteShop = mShopDetails.findViewById(R.id.button_delete);
         buttonDeleteShop.setVisibility(View.GONE);
 
-        if(mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")){
+        if (mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")) {
             buttonDeleteShop.setVisibility(View.VISIBLE);
         }
 
@@ -582,13 +620,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         }
     }
 
-    private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(Constants.INTERVAL);
-        mLocationRequest.setFastestInterval(Constants.FASTEST_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
     private MaterialDialog.Builder buildCustomDialog(String title, int layout) {
 
         return new MaterialDialog.Builder(this)
@@ -596,7 +627,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 .customView(layout, true);
     }
 
-    private void onNewShopMarkerAdded() {
+    private void registerListenerForNewMarkerAdded() {
         mPresenter.addListenerForNewMarkerAdded();
     }
 
@@ -606,18 +637,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     public void showAddThanksPopup() {
         Util.buildDialog(this, getString(R.string.thanks_adding_title), getString(R.string.thanks_adding_text), 0).show();
-    }
-
-    @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
     }
 
     @Override
@@ -730,7 +749,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
         }
@@ -876,18 +894,39 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void showErrorDialog(String title, String message, int errorType) {
-        mAccuracyDialog = Util.buildAccuracyDialog(this, title, message, errorType).show();
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
+
         mCurrentAccuracy = location.getAccuracy();
-        if (mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing()) {
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        // TODO: 26-May-18 Not the same accuracy dialog. is showing returning false even though it is there
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && mAccuracyDialog.getTag().equals(LOCATION_TAG)) {
+            mAccuracyDialog.dismiss();
+        } else if (mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
             mAccuracyDialog.dismiss();
             showAddShopDialog();
         }
-        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        if (mMap == null) {
+            setUpMap();
+            showAccuracyErrorDialog(LOCATION_TAG, false);
+        } else {
+            if (worldMapShowing()) {
+                zoomToCurrentLocation();
+            }
+        }
+
+        closeNoGpsDialog();
+    }
+
+    private void closeNoGpsDialog() {
+        if (mNoGpsDialog != null && mNoGpsDialog.isShowing()) {
+            mNoGpsDialog.dismiss();
+        }
+    }
+
+    private boolean worldMapShowing() {
+        return mMap.getCameraPosition().zoom == 2.0;
     }
 
     private void showAddLimitAlertPopup() {

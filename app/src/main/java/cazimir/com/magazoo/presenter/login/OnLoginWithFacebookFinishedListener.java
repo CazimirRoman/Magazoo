@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter.authentication;
+package cazimir.com.magazoo.presenter.login;
 
 /**
  * TODO: Add a class header comment!

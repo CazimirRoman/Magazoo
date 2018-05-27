@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.blankj.utilcode.util.Utils;
+
 import butterknife.ButterKnife;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.utils.MyAlertDialog;
@@ -30,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         setUpToolbar();
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         bootstrapBrand = new PrimaryBootstrapBrand(this);
+        Utils.init(getApplication());
     }
 
     private void setUpToolbar() {

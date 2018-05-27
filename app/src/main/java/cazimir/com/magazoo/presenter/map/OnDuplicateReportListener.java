@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter;
+package cazimir.com.magazoo.presenter.map;
 
 /**
  * TODO: Add a class header comment!

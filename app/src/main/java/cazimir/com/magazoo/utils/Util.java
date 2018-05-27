@@ -13,7 +13,6 @@ import java.util.Date;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.utils.data.NetworkStatus;
 
 public class Util {
 
@@ -25,12 +24,8 @@ public class Util {
         }
     }
 
-    public static boolean isInternetAvailable(Context context) {
-        return NetworkStatus.getInstance(context).isOnline();
-    }
-
     public static boolean isGPSAvailable() {
-        if (!LocationUtils.isLocationEnabled()) {
+        if (!LocationUtils.isGpsEnabled()) {
             return false;
         }
 
@@ -63,18 +58,12 @@ public class Util {
                 });
     }
 
-    public static MaterialDialog.Builder buildAccuracyDialog(final Context context, String title, final String content, final int errorType) {
-
-        final OnErrorHandledListener listener = (OnErrorHandledListener) context;
+    public static MaterialDialog.Builder buildCustomDialog(final Context context, int customLayout, boolean isCancelable, String tag) {
 
         return new MaterialDialog.Builder(context)
-                .customView(R.layout.accuracy_dialog, true)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    }
-                });
+                .tag(tag)
+                .customView(customLayout, true)
+                .cancelable(isCancelable);
     }
 
     public static boolean isSameDay(Date day1, Date day2) {

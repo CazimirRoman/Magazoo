@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.ui;
+package cazimir.com.magazoo.utils;
 
 public interface OnFormValidatedListener {
     void onValidateSuccess(String email, String password);

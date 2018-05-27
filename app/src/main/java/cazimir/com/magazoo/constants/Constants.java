@@ -2,6 +2,9 @@ package cazimir.com.magazoo.constants;
 
 public class Constants {
 
+    public static final String ACCURACY_TAG = "ACCURACY_TAG";
+    public static final String LOCATION_TAG = "LOCATION_TAG";
+    public static final String GPS_TAG = "GPS_TAG";
     public static final String ID_PLACEHOLDER = "check model property for id";
     public static final int MY_LOCATION_REQUEST_CODE = 523;
     public static final long INTERVAL = 1000 * 10;
@@ -11,8 +14,6 @@ public class Constants {
     public static final int ADD_SHOP_LIMIT = 5;
     public static final int REPORT_SHOP_LIMIT = 5;
     public static final int ERROR_ACCURACY = 567;
-    public static final int ERROR_INTERNET = 876;
-    public static final int ERROR_LOCATION = 159;
     public static final int ERROR_PERMISSION = 670;
     public static final int ERROR_LIMIT = 643;
     public static final String REPORT_LOCATION = "location";
@@ -29,5 +30,4 @@ public class Constants {
     public static final String TRELLO_APP_KEY = "321ba6624c2447e55e60aac99d825756";
     public static final java.lang.String TRELLO_ACCESS_TOKEN = "ba92d8c063b0669a93759bc5835e74f3a2be25e57cf2008c38d28b0fde99771c";
     public static final String TRELLO_FEEDBACK_LIST = "5ad9b2bf00638ba0f3023928";
-
 }

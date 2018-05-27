@@ -3,8 +3,9 @@ package cazimir.com.magazoo.presenter.authentication;
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
+import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
-import cazimir.com.magazoo.ui.profile.OnResetInstructionsSent;
+import cazimir.com.magazoo.ui.reset.OnResetInstructionsSent;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
 
 public interface IAuthPresenter {

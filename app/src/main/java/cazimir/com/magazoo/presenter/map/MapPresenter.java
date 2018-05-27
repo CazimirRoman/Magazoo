@@ -1,4 +1,4 @@
-package cazimir.com.magazoo.presenter;
+package cazimir.com.magazoo.presenter.map;
 
 import android.util.Log;
 
@@ -10,18 +10,10 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
-import cazimir.com.magazoo.ui.map.MapActivityView;
-import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
-import cazimir.com.magazoo.ui.map.OnIsAllowedToReportListener;
-import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
-import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.IMapPresenter;
-import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
 
 /**
@@ -46,7 +38,7 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void checkIfDuplicateReport(Report currentReportedShop) {
-        mRepository.checkIfDuplicateReport(new cazimir.com.magazoo.presenter.OnDuplicateReportListener() {
+        mRepository.checkIfDuplicateReport(new OnDuplicateReportListener() {
             @Override
             public void isDuplicateReport() {
                 getMapActivityView().showReportThanksPopup();
@@ -100,7 +92,7 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void getAllMarkers(LatLngBounds bounds) {
-        mRepository.getAllMarkers(new cazimir.com.magazoo.presenter.OnGetAllMarkersListener() {
+        mRepository.getAllMarkers(new OnGetAllMarkersListener() {
             @Override
             public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
                 getMapActivityView().addMarkersToMap(markers);
@@ -151,7 +143,7 @@ public class MapPresenter implements IMapPresenter {
     }
 
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
-        mRepository.getShopsAddedToday(new cazimir.com.magazoo.presenter.OnGetShopsAddedTodayListener() {
+        mRepository.getShopsAddedToday(new OnGetShopsAddedTodayListener() {
             @Override
             public void onGetShopsAddedTodaySuccess(ArrayList<Shop> shopsAddedToday) {
                 if (isUnderTheAddLimit(shopsAddedToday)) {

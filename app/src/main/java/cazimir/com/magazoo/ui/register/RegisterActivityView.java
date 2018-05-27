@@ -18,8 +18,8 @@ import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.presenter.RegisterPresenter;
-import cazimir.com.magazoo.ui.OnFormValidatedListener;
+import cazimir.com.magazoo.presenter.register.RegisterPresenter;
+import cazimir.com.magazoo.utils.OnFormValidatedListener;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.utils.UtilHelperClass;
 
