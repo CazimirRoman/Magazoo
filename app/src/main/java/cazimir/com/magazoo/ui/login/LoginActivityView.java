@@ -68,10 +68,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     private void initUI() {
-        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
-        btnGoToRegister.setBootstrapBrand(getBootrapBrand());
-        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
-        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+        btnLoginWithEmail.setBootstrapBrand(getLoginRegisterbrand());
+        btnGoToRegister.setBootstrapBrand(getLoginRegisterbrand());
+        btnLoginWithEmail.setBootstrapBrand(getLoginRegisterbrand());
+        btnForgotPassword.setBootstrapBrand(getLoginRegisterbrand());
         expandableLayout.collapse();
     }
 

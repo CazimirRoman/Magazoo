@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:padding="5dp"
         android:layout_height="wrap_content"
-        android:text="@string/popup_gps_error_text" />
+        android:text="@string/popup_connection_error_text" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/buttonGpsSettings"
+        android:id="@+id/buttonInternetSettings"
         app:bootstrapSize="md"
         android:layout_margin="10dp"
-        android:text="@string/gps_settings"
+        android:text="@string/internet_settings"
         app:roundedCorners="true"
         app:showOutline="true"
         android:layout_gravity="end"

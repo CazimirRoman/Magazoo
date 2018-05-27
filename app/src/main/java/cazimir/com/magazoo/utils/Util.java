@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.blankj.utilcode.util.LocationUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,11 +26,13 @@ public class Util {
     }
 
     public static boolean isGPSAvailable() {
-        if (!LocationUtils.isGpsEnabled()) {
-            return false;
-        }
+        return LocationUtils.isGpsEnabled();
 
-        return true;
+    }
+
+    public static boolean isNetworkAvailable() {
+        return NetworkUtils.isConnected();
+
     }
 
     public static MaterialDialog.Builder buildDialog(final Context context, String title, final String content, final int errorType) {

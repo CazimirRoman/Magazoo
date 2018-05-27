@@ -4,6 +4,7 @@ public class Constants {
 
     public static final String ACCURACY_TAG = "ACCURACY_TAG";
     public static final String LOCATION_TAG = "LOCATION_TAG";
+    public static final String INTERNET_TAG = "INTERNET_TAG";
     public static final String GPS_TAG = "GPS_TAG";
     public static final String ID_PLACEHOLDER = "check model property for id";
     public static final int MY_LOCATION_REQUEST_CODE = 523;

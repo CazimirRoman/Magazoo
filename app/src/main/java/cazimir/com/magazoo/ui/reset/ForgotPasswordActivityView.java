@@ -56,7 +56,7 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthPresenter = new AuthPresenter(this);
-        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+        btnForgotPassword.setBootstrapBrand(getLoginRegisterbrand());
     }
 
     @Override

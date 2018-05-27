@@ -2,12 +2,15 @@ package cazimir.com.magazoo.ui.map;
 
 import android.Manifest.permission;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -63,7 +66,6 @@ import com.julienvey.trello.impl.TrelloImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
@@ -112,20 +114,45 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mAddShopDialog;
     private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
-    private MaterialDialog mAccuracyDialog;
+    private MaterialDialog mLocationDialog;
     private MaterialDialog mNoGpsDialog;
+    private MaterialDialog mNoInternetDialog;
+    private BootstrapBrand mAddButtonBrand;
 
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
+        registerReceiver(connectivityReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        registerReceiver(connectivityReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         super.onStart();
     }
+
+    private BroadcastReceiver connectivityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                if (!gpsActive()) {
+                    showNoGPSErrorDialog();
+                } else {
+                    closeNoGpsDialog();
+                }
+
+            } else if (intent.getAction().matches("android.net.conn.CONNECTIVITY_CHANGE")) {
+                if (!networkActive()) {
+                    showNoInternetErrorDialog();
+                } else {
+                    closeNoInternetDialog();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
         setupApiClientLocation();
+        setUpMap();
         checkIfOnboardingNeeded();
         initUI();
         setupNavigationDrawer();
@@ -134,21 +161,28 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     protected void onStop() {
         mGoogleApiClient.disconnect();
+        unregisterReceiver(connectivityReceiver);
         super.onStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (gpsActive()) {
-            setUpMap();
-        } else {
+        if (!gpsActive()) {
             showNoGPSErrorDialog();
+        }
+
+        if (!networkActive()) {
+            showNoInternetErrorDialog();
         }
     }
 
     private boolean gpsActive() {
         return Util.isGPSAvailable();
+    }
+
+    private boolean networkActive() {
+        return Util.isNetworkAvailable();
     }
 
     @Override
@@ -239,6 +273,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                setMapTheme();
+                getMapBounds();
+                setMyLocationEnabled();
+                setOnCameraChangeListener();
+
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
                         mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
@@ -255,15 +294,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         return true;
                     }
                 });
-
-                setMapTheme();
-                getMapBounds();
-                setMyLocationEnabled();
-                setOnCameraChangeListener();
-                registerListenerForNewMarkerAdded();
-                if (mCurrentZoomLevel > 1 && mCurrentZoomLevel >= Constants.ZOOM_LEVEL_DESIRED) {
-                    getShopMarkers(getMapBounds());
-                }
             }
         });
     }
@@ -332,17 +362,24 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mFeedbackDialog = buildCustomDialog(getString(R.string.send_feedback), R.layout.feedback_dialog).show();
         final BootstrapEditText etFeedbackText = (BootstrapEditText) mFeedbackDialog.findViewById(R.id.editTextFeedbackText);
         BootstrapButton btnSendFeedback = (BootstrapButton) mFeedbackDialog.findViewById(R.id.buttonSendFeedback);
+        btnSendFeedback.setBootstrapBrand(mAddButtonBrand);
 
         btnSendFeedback.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (TextUtils.isEmpty(etFeedbackText.getText())) {
-                    etFeedbackText.setError(getString(R.string.feedback_empty));
-                    return;
+                if(networkActive()){
+                    if (TextUtils.isEmpty(etFeedbackText.getText())) {
+                        etFeedbackText.setError(getString(R.string.feedback_empty));
+                        return;
+                    }
+
+                    sendFeedbackToTrello(etFeedbackText.getText().toString());
+                }else{
+                    showNoInternetErrorDialog();
                 }
 
-                sendFeedbackToTrello(etFeedbackText.getText().toString());
+
             }
         });
 
@@ -375,6 +412,61 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private void initUI() {
         initAddShop();
         initShopDetails();
+        initBootStrapBrand();
+    }
+
+    private void initBootStrapBrand() {
+        mAddButtonBrand = new BootstrapBrand() {
+            @Override
+            public int defaultFill(Context context) {
+                return context.getResources().getColor(R.color.colorPrimary);
+            }
+
+            @Override
+            public int defaultEdge(Context context) {
+                return context.getResources().getColor(R.color.colorPrimary);
+            }
+
+            @Override
+            public int defaultTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int activeFill(Context context) {
+                return context.getResources().getColor(R.color.colorAccent);
+            }
+
+            @Override
+            public int activeEdge(Context context) {
+                return context.getResources().getColor(R.color.colorAccent);
+            }
+
+            @Override
+            public int activeTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledFill(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledEdge(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int disabledTextColor(Context context) {
+                return 0;
+            }
+
+            @Override
+            public int getColor() {
+                return 0;
+            }
+        };
     }
 
     private void initAddShop() {
@@ -383,42 +475,48 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (correctAccuracy()) {
-                            mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
-                                @Override
-                                public void isAllowedToAdd() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showAddShopDialog();
-                                        }
-                                    });
-                                }
+                if(networkActive()){
+                    registerListenerForNewMarkerAdded();
 
-                                @Override
-                                public void isNotAllowedToAdd() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showAddLimitAlertPopup();
-                                        }
-                                    });
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (correctAccuracy()) {
+                                mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
+                                    @Override
+                                    public void isAllowedToAdd() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showAddShopDialog();
+                                            }
+                                        });
+                                    }
 
-                                }
-                            });
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showAccuracyErrorDialog(ACCURACY_TAG, true);
-                                }
-                            });
+                                    @Override
+                                    public void isNotAllowedToAdd() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showAddLimitAlertPopup();
+                                            }
+                                        });
+
+                                    }
+                                });
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showLocationDialog(ACCURACY_TAG, true);
+                                    }
+                                });
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
+                }else{
+                    showNoInternetErrorDialog();
+                }
             }
         });
     }
@@ -427,22 +525,46 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
     }
 
-    private void showAccuracyErrorDialog(String tag, boolean isCancelable) {
-        mAccuracyDialog = null;
-        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.accuracy_dialog, isCancelable, tag).show();
+    private void showLocationDialog(String tag, boolean isCancelable) {
+        if (mLocationDialog == null) {
+            mLocationDialog = Util.buildCustomDialog(this, R.layout.location_dialog, isCancelable, tag).show();
+        } else {
+            mLocationDialog.show();
+        }
     }
 
     private void showNoGPSErrorDialog() {
-        mNoGpsDialog = Util.buildCustomDialog(this, R.layout.no_gps_dialog, false, Constants.GPS_TAG).show();
-        mNoGpsDialog.getCustomView().findViewById(R.id.buttonGpsSettings).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                closeNoGpsDialog();
-            }
-        });
+        if (mNoGpsDialog == null) {
+            mNoGpsDialog = Util.buildCustomDialog(this, R.layout.no_gps_dialog, false, Constants.GPS_TAG).show();
+            mNoGpsDialog.getCustomView().findViewById(R.id.buttonGpsSettings).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    closeNoGpsDialog();
+                }
+            });
+        } else {
+            mNoGpsDialog.show();
+        }
+    }
+
+    private void showNoInternetErrorDialog() {
+        if (mNoInternetDialog == null) {
+            mNoInternetDialog = Util.buildCustomDialog(this, R.layout.no_internet_dialog, true, Constants.INTERNET_TAG).show();
+            mNoInternetDialog.getCustomView().findViewById(R.id.buttonInternetSettings).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    closeNoInternetDialog();
+                }
+            });
+        } else {
+            mNoInternetDialog.show();
+        }
     }
 
     @Override
@@ -722,7 +844,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                refreshMarkersOnMap();
+                if (!worldMapShowing()) {
+                    refreshMarkersOnMap();
+                }
             }
         });
     }
@@ -806,57 +930,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
         final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
         BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
-        buttonAdd.setBootstrapBrand(new BootstrapBrand() {
-            @Override
-            public int defaultFill(Context context) {
-                return context.getResources().getColor(R.color.colorPrimary);
-            }
-
-            @Override
-            public int defaultEdge(Context context) {
-                return context.getResources().getColor(R.color.colorPrimary);
-            }
-
-            @Override
-            public int defaultTextColor(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int activeFill(Context context) {
-                return context.getResources().getColor(R.color.colorAccent);
-            }
-
-            @Override
-            public int activeEdge(Context context) {
-                return context.getResources().getColor(R.color.colorAccent);
-            }
-
-            @Override
-            public int activeTextColor(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int disabledFill(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int disabledEdge(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int disabledTextColor(Context context) {
-                return 0;
-            }
-
-            @Override
-            public int getColor() {
-                return 0;
-            }
-        });
+        buttonAdd.setBootstrapBrand(mAddButtonBrand);
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_small));
@@ -896,32 +970,31 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
+        if (worldMapShowing()) {
+            zoomToCurrentLocation();
+        }
+
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         // TODO: 26-May-18 Not the same accuracy dialog. is showing returning false even though it is there
-        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && mAccuracyDialog.getTag().equals(LOCATION_TAG)) {
-            mAccuracyDialog.dismiss();
-        } else if (mAccuracyDialog != null && correctAccuracy() && mAccuracyDialog.isShowing() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
-            mAccuracyDialog.dismiss();
+        if (mLocationDialog != null && mLocationDialog.isShowing() && mLocationDialog.getTag().equals(LOCATION_TAG)) {
+            mLocationDialog.dismiss();
+        } else if (mLocationDialog != null && correctAccuracy() && mLocationDialog.isShowing() && mLocationDialog.getTag().equals(ACCURACY_TAG)) {
+            mLocationDialog.dismiss();
             showAddShopDialog();
         }
-
-        if (mMap == null) {
-            setUpMap();
-            showAccuracyErrorDialog(LOCATION_TAG, false);
-        } else {
-            if (worldMapShowing()) {
-                zoomToCurrentLocation();
-            }
-        }
-
-        closeNoGpsDialog();
     }
 
     private void closeNoGpsDialog() {
         if (mNoGpsDialog != null && mNoGpsDialog.isShowing()) {
             mNoGpsDialog.dismiss();
+        }
+    }
+
+    private void closeNoInternetDialog() {
+        if (mNoInternetDialog != null && mNoInternetDialog.isShowing()) {
+            mNoInternetDialog.dismiss();
         }
     }
 

@@ -6,21 +6,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.blankj.utilcode.util.Utils;
 
 import butterknife.ButterKnife;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.utils.MyAlertDialog;
-import cazimir.com.magazoo.utils.PrimaryBootstrapBrand;
+import cazimir.com.magazoo.utils.LoginRegisterBrand;
 
 public abstract class BaseActivity extends AppCompatActivity implements IGeneralView {
 
     private MyAlertDialog mAlertDialog;
     private Toolbar mToolbar;
-    PrimaryBootstrapBrand bootstrapBrand;
+    LoginRegisterBrand loginRegisterBrand;
+    BootstrapBrand greenButtons;
 
-    public PrimaryBootstrapBrand getBootrapBrand() {
-        return bootstrapBrand;
+    public LoginRegisterBrand getLoginRegisterbrand() {
+        return loginRegisterBrand;
     }
 
     @Override
@@ -31,7 +33,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         ButterKnife.bind(this);
         setUpToolbar();
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        bootstrapBrand = new PrimaryBootstrapBrand(this);
+        loginRegisterBrand = new LoginRegisterBrand(this);
+
         Utils.init(getApplication());
     }
 

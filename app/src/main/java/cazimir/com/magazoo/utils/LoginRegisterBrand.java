@@ -10,7 +10,7 @@ import cazimir.com.magazoo.R;
 /**
  * TODO: Add a class header comment!
  */
-public class PrimaryBootstrapBrand implements BootstrapBrand {
+public class LoginRegisterBrand implements BootstrapBrand {
 
     @ColorInt private final int defaultFill;
     @ColorInt private final int defaultEdge;
@@ -22,7 +22,7 @@ public class PrimaryBootstrapBrand implements BootstrapBrand {
     @ColorInt private final int disabledEdge;
     @ColorInt private final int disabledTextColor;
 
-    @SuppressWarnings("deprecation") public PrimaryBootstrapBrand(Context context) {
+    @SuppressWarnings("deprecation") public LoginRegisterBrand(Context context) {
         defaultFill = context.getResources().getColor(R.color.colorSecondary);
         defaultEdge = context.getResources().getColor(R.color.colorPrimary);
         defaultTextColor = context.getResources().getColor(R.color.colorWhite);
