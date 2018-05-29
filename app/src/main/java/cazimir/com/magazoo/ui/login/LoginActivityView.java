@@ -68,10 +68,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     private void initUI() {
-        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
-        btnGoToRegister.setBootstrapBrand(getBootrapBrand());
-        btnLoginWithEmail.setBootstrapBrand(getBootrapBrand());
-        btnForgotPassword.setBootstrapBrand(getBootrapBrand());
+        btnLoginWithEmail.setBootstrapBrand(getLoginRegisterbrand());
+        btnGoToRegister.setBootstrapBrand(getLoginRegisterbrand());
+        btnLoginWithEmail.setBootstrapBrand(getLoginRegisterbrand());
+        btnForgotPassword.setBootstrapBrand(getLoginRegisterbrand());
         expandableLayout.collapse();
     }
 
@@ -181,6 +181,9 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         super.onActivityResult(requestCode, resultCode, data);
         // Pass the activity result back to the Facebook SDK
         mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 0){
+            hideProgressBar();
+        }
     }
 
     private void setPasswordError(String error) {

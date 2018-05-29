@@ -7,6 +7,7 @@
     <string name="nothing" />
 
     <string name="gps_settings">Open GPS settings</string>
+    <string name="internet_settings">Open network settings</string>
 
     <!--login, register start-->
     <string name="email_missing">Enter email address!</string>
@@ -31,7 +32,7 @@
 
     <!--popups start-->
     <string name="popup_accuracy_error_title">"Location accuracy"</string>
-    <string name="popup_accuracy_text">Please wait while we are locating you…\n\nIf you are inside a building, go to a window or take a few steps outside and try again.</string>
+    <string name="popup_accuracy_text">Please wait while we are locating you…\n\nIf you are inside a building, go to a window or take a few steps outside</string>
     <string name="popup_current_accuracy">Current accuracy:</string>
     <string name="popup_connection_error_title">"You are offline"</string>
     <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>
@@ -55,9 +56,9 @@
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="checkbox_pos">pos</string>
-    <string name="checkbox_tickets">tickets</string>
-    <string name="checkbox_nonstop">nonstop</string>
+    <string name="checkbox_pos">POS</string>
+    <string name="checkbox_tickets">meal tickets</string>
+    <string name="checkbox_nonstop">24/7</string>
     <string name="thanks_adding_title">Thanks for adding</string>
     <string name="thanks_adding_text">Your shop has been added to the map</string>
     <!--add shop end-->
