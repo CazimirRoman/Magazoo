@@ -32,7 +32,7 @@
 
     <!--popups start-->
     <string name="popup_accuracy_error_title">"Location accuracy"</string>
-    <string name="popup_accuracy_text">Please wait while we are locating you…\n\nIf you are inside a building, go to a window or take a few steps outside and try again.</string>
+    <string name="popup_accuracy_text">Please wait while we are locating you…\n\nIf you are inside a building, go to a window or take a few steps outside</string>
     <string name="popup_current_accuracy">Current accuracy:</string>
     <string name="popup_connection_error_title">"You are offline"</string>
     <string name="popup_connection_error_text">Make sure Wi-Fi or cellular data is turned on, then try again.</string>

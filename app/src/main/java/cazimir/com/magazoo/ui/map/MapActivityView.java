@@ -872,10 +872,22 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            setUpMyLocationButton();
         } else {
             requestLocationPermissions();
         }
+
+    }
+
+    private void setUpMyLocationButton() {
+        FloatingActionButton fabLocateUser = findViewById(R.id.fabLocateUser);
+        fabLocateUser.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomToCurrentLocation();
+            }
+        });
 
     }
 

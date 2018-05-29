@@ -181,6 +181,9 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         super.onActivityResult(requestCode, resultCode, data);
         // Pass the activity result back to the Facebook SDK
         mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 0){
+            hideProgressBar();
+        }
     }
 
     private void setPasswordError(String error) {
