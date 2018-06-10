@@ -13,12 +13,14 @@ public class Shop {
     private boolean tickets;
     private long createdAt;
     private String createdBy;
+    private String city;
+    private String country;
 
 
     public Shop() {
     }
 
-    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId) {
+    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId, String city, String country) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
@@ -28,6 +30,8 @@ public class Shop {
         this.tickets = tickets;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
+        this.city = city;
+        this.country = country;
     }
 
     public void setTickets(boolean tickets) {
@@ -72,5 +76,21 @@ public class Shop {
 
     public boolean getTickets() {
         return tickets;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

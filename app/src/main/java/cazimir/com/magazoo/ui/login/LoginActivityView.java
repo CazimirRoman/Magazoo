@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
@@ -17,6 +19,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseActivity;
 import cazimir.com.magazoo.base.IGeneralView;
@@ -28,6 +31,7 @@ import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
 import cazimir.com.magazoo.utils.UtilHelperClass;
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivityView extends BaseActivity implements ILoginActivityView {
 

@@ -48,10 +48,10 @@ public class TutorialActivity extends AppCompatActivity {
 
         ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
         elements.add(start);
+        elements.add(navigate);
         elements.add(add);
         elements.add(type);
         elements.add(report);
-        elements.add(navigate);
         return elements;
     }
 }
