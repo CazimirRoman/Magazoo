@@ -36,7 +36,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +67,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.impl.TrelloImpl;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -123,6 +126,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mNoGpsDialog;
     private MaterialDialog mNoInternetDialog;
     private BootstrapBrand mAddButtonBrand;
+    private FrameLayout mProgress;
 
     @Override
     protected void onStart() {
@@ -161,7 +165,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         checkIfOnboardingNeeded();
         initUI();
         setupNavigationDrawer();
-        Crashlytics.getInstance().crash();
     }
 
     @Override
@@ -438,6 +441,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         initAddShop();
         initShopDetails();
         initBootStrapBrand();
+        mProgress = findViewById(R.id.progress);
+
     }
 
     private void initBootStrapBrand() {
@@ -547,7 +552,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean correctAccuracy() {
+        Log.d(TAG, "currentAccuracy: " + mCurrentAccuracy);
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
+
     }
 
     private void showLocationDialog(String tag, boolean isCancelable) {
@@ -673,6 +680,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -682,6 +690,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -691,6 +700,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -701,6 +711,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -892,6 +903,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         getShopMarkers(getMapBounds());
     }
 
+    @Override
+    public void showProgressBar() {
+        mProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgress.setVisibility(View.INVISIBLE);
+    }
+
     private void setZoomLevel() {
         mCurrentZoomLevel = mMap.getCameraPosition().zoom;
     }
@@ -999,6 +1020,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mCurrentLocation.latitude, mCurrentLocation.longitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry()));
+                    Log.d(TAG, "addMarkerToFirebase: " + "User who added this shop is: " + mPresenter.getUserId());
+                    showProgressBar();
                 } else {
                     spinner.setError(getString(R.string.popup_add_shop_type_error));
                 }

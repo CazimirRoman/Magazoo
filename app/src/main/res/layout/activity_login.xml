@@ -18,8 +18,8 @@
     <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_weight="0.8"
         android:layout_height="0dp"
+        android:layout_weight="0.8"
         android:background="@color/colorPrimary"
         android:fitsSystemWindows="true">
 
@@ -155,18 +155,18 @@
     </ScrollView>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/progress"
-            tools:visibility="visible"
-            android:visibility="invisible"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:indicatorName="BallPulseIndicator"
-            />
+            app:indicatorName="BallBeatIndicator" />
     </FrameLayout>
 
 </LinearLayout>

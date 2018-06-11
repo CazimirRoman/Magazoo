@@ -21,4 +21,6 @@ public interface IMapActivityView {
     void addMarkersToMap(ArrayList<Shop> markers);
     void closeAddShopDialog();
     void refreshMarkersOnMap();
+    void showProgressBar();
+    void hideProgressBar();
 }

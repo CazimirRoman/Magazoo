@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @BindView(R.id.btnForgotPassword)
     BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
-    AVLoadingIndicatorView progress;
+    FrameLayout progress;
     @BindView(R.id.btnLoginWithEmail)
     BootstrapButton btnLoginWithEmail;
     @BindView(R.id.btnGoToRegister)
@@ -150,11 +151,11 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     public void showProgressBar() {
-        progress.smoothToShow();
+        progress.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progress.smoothToHide();
+        progress.setVisibility(View.INVISIBLE);
     }
 
     public void goToMap() {

@@ -93,4 +93,8 @@ public class Shop {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
 }
