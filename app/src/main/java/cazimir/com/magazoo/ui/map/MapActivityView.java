@@ -38,7 +38,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +45,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -65,11 +63,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.impl.TrelloImpl;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -248,10 +247,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         if (ActivityCompat.checkSelfPermission(MapActivityView.this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                                     mGoogleApiClient);
-                            if (mLastLocation != null) {
-                                LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, Constants.ZOOM_LEVEL_DESIRED));
-                            }
 
                             LocationServices.FusedLocationApi.requestLocationUpdates(
                                     mGoogleApiClient, mLocationRequest, MapActivityView.this);
@@ -296,16 +291,21 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-                        mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
-                        if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Shop shop : mShopsInBounds) {
-                                if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
-                                    populateShopDetails(shop);
-                                    openShopDetails();
-                                    getAddress(new LatLng(shop.getLat(), shop.getLon()));
-                                    mCurrentSelectedShop = shop;
+
+                        if(marker.getTitle()  != null){
+                            mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
+                            if (mShopDetails.getVisibility() == View.GONE) {
+                                for (Shop shop : mShopsInBounds) {
+                                    if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
+                                        populateShopDetails(shop);
+                                        openShopDetails();
+                                        getAddress(new LatLng(shop.getLat(), shop.getLon()));
+                                        mCurrentSelectedShop = shop;
+                                    }
                                 }
                             }
+                        }else{
+                            //do nothing, a cluster has been clicked
                         }
 
                         return true;
@@ -321,7 +321,17 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mClusterManager = new ClusterManager<Shop>(this, mMap);
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
-        mMap.setOnMarkerClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Shop>() {
+            @Override
+            public boolean onClusterClick(Cluster<Shop> cluster) {
+               return false;
+            }
+        });
+
+        //mMap.setOnMarkerClickListener(mClusterManager);
+
+        final CustomClusterRenderer renderer = new CustomClusterRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
 
     }
 
@@ -773,9 +783,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void addMarkersToMap(ArrayList<Shop> shops) {
-
+        mClusterManager.clearItems();
         for (int i = 0; i < shops.size(); i++) {
-
             mClusterManager.addItem(shops.get(i));
 
 //            mMap.addMarker(new MarkerOptions()
@@ -784,6 +793,19 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         }
 
         mShopsInBounds = shops;
+        Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
+    }
+
+    public class CustomClusterRenderer extends DefaultClusterRenderer<Shop> {
+
+        public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Shop> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Shop item, MarkerOptions markerOptions) {
+            markerOptions.position(new LatLng(item.getLat(), item.getLon())).icon(getIconForShop(item.getType())).title(item.getId());
+        }
     }
 
     private void navigateToShop() {
@@ -911,11 +933,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     refreshMarkersOnMap();
                 }
 
-                CameraPosition position = mMap.getCameraPosition();
-                if(mPreviousCameraPosition[0] == null || mPreviousCameraPosition[0].zoom != position.zoom) {
-                    mPreviousCameraPosition[0] = mMap.getCameraPosition();
+                if(mCurrentZoomLevel <= Constants.ZOOM_LEVEL_DESIRED)
                     mClusterManager.cluster();
-                }
             }
         });
     }

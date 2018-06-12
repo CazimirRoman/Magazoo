@@ -1,6 +1,7 @@
 package cazimir.com.magazoo.model;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.Date;
@@ -102,6 +103,7 @@ public class Shop implements ClusterItem {
     }
 
     @Override
+    @Exclude
     public LatLng getPosition() {
         return new LatLng(getLat(), getLon());
     }

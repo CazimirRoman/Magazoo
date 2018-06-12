@@ -93,12 +93,12 @@
     <!--navigation drawer start-->
     <string name="tutorial">Tutorial</string>
     <string name="share">Share</string>
-    <string name="send_feedback">Please enter any comments, questions, suggestions or feedback…</string>
+    <string name="send_feedback">Contact us</string>
     <string name="signout">Logout</string>
     <string name="sign_in">Sign in</string>
+    <string name="send_feedback_hint">Please enter any comments, questions, suggestions or feedback…</string>
     <string name="feedback_empty">You did not enter any text.</string>
     <string name="feedback_sent">Thank you! Your feedback is important to us</string>
-    <string name="send_feedback_hint">Add your feedback here…</string>
     <string name="share_text">Hey! I found this super cool Android app that shows you all shops around you : https://play.google.com/store/apps/details?id=cazimir.com.magazoo. Download now and start discovering!</string>
     <string name="share_via">Share with</string>
     <!--navigation drawer end-->
