@@ -1,8 +1,11 @@
 package cazimir.com.magazoo.model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.util.Date;
 
-public class Shop {
+public class Shop implements ClusterItem {
 
     private String id;
     private Double lat;
@@ -96,5 +99,20 @@ public class Shop {
 
     public String getCreatedBy() {
         return createdBy;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(getLat(), getLon());
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public String getSnippet() {
+        return null;
     }
 }

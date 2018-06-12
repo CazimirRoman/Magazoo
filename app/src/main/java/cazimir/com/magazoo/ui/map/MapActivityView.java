@@ -60,10 +60,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.impl.TrelloImpl;
@@ -103,6 +105,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MapPresenter mPresenter;
 
     private GoogleMap mMap;
+    private ClusterManager<Shop> mClusterManager;
+    final CameraPosition[] mPreviousCameraPosition = {null};
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
@@ -282,6 +286,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                setUpClusterer();
                 setMapTheme();
                 getMapBounds();
                 setMyLocationEnabled();
@@ -308,6 +313,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 });
             }
         });
+    }
+
+    private void setUpClusterer() {
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<Shop>(this, mMap);
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        mMap.setOnMarkerClickListener(mClusterManager);
+
     }
 
     private void getAddress(LatLng location){
@@ -760,9 +775,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     public void addMarkersToMap(ArrayList<Shop> shops) {
 
         for (int i = 0; i < shops.size(); i++) {
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(shops.get(i).getLat(), shops.get(i).getLon()))
-                    .title(shops.get(i).getId()).icon(getIconForShop(shops.get(i).getType())));
+
+            mClusterManager.addItem(shops.get(i));
+
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(shops.get(i).getLat(), shops.get(i).getLon()))
+//                    .title(shops.get(i).getId()).icon(getIconForShop(shops.get(i).getType())));
         }
 
         mShopsInBounds = shops;
@@ -891,6 +909,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onCameraIdle() {
                 if (!worldMapShowing()) {
                     refreshMarkersOnMap();
+                }
+
+                CameraPosition position = mMap.getCameraPosition();
+                if(mPreviousCameraPosition[0] == null || mPreviousCameraPosition[0].zoom != position.zoom) {
+                    mPreviousCameraPosition[0] = mMap.getCameraPosition();
+                    mClusterManager.cluster();
                 }
             }
         });
