@@ -16,15 +16,13 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
+import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsSent;
-import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
-import cazimir.com.magazoo.ui.login.ILoginActivityView;
-import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
-import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
 
 public class AuthPresenter implements IAuthPresenter {
 
@@ -48,7 +46,7 @@ public class AuthPresenter implements IAuthPresenter {
                                 listener.onLoginWithEmailSuccess();
 
                             } else {
-                                listener.onLoginWithEmailFailed("Te rog sa iti verifici mailul pentru a intra in aplicatie.");
+                                listener.onLoginWithEmailFailed(getLoginActivityView().getActivity().getString(R.string.email_not_verified));
 
                             }
                         }
@@ -134,7 +132,7 @@ public class AuthPresenter implements IAuthPresenter {
 
     @Override
     public void checkIfUserLoggedInAndRedirectToMap() {
-        if (mAuthManager.getCurrentUser() != null) {
+        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified()) {
             ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
             view.goToMap();
         }

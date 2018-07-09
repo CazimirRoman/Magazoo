@@ -1064,7 +1064,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
                     closeAddShopDialog();
-                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLatitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
                             chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry()));
                     Log.d(TAG, "addMarkerToFirebase: " + "User who added this shop is: " + mPresenter.getUserId());
@@ -1126,7 +1126,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showAddShopDialog();
         }
 
-        if(worldMapShowing()){
+        if (worldMapShowing()) {
             zoomToCurrentLocation();
         }
 
