@@ -42,6 +42,7 @@ public class MapPresenter implements IMapPresenter {
             @Override
             public void isDuplicateReport() {
                 getMapActivityView().showReportThanksPopup();
+                getMapActivityView().hideProgressBar();
                 Log.d(TAG, "Duplicate " + getMapActivityView().getCurrentReportedShop().getRegards() + " report");
             }
 
@@ -53,6 +54,7 @@ public class MapPresenter implements IMapPresenter {
                     public void onReportWrittenSuccess() {
                         getMapActivityView().closeReportDialog();
                         getMapActivityView().showReportThanksPopup();
+                        getMapActivityView().hideProgressBar();
                         Log.d(TAG, "Report for " + getMapActivityView().getCurrentReportedShop().getRegards() + " written to DB");
                     }
 
@@ -107,15 +109,16 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void addMarkerToFirebase(Shop shop) {
-        shop.setCreatedBy(mAuthenticationPresenter.getUserId());
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
+                getMapActivityView().hideProgressBar();
                 getMapActivityView().showAddThanksPopup();
             }
 
             @Override
             public void onAddMarkerFailed(String error) {
+                getMapActivityView().hideProgressBar();
                 getMapActivityView().showToast(error);
             }
         }, shop);

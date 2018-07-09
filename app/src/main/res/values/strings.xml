@@ -52,6 +52,7 @@
     <string name="popup_add_shop_small">Small shop</string>
     <string name="popup_add_shop_farmer">Farmer\'s market</string>
     <string name="popup_add_shop_supermarket">Supermarket</string>
+    <string name="popup_add_shop_shopping_center">Shopping center</string>
     <string name="popup_add_shop_hypermarket">Hypermarket</string>
     <string name="popup_add_shop_button_add">Add</string>
     <string name="popup_add_shop_button_cancel">Cancel</string>
@@ -59,8 +60,8 @@
     <string name="checkbox_pos">POS</string>
     <string name="checkbox_tickets">meal tickets</string>
     <string name="checkbox_nonstop">24/7</string>
-    <string name="thanks_adding_title">Thanks for adding</string>
-    <string name="thanks_adding_text">Your shop has been added to the map</string>
+    <string name="thanks_adding_title">Thanks</string>
+    <string name="thanks_adding_text">Thank you for your contribution! The shop has been added to the map</string>
     <!--add shop end-->
 
     <!--shop details start-->
@@ -86,19 +87,19 @@
     <string name="popup_report_limit_error_title">"Limit reached"</string>
     <string name="popup_report_limit_error_text">You have reached your daily report limit.</string>
     <string name="thanks_report">Thank you!</string>
-    <string name="details_report">Your report has been submitted! Thank you!</string>
+    <string name="details_report">Your report has been submitted!</string>
     <!--report shop end-->
 
     <!--navigation drawer start-->
     <string name="tutorial">Tutorial</string>
     <string name="share">Share</string>
-    <string name="send_feedback">Send a message</string>
+    <string name="send_feedback">Contact us</string>
     <string name="signout">Logout</string>
     <string name="sign_in">Sign in</string>
+    <string name="send_feedback_hint">Please enter any comments, questions, suggestions or feedback…</string>
     <string name="feedback_empty">You did not enter any text.</string>
-    <string name="feedback_sent">Feedback received</string>
-    <string name="send_feedback_hint">Add your feedback here…</string>
-    <string name="share_text">Magazoo will show you the closest shops in your area.</string>
+    <string name="feedback_sent">Thank you! Your feedback is important to us</string>
+    <string name="share_text">Hey! I found this super cool Android app that shows you all shops around you : https://play.google.com/store/apps/details?id=cazimir.com.magazoo. Download now and start discovering!</string>
     <string name="share_via">Share with</string>
     <!--navigation drawer end-->
 
@@ -108,13 +109,16 @@
     <string name="tutorial_add_shop_title">Add shops</string>
     <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? \n Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
     <string name="tutorial_shop_type_title">Type of shops</string>
-    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, super and hypermarkets.</string>
+    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, supermarkets and shopping centers.</string>
     <string name="tutorial_report_shop_title">Report a shop</string>
-    <string name="tutorial_report_shop_text">The shop is not there anymore, does not accept credit cards or meal tickets? Report it and Magazoo will change that for you.</string>
+    <string name="tutorial_report_shop_text">Help the Magazoo community maintain an accurate database of available shops by actively contributing. Report non-existent shops or wrong shop properties with 1 click.</string>
     <string name="tutorial_navigate_title">Navigate</string>
     <string name="tutorial_navigate_text">Magazoo locates you on the map and immediately shows you the shortest route to your favourite shop.</string>
     <string name="about">About</string>
     <string name="popup_add_shop_text">This shop will be added at your current location</string>
+    <string name="application_version">"Application version is: "</string>
+    <string name="developed_by">"Developed by: "</string>
+    <string name="last_update">"Last update: "</string>
     <!--tutorial end-->
 
 </resources>

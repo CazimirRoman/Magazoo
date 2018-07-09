@@ -34,8 +34,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         setUpToolbar();
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         loginRegisterBrand = new LoginRegisterBrand(this);
-
         Utils.init(getApplication());
+
     }
 
     private void setUpToolbar() {

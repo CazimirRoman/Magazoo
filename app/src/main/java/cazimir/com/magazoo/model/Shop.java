@@ -1,8 +1,12 @@
 package cazimir.com.magazoo.model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.util.Date;
 
-public class Shop {
+public class Shop implements ClusterItem {
 
     private String id;
     private Double lat;
@@ -13,12 +17,14 @@ public class Shop {
     private boolean tickets;
     private long createdAt;
     private String createdBy;
+    private String city;
+    private String country;
 
 
     public Shop() {
     }
 
-    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId) {
+    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId, String city, String country) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
@@ -28,6 +34,8 @@ public class Shop {
         this.tickets = tickets;
         this.createdAt = new Date().getTime();
         this.createdBy = userId;
+        this.city = city;
+        this.country = country;
     }
 
     public void setTickets(boolean tickets) {
@@ -72,5 +80,41 @@ public class Shop {
 
     public boolean getTickets() {
         return tickets;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    @Override
+    @Exclude
+    public LatLng getPosition() {
+        return new LatLng(getLat(), getLon());
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public String getSnippet() {
+        return null;
     }
 }

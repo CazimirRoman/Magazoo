@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -34,6 +36,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,13 +62,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.julienvey.trello.Trello;
 import com.julienvey.trello.domain.Card;
 import com.julienvey.trello.impl.TrelloImpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
@@ -83,7 +91,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
-import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
+import static cazimir.com.magazoo.constants.Constants.WORLD_MAP_TAG;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
@@ -95,6 +103,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MapPresenter mPresenter;
 
     private GoogleMap mMap;
+    private ClusterManager<Shop> mClusterManager;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private float mCurrentAccuracy = 0;
@@ -114,10 +123,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mAddShopDialog;
     private MaterialDialog mFeedbackDialog;
     private ImageView mShopImage;
-    private MaterialDialog mLocationDialog;
+    private MaterialDialog mAccuracyDialog;
     private MaterialDialog mNoGpsDialog;
     private MaterialDialog mNoInternetDialog;
     private BootstrapBrand mAddButtonBrand;
+    private FrameLayout mProgress;
+    private double mAddLatitude;
+    private double mAddLongitude;
 
     @Override
     protected void onStart() {
@@ -156,6 +168,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         checkIfOnboardingNeeded();
         initUI();
         setupNavigationDrawer();
+        showLocationDialog(WORLD_MAP_TAG, false);
+
     }
 
     @Override
@@ -235,10 +249,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         if (ActivityCompat.checkSelfPermission(MapActivityView.this, permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                                     mGoogleApiClient);
-                            if (mLastLocation != null) {
-                                LatLng marker = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, Constants.ZOOM_LEVEL_DESIRED));
-                            }
 
                             LocationServices.FusedLocationApi.requestLocationUpdates(
                                     mGoogleApiClient, mLocationRequest, MapActivityView.this);
@@ -273,22 +283,30 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                setUpClusterer();
                 setMapTheme();
                 getMapBounds();
                 setMyLocationEnabled();
                 setOnCameraChangeListener();
+                mMap.setIndoorEnabled(false);
+                mMap.setBuildingsEnabled(false);
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-                        mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
-                        if (mShopDetails.getVisibility() == View.GONE) {
-                            for (Shop shop : mShopsInBounds) {
-                                if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
-                                    populateShopDetails(shop);
-                                    openShopDetails();
-                                    mCurrentSelectedShop = shop;
+                        if (marker.getTitle() != null) {
+                            mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
+                            if (mShopDetails.getVisibility() == View.GONE) {
+                                for (Shop shop : mShopsInBounds) {
+                                    if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
+                                        populateShopDetails(shop);
+                                        openShopDetails();
+                                        getAddress(new LatLng(shop.getLat(), shop.getLon()));
+                                        mCurrentSelectedShop = shop;
+                                    }
                                 }
                             }
+                        } else {
+                            //do nothing, a cluster has been clicked
                         }
 
                         return true;
@@ -296,6 +314,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 });
             }
         });
+    }
+
+    private void setUpClusterer() {
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<Shop>(this, mMap);
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Shop>() {
+            @Override
+            public boolean onClusterClick(Cluster<Shop> cluster) {
+                return false;
+            }
+        });
+
+        //mMap.setOnMarkerClickListener(mClusterManager);
+
+        final CustomClusterRenderer renderer = new CustomClusterRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
+
+    }
+
+    private void getAddress(LatLng location) {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(location.latitude, location.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            Log.d(TAG, addresses.get(0).getLocality());
+        } else {
+            // do your stuff
+        }
     }
 
     private void setupNavigationDrawer() {
@@ -345,7 +398,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAboutDialog() {
-        Util.buildDialog(this, getString(R.string.about), "Application version is: " + BuildConfig.VERSION_NAME, 0).show();
+        Util.buildDialog(this, getString(R.string.about), getString(R.string.application_version) + BuildConfig.VERSION_NAME + "\n" + getString(R.string.developed_by) + "cazimir.roman@gmail.com" + "\n" + getString(R.string.last_update) + BuildConfig.APP_LAST_UPDATE, 0).show();
     }
 
     private void shareApplication() {
@@ -368,14 +421,14 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View v) {
 
-                if(networkActive()){
+                if (networkActive()) {
                     if (TextUtils.isEmpty(etFeedbackText.getText())) {
                         etFeedbackText.setError(getString(R.string.feedback_empty));
                         return;
                     }
 
                     sendFeedbackToTrello(etFeedbackText.getText().toString());
-                }else{
+                } else {
                     showNoInternetErrorDialog();
                 }
 
@@ -413,6 +466,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         initAddShop();
         initShopDetails();
         initBootStrapBrand();
+        mProgress = findViewById(R.id.progress);
+
     }
 
     private void initBootStrapBrand() {
@@ -475,7 +530,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
 
-                if(networkActive()){
+                mAddLatitude = mCurrentLocation.latitude;
+                mAddLongitude = mCurrentLocation.longitude;
+
+                if (networkActive()) {
                     registerListenerForNewMarkerAdded();
 
                     new Thread(new Runnable() {
@@ -514,7 +572,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                             }
                         }
                     }).start();
-                }else{
+                } else {
                     showNoInternetErrorDialog();
                 }
             }
@@ -522,15 +580,14 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean correctAccuracy() {
+        Log.d(TAG, "currentAccuracy: " + mCurrentAccuracy);
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
+
     }
 
     private void showLocationDialog(String tag, boolean isCancelable) {
-        if (mLocationDialog == null) {
-            mLocationDialog = Util.buildCustomDialog(this, R.layout.location_dialog, isCancelable, tag).show();
-        } else {
-            mLocationDialog.show();
-        }
+        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.location_dialog, isCancelable, tag).show();
+        Log.d(TAG, "mAccuracy dialog is showing: " + mAccuracyDialog.isShowing());
     }
 
     private void showNoGPSErrorDialog() {
@@ -648,6 +705,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -657,6 +715,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -666,6 +725,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -676,6 +736,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeReportDialog();
+                showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
                 mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
             }
@@ -711,21 +772,38 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_supermarket);
         } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
-        } else {
+        } else if (type.equals(getString(R.string.popup_add_shop_shopping_center))) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
+        } else if (type.equals(getString(R.string.popup_add_shop_hypermarket))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
         }
+
+        return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
     }
 
     @Override
     public void addMarkersToMap(ArrayList<Shop> shops) {
-
+        Log.d(TAG, "addMarkersToMap - number of shops to add: " + shops.size());
         for (int i = 0; i < shops.size(); i++) {
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(shops.get(i).getLat(), shops.get(i).getLon()))
-                    .title(shops.get(i).getId()).icon(getIconForShop(shops.get(i).getType())));
+            mClusterManager.addItem(shops.get(i));
         }
 
+        mClusterManager.cluster();
+
         mShopsInBounds = shops;
+        Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
+    }
+
+    public class CustomClusterRenderer extends DefaultClusterRenderer<Shop> {
+
+        public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Shop> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Shop item, MarkerOptions markerOptions) {
+            markerOptions.position(new LatLng(item.getLat(), item.getLon())).icon(getIconForShop(item.getType())).title(item.getId());
+        }
     }
 
     private void navigateToShop() {
@@ -784,6 +862,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private void populateShopDetails(Shop shop) {
         mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
+
+        if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
+            mShopTypeLabel.setText(getString(R.string.popup_add_shop_shopping_center));
+        }
+
         mShopTypeLabel.setText(shop.getType());
 
         if (shop.getType().equals(getString(R.string.popup_add_shop_small))) {
@@ -844,18 +927,37 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+
+                setZoomLevel();
+
                 if (!worldMapShowing()) {
                     refreshMarkersOnMap();
                 }
+
+                if (isDesiredZoomLevel())
+                    mClusterManager.cluster();
             }
         });
     }
 
+    private boolean isDesiredZoomLevel() {
+        return mCurrentZoomLevel <= Constants.ZOOM_LEVEL_DESIRED;
+    }
+
     @Override
     public void refreshMarkersOnMap() {
-        mMap.clear();
-        setZoomLevel();
+        mClusterManager.clearItems();
         getShopMarkers(getMapBounds());
+    }
+
+    @Override
+    public void showProgressBar() {
+        mProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgress.setVisibility(View.INVISIBLE);
     }
 
     private void setZoomLevel() {
@@ -874,6 +976,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             setUpMyLocationButton();
+            zoomToCurrentLocation();
         } else {
             requestLocationPermissions();
         }
@@ -948,7 +1051,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         categories.add(getString(R.string.popup_add_shop_small));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
-        categories.add(getString(R.string.popup_add_shop_hypermarket));
+        categories.add(getString(R.string.popup_add_shop_shopping_center));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
@@ -961,9 +1064,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onClick(View view) {
                 if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
                     closeAddShopDialog();
-                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mCurrentLocation.latitude, mCurrentLocation.longitude,
+                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLatitude,
                             spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId()));
+                            chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry()));
+                    Log.d(TAG, "addMarkerToFirebase: " + "User who added this shop is: " + mPresenter.getUserId());
+                    showProgressBar();
                 } else {
                     spinner.setError(getString(R.string.popup_add_shop_type_error));
                 }
@@ -974,6 +1079,36 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mAddShopDialog.show();
     }
 
+    private String getShopCountry() {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(mCurrentLocation.latitude, mCurrentLocation.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            return (addresses.get(0).getCountryName());
+        }
+
+        return "";
+    }
+
+    private String getShopCity() {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(mCurrentLocation.latitude, mCurrentLocation.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            return (addresses.get(0).getLocality());
+        }
+
+        return "";
+    }
+
     @Override
     public void closeAddShopDialog() {
         mAddShopDialog.dismiss();
@@ -982,20 +1117,21 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
-        if (worldMapShowing()) {
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(WORLD_MAP_TAG)) {
+            mAccuracyDialog.dismiss();
+        }
+
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
+            mAccuracyDialog.dismiss();
+            showAddShopDialog();
+        }
+
+        if(worldMapShowing()){
             zoomToCurrentLocation();
         }
 
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
-        // TODO: 26-May-18 Not the same accuracy dialog. is showing returning false even though it is there
-        if (mLocationDialog != null && mLocationDialog.isShowing() && mLocationDialog.getTag().equals(LOCATION_TAG)) {
-            mLocationDialog.dismiss();
-        } else if (mLocationDialog != null && correctAccuracy() && mLocationDialog.isShowing() && mLocationDialog.getTag().equals(ACCURACY_TAG)) {
-            mLocationDialog.dismiss();
-            showAddShopDialog();
-        }
     }
 
     private void closeNoGpsDialog() {
@@ -1011,6 +1147,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean worldMapShowing() {
+        Log.d(TAG, "worldMapShowing: " + String.valueOf(mMap.getCameraPosition().zoom == 2.0));
         return mMap.getCameraPosition().zoom == 2.0;
     }
 
