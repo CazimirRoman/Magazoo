@@ -3,7 +3,7 @@ package cazimir.com.magazoo.constants;
 public class Constants {
 
     public static final String ACCURACY_TAG = "ACCURACY_TAG";
-    public static final String LOCATION_TAG = "LOCATION_TAG";
+    public static final String WORLD_MAP_TAG = "WORLD_MAP_TAG";
     public static final String INTERNET_TAG = "INTERNET_TAG";
     public static final String GPS_TAG = "GPS_TAG";
     public static final String ID_PLACEHOLDER = "check model property for id";
