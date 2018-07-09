@@ -5,11 +5,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,30 +27,30 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     @BindView(R.id.btnForgotPassword)
     BootstrapButton btnForgotPassword;
     @BindView(R.id.progress)
-    AVLoadingIndicatorView progress;
+    FrameLayout progress;
 
     private AuthPresenter mAuthPresenter;
 
     @OnClick(R.id.btnForgotPassword)
     public void onViewClicked() {
-                if(isFormDataValid()){
-                    String email = etEmail.getText().toString().trim();
-
-                    if(isFormDataValid()){
-                        mAuthPresenter.sendResetInstructions(new OnResetInstructionsSent() {
-                            @Override
-                            public void onResetInstructionsSentSuccess() {
-                                showToast(getString(R.string.email_reset_sent));
-                                finish();
-                            }
-
-                            @Override
-                            public void onResetInstructionsSentFailed() {
-                                showToast(getString(R.string.email_reset_sent_error));
-                            }
-                        }, email);
+            if (isFormDataValid()) {
+                showProgress();
+                String email = etEmail.getText().toString().trim();
+                mAuthPresenter.sendResetInstructions(new OnResetInstructionsSent() {
+                    @Override
+                    public void onResetInstructionsSentSuccess() {
+                        hideProgress();
+                        showToast(getString(R.string.email_reset_sent));
+                        finish();
                     }
-                }
+
+                    @Override
+                    public void onResetInstructionsSentFailed() {
+                        hideProgress();
+                        showToast(getString(R.string.email_reset_sent_error));
+                    }
+                }, email);
+            }
     }
 
     @Override
@@ -101,12 +102,12 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
 
     @Override
     public void showProgress() {
-        progress.smoothToShow();
+        progress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        progress.smoothToHide();
+        progress.setVisibility(View.INVISIBLE);
 
     }
 

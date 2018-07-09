@@ -12,6 +12,7 @@
     <!--login, register start-->
     <string name="email_missing">Enter email address!</string>
     <string name="email_invalid">Not a valid email. Please check!</string>
+    <string name="email_not_verified">Please verify your email address before proceeding.</string>
     <string name="password_missing">Enter password!</string>
     <string name="login_failed">Login failed! Please check your email or password!</string>
     <string name="hint_email">Email</string>

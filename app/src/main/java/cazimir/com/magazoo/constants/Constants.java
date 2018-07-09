@@ -24,6 +24,7 @@ public class Constants {
 
     public static final String EMAIL_EMPTY = "email_empty";
     public static final String EMAIL_INVALID = "email_invalid";
+    public static final String EMAIL_NOT_VERIFIED = "Please verify your email address to continue";
     public static final String PASSWORD_EMPTY = "password_empty";
     public static final String PASSWORD_INVALID = "password_invalid";
     public static final String PASSWORD_MATCH_NA = "no password repeat";
