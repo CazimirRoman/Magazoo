@@ -91,10 +91,10 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
-import static cazimir.com.magazoo.constants.Constants.WORLD_MAP_TAG;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
+import static cazimir.com.magazoo.constants.Constants.WORLD_MAP_TAG;
 
 public class MapActivityView extends BaseActivity implements IMapActivityView, LocationListener, OnErrorHandledListener {
 
@@ -776,6 +776,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
         } else if (type.equals(getString(R.string.popup_add_shop_hypermarket))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
+        } else if(type.equals(getString(R.string.popup_add_gas_station))) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_gas_station);
         }
 
         return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
@@ -877,6 +879,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.supermarket_image));
         } else if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.hypermarket_image));
+        } else if(shop.getType().equals(getString(R.string.popup_add_gas_station))){
+            mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.gast_station_image));
         }
 
         if (shop.getNonstop()) {
@@ -1049,6 +1053,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.popup_add_shop_small));
+        categories.add(getString(R.string.popup_add_gas_station));
         categories.add(getString(R.string.popup_add_shop_farmer));
         categories.add(getString(R.string.popup_add_shop_supermarket));
         categories.add(getString(R.string.popup_add_shop_shopping_center));
