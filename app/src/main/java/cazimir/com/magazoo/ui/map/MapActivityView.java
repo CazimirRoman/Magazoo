@@ -756,11 +756,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void addNewlyAddedMarkerToMap(Shop shop, String title) {
-
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(shop.getLat(), shop.getLon()))
-                .title(title).icon(getIconForShop(shop.getType())));
-
+        mClusterManager.addItem(shop);
         populateShopDetails(shop);
     }
 
@@ -790,9 +786,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             mClusterManager.addItem(shops.get(i));
         }
 
-        mClusterManager.cluster();
-
         mShopsInBounds = shops;
+        mClusterManager.cluster();
         Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
     }
 
@@ -937,9 +932,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 if (!worldMapShowing()) {
                     refreshMarkersOnMap();
                 }
-
-                if (isDesiredZoomLevel())
-                    mClusterManager.cluster();
             }
         });
     }
