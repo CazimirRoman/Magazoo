@@ -1,6 +1,7 @@
 package cazimir.com.magazoo.repository;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -24,7 +25,7 @@ import cazimir.com.magazoo.presenter.map.OnAddListenerForNewMarkerAdded;
 import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportListener;
-import cazimir.com.magazoo.presenter.map.OnGetAllMarkersListener;
+import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
@@ -34,6 +35,8 @@ import cazimir.com.magazoo.utils.Util;
  * TODO: Add a class header comment!
  */
 public class Repository implements IRepository {
+
+    private static final String TAG = Repository.class.getSimpleName();
 
     private DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
@@ -71,41 +74,9 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void addChildEventListenerForMarker(final OnAddListenerForNewMarkerAdded mapPresenter) {
-        mStoreRef.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Shop marker = dataSnapshot.getValue(Shop.class);
-                assert marker != null;
-                mapPresenter.onAddListenerForNewMarkerAddedSuccess(marker, marker.getId());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    @Override
-    public void getAllMarkers(final OnGetAllMarkersListener mapPresenter, final LatLngBounds bounds) {
-        mStoreRef.addValueEventListener(new ValueEventListener() {
+    public void getMarkers(final OnGetMarkersListener mapPresenter, final LatLngBounds bounds) {
+        Log.d(TAG, "getMarkers: called");
+        mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -121,6 +92,7 @@ public class Repository implements IRepository {
                     }
                 }
 
+                Log.d(TAG, "markersInVisibleArea: " + markersInVisibleArea.size());
                 mapPresenter.onGetAllMarkersSuccess(markersInVisibleArea);
             }
 
@@ -161,6 +133,7 @@ public class Repository implements IRepository {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    Log.d(TAG, "deleteShop: success!");
                     mapPresenter.onDeleteSuccess();
                 }else{
                     mapPresenter.onDeleteFailed(task.getException().toString());
