@@ -562,6 +562,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                         showLocationDialog(ACCURACY_TAG, true);
                                     }
                                 });
+                                hideProgressBar();
                             }
                         }
                     }).start();
