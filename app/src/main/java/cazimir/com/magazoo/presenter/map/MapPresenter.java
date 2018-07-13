@@ -78,25 +78,11 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void addListenerForNewMarkerAdded() {
-        mRepository.addChildEventListenerForMarker(new OnAddListenerForNewMarkerAdded() {
-            @Override
-            public void onAddListenerForNewMarkerAddedSuccess(Shop shop, String title) {
-                getMapActivityView().addNewlyAddedMarkerToMap(shop, title);
-            }
-
-            @Override
-            public void onAddListenerForNewMarkerAddedFailed() {
-
-            }
-        });
-    }
-
-    @Override
     public void getAllMarkers(LatLngBounds bounds) {
-        mRepository.getAllMarkers(new OnGetAllMarkersListener() {
+        mRepository.getMarkers(new OnGetMarkersListener() {
             @Override
             public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
+                Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
                 getMapActivityView().addMarkersToMap(markers);
             }
 
@@ -112,7 +98,9 @@ public class MapPresenter implements IMapPresenter {
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
+                Log.d(TAG, "onAddMarkerSuccess: called");
                 getMapActivityView().hideProgressBar();
+                getMapActivityView().refreshMarkersOnMap();
                 getMapActivityView().showAddThanksPopup();
             }
 
@@ -129,9 +117,11 @@ public class MapPresenter implements IMapPresenter {
         mRepository.deleteShop(new OnDeleteShopListener() {
             @Override
             public void onDeleteSuccess() {
-                getMapActivityView().showToast("Sters!");
+                Log.d(TAG, "onDeleteSuccess: true");
+                getMapActivityView().showToast("Deleted!");
                 getMapActivityView().closeShopDetails();
                 getMapActivityView().refreshMarkersOnMap();
+                getMapActivityView().hideProgressBar();
             }
 
             @Override

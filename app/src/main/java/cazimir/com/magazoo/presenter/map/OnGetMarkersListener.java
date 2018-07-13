@@ -7,7 +7,7 @@ import cazimir.com.magazoo.model.Shop;
 /**
  * TODO: Add a class header comment!
  */
-public interface OnGetAllMarkersListener {
+public interface OnGetMarkersListener {
     void onGetAllMarkersSuccess(ArrayList<Shop> markers);
     void onGetAllMarkersFailed(String message);
 }

@@ -38,6 +38,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -294,7 +295,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
                         if (marker.getTitle() != null) {
-                            mMap.animateCamera((CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constants.ZOOM_LEVEL_DESIRED)));
+                            mMap.animateCamera((CameraUpdateFactory.newLatLng(marker.getPosition())));
                             if (mShopDetails.getVisibility() == View.GONE) {
                                 for (Shop shop : mShopsInBounds) {
                                     if (shop.getId() != null && shop.getId().contains(marker.getTitle())) {
@@ -317,11 +318,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void setUpClusterer() {
-        // Initialize the manager with the context and the map.
-        // (Activity extends context, so we can pass 'this' in the constructor.)
+
         mClusterManager = new ClusterManager<Shop>(this, mMap);
-        // Point the map's listeners at the listeners implemented by the cluster
-        // manager.
         mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<Shop>() {
             @Override
             public boolean onClusterClick(Cluster<Shop> cluster) {
@@ -329,11 +327,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             }
         });
 
-        //mMap.setOnMarkerClickListener(mClusterManager);
-
         final CustomClusterRenderer renderer = new CustomClusterRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
-
     }
 
     private void getAddress(LatLng location) {
@@ -529,17 +524,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         fabAddShop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mAddLatitude = mCurrentLocation.latitude;
                 mAddLongitude = mCurrentLocation.longitude;
-
+                Log.d(TAG, "fabAddShop: clicked");
+                showProgressBar();
                 if (networkActive()) {
-                    registerListenerForNewMarkerAdded();
-
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (correctAccuracy()) {
+                            if (isCorrectAccuracy()) {
                                 mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
                                     @Override
                                     public void isAllowedToAdd() {
@@ -579,7 +572,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         });
     }
 
-    private boolean correctAccuracy() {
+    private boolean isCorrectAccuracy() {
         Log.d(TAG, "currentAccuracy: " + mCurrentAccuracy);
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
 
@@ -608,6 +601,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showNoInternetErrorDialog() {
+        hideProgressBar();
         if (mNoInternetDialog == null) {
             mNoInternetDialog = Util.buildCustomDialog(this, R.layout.no_internet_dialog, true, Constants.INTERNET_TAG).show();
             mNoInternetDialog.getCustomView().findViewById(R.id.buttonInternetSettings).setOnClickListener(new OnClickListener() {
@@ -670,6 +664,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 closeShopDetails();
+                showProgressBar();
                 mPresenter.deleteShopFromDB(mCurrentSelectedShop.getId());
             }
         });
@@ -754,16 +749,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mReportDialog.dismiss();
     }
 
-    @Override
-    public void addNewlyAddedMarkerToMap(Shop shop, String title) {
-
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(shop.getLat(), shop.getLon()))
-                .title(title).icon(getIconForShop(shop.getType())));
-
-        populateShopDetails(shop);
-    }
-
     private BitmapDescriptor getIconForShop(String type) {
 
         if (type.equals(getString(R.string.popup_add_shop_small))) {
@@ -776,7 +761,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
         } else if (type.equals(getString(R.string.popup_add_shop_hypermarket))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
-        } else if(type.equals(getString(R.string.popup_add_gas_station))) {
+        } else if (type.equals(getString(R.string.popup_add_gas_station))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_gas_station);
         }
 
@@ -785,14 +770,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void addMarkersToMap(ArrayList<Shop> shops) {
-        Log.d(TAG, "addMarkersToMap - number of shops to add: " + shops.size());
+        Log.d(TAG, "addMarkersToMap - number of markers to add: " + shops.size());
         for (int i = 0; i < shops.size(); i++) {
             mClusterManager.addItem(shops.get(i));
         }
 
-        mClusterManager.cluster();
-
         mShopsInBounds = shops;
+        mClusterManager.cluster();
         Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
     }
 
@@ -827,10 +811,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return new MaterialDialog.Builder(this)
                 .title(title)
                 .customView(layout, true);
-    }
-
-    private void registerListenerForNewMarkerAdded() {
-        mPresenter.addListenerForNewMarkerAdded();
     }
 
     private void getShopMarkers(LatLngBounds bounds) {
@@ -879,7 +859,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.supermarket_image));
         } else if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.hypermarket_image));
-        } else if(shop.getType().equals(getString(R.string.popup_add_gas_station))){
+        } else if (shop.getType().equals(getString(R.string.popup_add_gas_station))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.gast_station_image));
         }
 
@@ -937,9 +917,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 if (!worldMapShowing()) {
                     refreshMarkersOnMap();
                 }
-
-                if (isDesiredZoomLevel())
-                    mClusterManager.cluster();
             }
         });
     }
@@ -950,6 +927,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void refreshMarkersOnMap() {
+        Log.d(TAG, "refreshMarkersOnMap: called");
         mClusterManager.clearItems();
         getShopMarkers(getMapBounds());
     }
@@ -1043,43 +1021,62 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAddShopDialog() {
-        mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).build();
-        final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
-        final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
-        final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
-        final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
-        BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
-        buttonAdd.setBootstrapBrand(mAddButtonBrand);
+        hideProgressBar();
+        Log.d(TAG, "showAddShopDialog: called");
+        if(mAddShopDialog == null){
 
-        List<String> categories = new ArrayList<>();
-        categories.add(getString(R.string.popup_add_shop_small));
-        categories.add(getString(R.string.popup_add_gas_station));
-        categories.add(getString(R.string.popup_add_shop_farmer));
-        categories.add(getString(R.string.popup_add_shop_supermarket));
-        categories.add(getString(R.string.popup_add_shop_shopping_center));
+            mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).build();
+            final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
+            final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
+            final CheckBox chkNonstop = (CheckBox) mAddShopDialog.findViewById(R.id.checkNonstop);
+            final CheckBox chkTickets = (CheckBox) mAddShopDialog.findViewById(R.id.checkTickets);
+            BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
+            buttonAdd.setBootstrapBrand(mAddButtonBrand);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+            List<String> categories = new ArrayList<>();
+            categories.add(getString(R.string.popup_add_shop_small));
+            categories.add(getString(R.string.popup_add_gas_station));
+            categories.add(getString(R.string.popup_add_shop_farmer));
+            categories.add(getString(R.string.popup_add_shop_supermarket));
+            categories.add(getString(R.string.popup_add_shop_shopping_center));
 
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
-        spinner.setAdapter(dataAdapter);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        buttonAdd.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                    closeAddShopDialog();
-                    mPresenter.addMarkerToFirebase(new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude,
-                            spinner.getSelectedItem().toString(), chkPos.isChecked(),
-                            chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry()));
-                    Log.d(TAG, "addMarkerToFirebase: " + "User who added this shop is: " + mPresenter.getUserId());
-                    showProgressBar();
-                } else {
-                    spinner.setError(getString(R.string.popup_add_shop_type_error));
+            spinner.setAdapter(dataAdapter);
+
+            mAddLatitude = mCurrentLocation.latitude;
+            mAddLongitude = mCurrentLocation.longitude;
+
+            buttonAdd.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
+                        closeAddShopDialog();
+
+                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude,
+                                spinner.getSelectedItem().toString(), chkPos.isChecked(),
+                                chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry());
+
+                        showProgressBar();
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPresenter.addMarkerToFirebase(shop);
+                            }
+                        }).start();
+
+                    } else {
+                        spinner.setError(getString(R.string.popup_add_shop_type_error));
+                        hideProgressBar();
+                    }
+
                 }
-
-            }
-        });
+            });
+        }
 
         mAddShopDialog.show();
     }
@@ -1116,7 +1113,23 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void closeAddShopDialog() {
+        resetAddShopDialog();
         mAddShopDialog.dismiss();
+    }
+
+    private void resetAddShopDialog() {
+        Spinner spinner;
+        if (mAddShopDialog.getCustomView() != null) {
+            spinner = mAddShopDialog.getCustomView().findViewById(R.id.spinner_type);
+            spinner.setSelection(0);
+        }
+
+        CheckBox checkPos = mAddShopDialog.getCustomView().findViewById(R.id.checkPos);
+        checkPos.setChecked(false);
+        CheckBox checkTickets = mAddShopDialog.getCustomView().findViewById(R.id.checkTickets);
+        checkTickets.setChecked(false);
+        CheckBox checkNonstop = mAddShopDialog.getCustomView().findViewById(R.id.checkNonstop);
+        checkNonstop.setChecked(false);
     }
 
     @Override
@@ -1126,7 +1139,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             mAccuracyDialog.dismiss();
         }
 
-        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isCorrectAccuracy() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
             mAccuracyDialog.dismiss();
             showAddShopDialog();
         }

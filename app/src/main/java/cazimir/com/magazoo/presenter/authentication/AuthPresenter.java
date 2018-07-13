@@ -132,7 +132,7 @@ public class AuthPresenter implements IAuthPresenter {
 
     @Override
     public void checkIfUserLoggedInAndRedirectToMap() {
-        if (mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified()) {
+        if ((mAuthManager.getCurrentUser() != null && mAuthManager.getCurrentUser().isEmailVerified()) || isLoggedInWithFacebook()) {
             ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
             view.goToMap();
         }

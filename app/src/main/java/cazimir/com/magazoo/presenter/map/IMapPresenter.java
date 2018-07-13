@@ -13,7 +13,6 @@ public interface IMapPresenter {
     void checkIfDuplicateReport(Report currentReportedShop);
     boolean isUserLoggedIn();
     String getUserEmail();
-    void addListenerForNewMarkerAdded();
     void getAllMarkers(LatLngBounds mBounds);
     void addMarkerToFirebase(Shop markerToAdd);
     void deleteShopFromDB(String id);
