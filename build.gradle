@@ -31,3 +31,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    // App dependencies
+    junitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    powerMockito = '1.6.2'
+    runnerVersion = '1.0.2'
+    rulesVersion = '1.0.2'
+    espressoVersion = '3.0.2'
+}

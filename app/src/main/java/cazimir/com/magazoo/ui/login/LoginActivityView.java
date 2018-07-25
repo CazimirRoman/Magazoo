@@ -73,22 +73,6 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         initUI();
         redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "cazimir.com.magazoo",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
-
     }
 
     private void initUI() {
