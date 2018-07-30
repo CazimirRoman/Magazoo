@@ -10,8 +10,8 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.repository.Repository;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
+import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
@@ -23,16 +23,15 @@ public class MapPresenter implements IMapPresenter {
 
     private static final String TAG = MapPresenter.class.getSimpleName();
 
-
-    private Repository mRepository;
+    private IRepository mRepository;
     private IGeneralView mView;
-    private AuthPresenter mAuthenticationPresenter;
+    private IAuthPresenter mAuthenticationPresenter;
     private String userId;
 
-    public MapPresenter(IGeneralView mView) {
-        this.mView = mView;
-        this.mRepository = new Repository();
-        this.mAuthenticationPresenter = new AuthPresenter(mView);
+    public MapPresenter(IGeneralView view, IAuthPresenter authenticationPresenter, IRepository repository) {
+        this.mView = view;
+        this.mRepository = repository;
+        this.mAuthenticationPresenter = authenticationPresenter;
         this.userId = mAuthenticationPresenter.getUserId();
     }
 

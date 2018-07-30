@@ -83,7 +83,9 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
+import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
@@ -163,7 +165,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapPresenter(this);
+        mPresenter = new MapPresenter(this, new AuthPresenter(this), new Repository());
         setupApiClientLocation();
         setUpMap();
         checkIfOnboardingNeeded();
@@ -1021,7 +1023,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showAddShopDialog() {
+    public void showAddShopDialog() {
         hideProgressBar();
         Log.d(TAG, "showAddShopDialog: called");
         if(mAddShopDialog == null){
