@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">Magazoo</string>
+    <string name="facebook_app_id">1561514127227022</string>
+    <string name="fb_login_protocol_scheme">fb1561514127227022</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nothing" />
+
+    <string name="gps_settings">Deschide setările GPS</string>
+    <string name="internet_settings">Deschide setările de internet</string>
+
+    <!--login, register start-->
+    <string name="email_missing">Te rog să introduci o adresă de email.</string>
+    <string name="email_invalid">Nu ai introdus o adresă de email validă.\n Te rog să verifici</string>
+    <string name="email_not_verified">Te rog să îți verifici adresa de email înainte de a continua.</string>
+    <string name="password_missing">Introdu parola.</string>
+    <string name="login_failed"> Autentificare eșuată. Te rog să verifici adresa ta de e-mail sau parola.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Parola</string>
+    <string name="forgot_password_msg">Avem nevoie doar de adresa ta de e-mail pentru a-ți putea trimite instrucțiunile de resetare.</string>
+    <string name="action_settings">Settings</string>
+    <string name="password_minimum">Parola este prea scurtă. Te rog să introduci minim 6 caractere.</string>
+    <string name="login">Logare cu email</string>
+    <string name="facebook_login">Logare cu Facebook</string>
+    <string name="register">Înregistrează-te</string>
+    <string name="password_forgot">Ai uitat parola?</string>
+    <string name="password_not_matching">Parolele nu se potrivesc.</string>
+    <string name="resetPassword">Resetează parola</string>
+    <string name="email_reset_sent">Te rugăm să îți verifici email-ul. Îți vom trimite instrucțiunile de resetare a parolei.</string>
+    <string name="email_reset_sent_error">Nu am putut să îți trimitem e-mailul. Te rugăm să încerci din nou mai târziu.</string>
+    <string name="password_repeat">Repetă parola</string>
+    <!--login, register end-->
+
+    <!--popups start-->
+    <string name="popup_accuracy_error_title">"Precizia locației"</string>
+    <string name="popup_accuracy_text"> Te rugăm să aștepți. Încercăm să te localizăm …\n\nDacă te afli în interiorul unei clădiri, mergi la o fereastră sau fă câțiva păși afară. </string>
+    <string name="popup_current_accuracy">Current accuracy:</string>
+    <string name="popup_connection_error_title">"Eşti deconectat de la internet"</string>
+    <string name="popup_connection_error_text">Asigură-te că datele mobile sau conexiunea Wi-Fi sunt activate, apoi încearcă din nou.</string>
+    <string name="popup_gps_error_title">"Nu există acces la locație"</string>
+    <string name="popup_gps_error_text">Te rog să pornești conexiunea GPS pentru a te putea localiza pe hartă.</string>
+    <string name="popup_location_permission_error_title">"Permite permisiunile de locație."</string>
+    <string name="popup_location_permission_error_text">Aplicația are nevoie de locația ta pentru a putea căuta magazinele din apropiere.</string>
+    <string name="popup_shop_limit_error_title">"Limită atinsă"</string>
+    <string name="popup_shop_limit_error_text">Ai atins limita zilnică de adăugare. Întoarce-te mâine pentru a putea adăuga mai multe magazine.</string>
+    <string name="popup_close">Închide</string>
+    <!--popups end-->
+
+    <!--add shop start-->
+    <string name="popup_add_shop_title">Adaugă un magazin</string>
+    <string name="popup_add_shop_type">Tip magazin</string>
+    <string name="popup_add_shop_type_error"> Te rog să selectezi tipul magazinului</string>
+    <string name="popup_add_shop_small">Magazin de cartier</string>
+    <string name="popup_add_gas_station">Benzinărie</string>
+    <string name="popup_add_shop_farmer">Piață</string>
+    <string name="popup_add_shop_supermarket">Supermarket</string>
+    <string name="popup_add_shop_shopping_center">Centru comercial</string>
+    <string name="popup_add_shop_hypermarket">Centru comercial</string>
+
+    <!--these are the labels that are saved in the Firebase DB, careful when changing these-->
+    <string name="db_add_shop_small">Small shop</string>
+    <string name="db_add_gas_station">Gas station</string>
+    <string name="db_add_shop_farmer">Farmer\'s market</string>
+    <string name="db_add_shop_supermarket">Supermarket</string>
+    <string name="db_add_shop_shopping_center">Shopping center</string>
+    <string name="db_add_shop_hypermarket">Centru comercial</string>
+
+    <string name="popup_add_shop_button_add">Adaugă</string>
+    <string name="popup_add_shop_button_cancel">Anulare</string>
+    <string name="ok">OK</string>
+    <string name="checkbox_pos">plata cu cardul</string>
+    <string name="checkbox_tickets">tichete de masă</string>
+    <string name="checkbox_nonstop">nonstop</string>
+    <string name="thanks_adding_title">Mulțumim</string>
+    <string name="thanks_adding_text">Îți mulțumim pentru contribuția ta! Magazinul a fost adăugat pe hartă</string>
+    <!--add shop end-->
+
+    <!--shop details start-->
+    <string name="shop_type">Tip magazin</string>
+    <string name="pos">Plata cu cardul</string>
+    <string name="cash_only">Doar cash</string>
+    <string name="tickets">Bonuri de masă</string>
+    <string name="nonstop">Nonstop</string>
+    <string name="report">raportează</string>
+    <string name="navigate">navighează</string>
+    <!--shop details end-->
+
+    <!--report shop start-->
+    <string name="popup_report_shop_title">Raportează magazin</string>
+    <string name="popup_report_question">Ce doreşti să raportezi?</string>
+    <string name="popup_report_location">Magazinul nu este aici</string>
+    <string name="popup_report_247_yes">Magazinul este deschis non-stop</string>
+    <string name="popup_report_247_no">Magazinul nu este deschis nonstop</string>
+    <string name="popup_report_credit_card_yes">Acceptă plata cu cardul</string>
+    <string name="popup_report_credit_card_no">Nu acceptă plata cu cardul</string>
+    <string name="popup_report_tickets_yes">Acceptă bonuri de masă</string>
+    <string name="popup_report_tickets_no">Nu acceptă bonuri de masă</string>
+    <string name="popup_report_limit_error_title">"Limită atinsă"</string>
+    <string name="popup_report_limit_error_text">Ai atins limita ta zilnică de raportare.</string>
+    <string name="thanks_report">Mulțumim!</string>
+    <string name="details_report">Raportul tău a fost trimis!</string>
+    <!--report shop end-->
+
+    <!--navigation drawer start-->
+    <string name="tutorial">Tutorial</string>
+    <string name="share">Trimite</string>
+    <string name="send_feedback">Contactează-ne</string>
+    <string name="signout">Deconectare</string>
+    <string name="sign_in">Conectare</string>
+    <string name="send_feedback_hint">Introdu orice comentariu, întrebare, sugestie sau feedback … </string>
+    <string name="feedback_empty">Nu ai introdus niciun text.</string>
+    <string name="feedback_sent">Mulțumim! Părerea ta este importantă pentru noi</string>
+    <string name="share_text">Hei, bună! Am găsit această super aplicație pentru Android care îți arată toate magazinele din jurul tău: https://play.google.com/store/apps/details?id=cazimir.com.magazoo. Descarc-o gratuit și începe să descoperi! </string>
+    <string name="share_via">Trimite cu</string>
+    <!--navigation drawer end-->
+
+    <!--tutorial start-->
+    <string name="tutorial_welcome_title">Bine ai venit!</string>
+    <string name="tutorial_welcome_text">Cu Magazoo găsești magazine de cartier, piețe alimentare, supermarket-uri și hipermarket-uri, toate la un click distanță!</string>
+    <string name="tutorial_add_shop_title">Adaugă un magazin</string>
+    <string name="tutorial_add_shop_text"> Știi un magazin care nu se află pe hartă?\nAdaugă-l în 2 păși simpli, în acest fel vei contribui activ la comunitatea Magazoo!</string>
+    <string name="tutorial_shop_type_title">Tipuri de magazin</string>
+    <string name="tutorial_shop_type_text">Alege ce magazin îți dorești : magazine de cartier, piețe alimentare, supermarketuri și centre comerciale. </string>
+    <string name="tutorial_report_shop_title">Raportează un magazin</string>
+    <string name="tutorial_report_shop_text">Ajută comunitatea Magazoo să mentină o bază de date completă a magazinelor disponibile prin contribuția ta. Raportează magazine inexistente sau proprietăti greșite ale magazinului.</string>
+    <string name="tutorial_navigate_title">Direcții</string>
+    <string name="tutorial_navigate_text">Magazoo te localizează pe hartă și îți arată imediat calea cea mai scurtă spre magazinul tău preferat.</string>
+    <string name="about">Despre noi</string>
+    <string name="popup_add_shop_text">Magazinul va fi adăugat la locația ta curentă</string>
+    <string name="application_version">"Versiunea aplicației este: "</string>
+    <string name="developed_by">"Dezvoltată de: "</string>
+    <string name="last_update">"Ultima actualizare: "</string>
+    <!--tutorial end-->
+
+</resources>
