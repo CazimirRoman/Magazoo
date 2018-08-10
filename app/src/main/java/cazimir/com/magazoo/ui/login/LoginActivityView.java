@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,22 +76,12 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         initUI();
         redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
+    }
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "cazimir.com.magazoo",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLogoLanguageForRomanian();
     }
 
     private void initUI() {

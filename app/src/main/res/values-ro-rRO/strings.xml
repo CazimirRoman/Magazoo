@@ -33,7 +33,7 @@
 
     <!--popups start-->
     <string name="popup_accuracy_error_title">"Precizia locației"</string>
-    <string name="popup_accuracy_text"> Te rugăm să aștepți. Încercăm să te localizăm …\n\nDacă te afli în interiorul unei clădiri, mergi la o fereastră sau fă câțiva păși afară. </string>
+    <string name="popup_accuracy_text"> Te rugăm să aștepți. Încercăm să te localizăm.\n\nDacă te afli în interiorul unei clădiri, mergi la o fereastră sau fă câțiva pași afară. </string>
     <string name="popup_current_accuracy">Current accuracy:</string>
     <string name="popup_connection_error_title">"Eşti deconectat de la internet"</string>
     <string name="popup_connection_error_text">Asigură-te că datele mobile sau conexiunea Wi-Fi sunt activate, apoi încearcă din nou.</string>

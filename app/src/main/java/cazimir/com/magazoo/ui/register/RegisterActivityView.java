@@ -7,10 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,6 +46,12 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
         super.onCreate(savedInstanceState);
         mPresenter = new RegisterPresenter(this);
         btnRegisterWithEmail.setBootstrapBrand(getLoginRegisterbrand());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLogoLanguageForRomanian();
     }
 
     @Override

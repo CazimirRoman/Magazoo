@@ -73,7 +73,6 @@
     <style name="logo">
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_height">250dp</item>
-        <item name="android:src">@drawable/magazoo_logo</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 

@@ -190,6 +190,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (!networkActive()) {
             showNoInternetErrorDialog();
         }
+
+        zoomToCurrentLocation();
     }
 
     private boolean gpsActive() {
@@ -562,7 +564,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                         showLocationDialog(ACCURACY_TAG, true);
                                     }
                                 });
-                                hideProgressBar();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgressBar();
+                                    }
+                                });
                             }
                         }
                     }).start();
