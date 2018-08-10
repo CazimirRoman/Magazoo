@@ -59,6 +59,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -1174,12 +1175,26 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showAddShopDialog();
         }
 
+        mCurrentAccuracy = location.getAccuracy();
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        updateCameraBearing(mMap, location.getBearing());
+
         if (worldMapShowing()) {
             zoomToCurrentLocation();
         }
 
-        mCurrentAccuracy = location.getAccuracy();
-        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    private void updateCameraBearing(GoogleMap mMap, float bearing) {
+        if ( mMap == null) return;
+        CameraPosition camPos = CameraPosition
+                .builder(
+                        mMap.getCameraPosition()
+                )
+                .bearing(bearing)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
     }
 
     private void closeNoGpsDialog() {
