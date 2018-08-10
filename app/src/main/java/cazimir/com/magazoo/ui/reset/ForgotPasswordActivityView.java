@@ -61,6 +61,12 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IRes
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setLogoLanguageForRomanian();
+    }
+
+    @Override
     protected void setBackArrowColour() {
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);

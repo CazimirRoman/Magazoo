@@ -59,6 +59,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -190,6 +191,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (!networkActive()) {
             showNoInternetErrorDialog();
         }
+
+        zoomToCurrentLocation();
     }
 
     private boolean gpsActive() {
@@ -562,7 +565,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                         showLocationDialog(ACCURACY_TAG, true);
                                     }
                                 });
-                                hideProgressBar();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgressBar();
+                                    }
+                                });
                             }
                         }
                     }).start();
@@ -752,17 +761,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private BitmapDescriptor getIconForShop(String type) {
 
-        if (type.equals(getString(R.string.popup_add_shop_small))) {
+        if (type.equals(getString(R.string.db_add_shop_small))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
-        } else if (type.equals(getString(R.string.popup_add_shop_supermarket))) {
+        } else if (type.equals(getString(R.string.db_add_shop_supermarket))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_supermarket);
-        } else if (type.equals(getString(R.string.popup_add_shop_farmer))) {
+        } else if (type.equals(getString(R.string.db_add_shop_farmer))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
-        } else if (type.equals(getString(R.string.popup_add_shop_shopping_center))) {
+        } else if (type.equals(getString(R.string.db_add_shop_shopping_center)) || type.equals(getString(R.string.db_add_shop_hypermarket))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
-        } else if (type.equals(getString(R.string.popup_add_shop_hypermarket))) {
-            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
-        } else if (type.equals(getString(R.string.popup_add_gas_station))) {
+        } else if (type.equals(getString(R.string.db_add_gas_station))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_gas_station);
         }
 
@@ -846,22 +853,21 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private void populateShopDetails(Shop shop) {
         mCurrentOpenShopLatLng = new LatLng(shop.getLat(), shop.getLon());
 
-        if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
-            mShopTypeLabel.setText(getString(R.string.popup_add_shop_shopping_center));
-        }
-
-        mShopTypeLabel.setText(shop.getType());
-
-        if (shop.getType().equals(getString(R.string.popup_add_shop_small))) {
+        if (shop.getType().equals(getString(R.string.db_add_shop_small))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.small_shop_image));
-        } else if (shop.getType().equals(getString(R.string.popup_add_shop_farmer))) {
+            mShopTypeLabel.setText(getString(R.string.popup_add_shop_small));
+        } else if (shop.getType().equals(getString(R.string.db_add_shop_farmer))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.farmers_market_image));
-        } else if (shop.getType().equals(getString(R.string.popup_add_shop_supermarket))) {
+            mShopTypeLabel.setText(getString(R.string.popup_add_shop_farmer));
+        } else if (shop.getType().equals(getString(R.string.db_add_shop_supermarket))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.supermarket_image));
-        } else if (shop.getType().equals(getString(R.string.popup_add_shop_hypermarket))) {
+            mShopTypeLabel.setText(getString(R.string.popup_add_shop_supermarket));
+        } else if (shop.getType().equals(getString(R.string.db_add_shop_hypermarket)) || shop.getType().equals(getString(R.string.db_add_shop_shopping_center))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.hypermarket_image));
-        } else if (shop.getType().equals(getString(R.string.popup_add_gas_station))) {
+            mShopTypeLabel.setText(getString(R.string.popup_add_shop_shopping_center));
+        } else if (shop.getType().equals(getString(R.string.db_add_gas_station))) {
             mShopImage.setImageDrawable(getResources().getDrawable(R.drawable.gast_station_image));
+            mShopTypeLabel.setText(getString(R.string.popup_add_gas_station));
         }
 
         if (shop.getNonstop()) {
@@ -1024,8 +1030,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private void showAddShopDialog() {
         hideProgressBar();
         Log.d(TAG, "showAddShopDialog: called");
-        if(mAddShopDialog == null){
-
+        if (mAddShopDialog == null) {
             mAddShopDialog = buildCustomDialog(getString(R.string.popup_add_shop_title), R.layout.add_shop).build();
             final MaterialSpinner spinner = (MaterialSpinner) mAddShopDialog.findViewById(R.id.spinner_type);
             final CheckBox chkPos = (CheckBox) mAddShopDialog.findViewById(R.id.checkPos);
@@ -1054,14 +1059,14 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 @Override
                 public void onClick(View view) {
 
-                    if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
-                        closeAddShopDialog();
+                    showProgressBar();
 
-                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude,
-                                spinner.getSelectedItem().toString(), chkPos.isChecked(),
+                    if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
+
+                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude, getShopType(spinner.getSelectedItemPosition()), chkPos.isChecked(),
                                 chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry());
 
-                        showProgressBar();
+                        closeAddShopDialog();
 
                         new Thread(new Runnable() {
                             @Override
@@ -1074,16 +1079,41 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         spinner.setError(getString(R.string.popup_add_shop_type_error));
                         hideProgressBar();
                     }
-
                 }
             });
+        }else{
+            //show meal tickets checkbox if in Romania
+            if(getShopCountry().equals("Romania")){
+                mAddShopDialog.getCustomView().findViewById(R.id.checkTickets).setVisibility(View.VISIBLE);
+            }
+
+            mAddShopDialog.show();
+        }
+    }
+
+    private String getShopType(int selectedItem) {
+
+        Log.d(TAG, "getShopType: selectedItem" + selectedItem);
+
+        switch (selectedItem) {
+            case 1:
+                return getString(R.string.db_add_shop_small);
+            case 2:
+                return getString(R.string.db_add_gas_station);
+            case 3:
+                return getString(R.string.db_add_shop_farmer);
+            case 4:
+                return getString(R.string.db_add_shop_supermarket);
+            case 5:
+                return getString(R.string.db_add_shop_shopping_center);
         }
 
-        mAddShopDialog.show();
+        //should not reach this because validation is done before this method is called
+        return "";
     }
 
     private String getShopCountry() {
-        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        Geocoder gcd = new Geocoder(this, Locale.US);
         List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(mCurrentLocation.latitude, mCurrentLocation.longitude, 1);
@@ -1098,7 +1128,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private String getShopCity() {
-        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        Geocoder gcd = new Geocoder(this, Locale.US);
         List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(mCurrentLocation.latitude, mCurrentLocation.longitude, 1);
@@ -1145,12 +1175,26 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showAddShopDialog();
         }
 
+        mCurrentAccuracy = location.getAccuracy();
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        updateCameraBearing(mMap, location.getBearing());
+
         if (worldMapShowing()) {
             zoomToCurrentLocation();
         }
 
-        mCurrentAccuracy = location.getAccuracy();
-        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    private void updateCameraBearing(GoogleMap mMap, float bearing) {
+        if ( mMap == null) return;
+        CameraPosition camPos = CameraPosition
+                .builder(
+                        mMap.getCameraPosition()
+                )
+                .bearing(bearing)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
     }
 
     private void closeNoGpsDialog() {

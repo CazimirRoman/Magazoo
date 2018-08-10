@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/popup_add_shop_text"
-        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:paddingEnd="10dp"
-        android:layout_height="wrap_content"
         android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/popup_add_shop_text"
         tools:ignore="RtlSymmetry" />
 
     <fr.ganfra.materialspinner.MaterialSpinner
@@ -30,23 +30,28 @@
 
         <CheckBox
             android:id="@+id/checkPos"
-            android:layout_weight="0.3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical"
             android:text="@string/checkbox_pos" />
 
         <CheckBox
             android:id="@+id/checkTickets"
-            android:layout_weight="0.3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/checkbox_tickets" />
+            android:gravity="center_vertical"
+            android:layout_weight="0.3"
+            android:text="@string/checkbox_tickets"
+            tools:visibility="visible"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/checkNonstop"
-            android:layout_weight="0.3"
             android:layout_width="wrap_content"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:text="@string/checkbox_nonstop" />
 
     </LinearLayout>
@@ -61,13 +66,12 @@
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/buttonAdd"
             android:layout_width="wrap_content"
-            app:roundedCorners="true"
+            android:layout_height="wrap_content"
             app:bootstrapSize="xl"
             app:fontAwesomeIcon="fa_check_circle"
+            app:roundedCorners="true"
             app:showOutline="true"
-            tools:text="add"
-            android:layout_height="wrap_content"
-            />
+            tools:text="add" />
 
     </LinearLayout>
 </LinearLayout>

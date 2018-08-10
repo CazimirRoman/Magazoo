@@ -2,12 +2,17 @@ package cazimir.com.magazoo.base;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.blankj.utilcode.util.Utils;
+
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import cazimir.com.magazoo.R;
@@ -16,6 +21,7 @@ import cazimir.com.magazoo.utils.LoginRegisterBrand;
 
 public abstract class BaseActivity extends AppCompatActivity implements IGeneralView {
 
+    private static final String TAG = BaseActivity.class.getSimpleName();
     private MyAlertDialog mAlertDialog;
     private Toolbar mToolbar;
     LoginRegisterBrand loginRegisterBrand;
@@ -58,4 +64,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
 
     protected abstract int getLayoutId();
     protected abstract int setActionBarTitle();
+
+    protected void setLogoLanguageForRomanian(){
+        Log.d(TAG, "setLogoLanguageForRomanian: called");
+        if(Locale.getDefault().getLanguage().equals("ro")){
+            ImageView logo = getActivity().findViewById(R.id.logo);
+            Drawable logoDrawable = getResources().getDrawable(R.drawable.logo_magazoo_ro);
+            logo.setImageDrawable(logoDrawable);
+        }
+    }
 }
