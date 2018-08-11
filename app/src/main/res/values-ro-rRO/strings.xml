@@ -56,15 +56,6 @@
     <string name="popup_add_shop_supermarket">Supermarket</string>
     <string name="popup_add_shop_shopping_center">Centru comercial</string>
     <string name="popup_add_shop_hypermarket">Centru comercial</string>
-
-    <!--these are the labels that are saved in the Firebase DB, careful when changing these-->
-    <string name="db_add_shop_small">Small shop</string>
-    <string name="db_add_gas_station">Gas station</string>
-    <string name="db_add_shop_farmer">Farmer\'s market</string>
-    <string name="db_add_shop_supermarket">Supermarket</string>
-    <string name="db_add_shop_shopping_center">Shopping center</string>
-    <string name="db_add_shop_hypermarket">Centru comercial</string>
-
     <string name="popup_add_shop_button_add">Adaugă</string>
     <string name="popup_add_shop_button_cancel">Anulare</string>
     <string name="ok">OK</string>
@@ -74,6 +65,14 @@
     <string name="thanks_adding_title">Mulțumim</string>
     <string name="thanks_adding_text">Îți mulțumim pentru contribuția ta! Magazinul a fost adăugat pe hartă</string>
     <!--add shop end-->
+
+    <!--these are the labels that are saved in the Firebase DB, careful when changing these-->
+    <string name="db_add_shop_small">Small shop</string>
+    <string name="db_add_gas_station">Gas station</string>
+    <string name="db_add_shop_farmer">Farmer\'s market</string>
+    <string name="db_add_shop_supermarket">Supermarket</string>
+    <string name="db_add_shop_shopping_center">Shopping center</string>
+    <string name="db_add_shop_hypermarket">Centru comercial</string>
 
     <!--shop details start-->
     <string name="shop_type">Tip magazin</string>

@@ -760,7 +760,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private BitmapDescriptor getIconForShop(String type) {
-
+        Log.d(TAG, "getIconForShop: " + type);
         if (type.equals(getString(R.string.db_add_shop_small))) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_small_shop);
         } else if (type.equals(getString(R.string.db_add_shop_supermarket))) {
@@ -1093,7 +1093,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private String getShopType(int selectedItem) {
 
-        Log.d(TAG, "getShopType: selectedItem" + selectedItem);
+        Log.d(TAG, "getShopType: selectedItem " + selectedItem);
 
         switch (selectedItem) {
             case 1:
