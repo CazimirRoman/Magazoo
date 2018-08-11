@@ -1,7 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Magazoo</string>
     <string name="facebook_app_id">1561514127227022</string>
-    <string name="fb_login_protocol_scheme">fb1561514127227022</string>
+    <string name="fb_login_protocol_scheme" tools:ignore="MissingTranslation">fb1561514127227022</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nothing" />
