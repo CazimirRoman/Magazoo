@@ -72,7 +72,7 @@
     <string name="db_add_shop_farmer">Farmer\'s market</string>
     <string name="db_add_shop_supermarket">Supermarket</string>
     <string name="db_add_shop_shopping_center">Shopping center</string>
-    <string name="db_add_shop_hypermarket">Centru comercial</string>
+    <string name="db_add_shop_hypermarket">Shopping center</string>
 
     <!--shop details start-->
     <string name="shop_type">Shop type</string>
@@ -115,7 +115,7 @@
 
     <!--tutorial start-->
     <string name="tutorial_welcome_title">Welcome!</string>
-    <string name="tutorial_welcome_text">With Magazoo you can find small shops, farmer\'s markets, supermarkets and hypermarkets, all within reach!</string>
+    <string name="tutorial_welcome_text">With Magazoo you can find small shops, farmer\'s markets, supermarkets and shopping centers, all within reach!</string>
     <string name="tutorial_add_shop_title">Add shops</string>
     <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? \n Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
     <string name="tutorial_shop_type_title">Type of shops</string>

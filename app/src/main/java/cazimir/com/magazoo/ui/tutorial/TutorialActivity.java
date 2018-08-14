@@ -1,5 +1,6 @@
 package cazimir.com.magazoo.ui.tutorial;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,15 @@ import com.ramotion.paperonboarding.listeners.PaperOnboardingOnRightOutListener;
 import java.util.ArrayList;
 
 import cazimir.com.magazoo.R;
+import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.utils.CustomPaperOnboardingEngine;
 
 public class TutorialActivity extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed() {
+        startMapActivity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +34,14 @@ public class TutorialActivity extends AppCompatActivity {
         engine.setOnRightOutListener(new PaperOnboardingOnRightOutListener() {
             @Override
             public void onRightOut() {
-                finish();
+                startMapActivity();
             }
         });
+    }
 
+    private void startMapActivity() {
+        startActivity(new Intent(TutorialActivity.this, MapActivityView.class));
+        finish();
     }
 
     private ArrayList<PaperOnboardingPage> getDataForOnboarding() {

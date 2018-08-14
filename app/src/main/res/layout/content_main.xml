@@ -39,7 +39,7 @@
         card_view:cardCornerRadius="10dp"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,9 +78,9 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="vertical"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:layout_height="match_parent">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/nonstop_label"
@@ -127,46 +127,52 @@
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:id="@+id/button_report"
                     android:layout_width="match_parent"
-                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:textSize="30sp"
-                    tools:text="@string/report"
-                    card_view:roundedCorners="true"
+                    android:layout_weight="0.3"
                     app:bootstrapBrand="warning"
                     card_view:bootstrapSize="lg"
                     card_view:fontAwesomeIcon="fa_exclamation_circle"
-                    card_view:showOutline="true" />
+                    card_view:roundedCorners="true"
+                    card_view:showOutline="true"
+                    tools:text="@string/report" />
 
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:id="@+id/button_navigate"
-                    card_view:roundedCorners="true"
                     android:layout_width="match_parent"
-                    tools:text="@string/navigate"
-                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
+                    android:layout_weight="0.3"
                     app:bootstrapBrand="info"
                     card_view:bootstrapSize="lg"
                     card_view:fontAwesomeIcon="fa_location_arrow"
-                    card_view:showOutline="true" />
+                    card_view:roundedCorners="true"
+                    card_view:showOutline="true"
+                    tools:text="@string/navigate" />
 
                 <com.beardedhen.androidbootstrap.BootstrapButton
                     android:id="@+id/button_delete"
-                    card_view:roundedCorners="true"
                     android:layout_width="match_parent"
-                    tools:text="@string/navigate"
-                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
+                    android:layout_weight="0.3"
                     app:bootstrapBrand="danger"
-                    card_view:bootstrapSize="lg"
+                    card_view:bootstrapSize="md"
                     card_view:fontAwesomeIcon="fa_remove"
-                    card_view:showOutline="true" />
+                    card_view:roundedCorners="true"
+                    card_view:showOutline="true"
+                    tools:text="@string/navigate" />
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/shop_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="id"
+            android:visibility="invisible" />
 
     </android.support.v7.widget.CardView>
 
