@@ -108,11 +108,11 @@
     <string name="tutorial_welcome_title">Bine ai venit!</string>
     <string name="tutorial_welcome_text">Cu Magazoo găsești magazine de cartier, piețe alimentare, supermarket-uri și centre comerciale, toate la un click distanță!</string>
     <string name="tutorial_add_shop_title">Adaugă un magazin</string>
-    <string name="tutorial_add_shop_text"> Știi un magazin care nu se află pe hartă?\nAdaugă-l în 2 păși simpli, în acest fel vei contribui activ la comunitatea Magazoo!</string>
+    <string name="tutorial_add_shop_text">Magazinul nu este trecut pe hartă? Adaugă-l în doi pași simpli, astfel contribui la comunitatea Magazoo!</string>
     <string name="tutorial_shop_type_title">Tipuri de magazin</string>
-    <string name="tutorial_shop_type_text">Alege ce magazin îți dorești : magazine de cartier, piețe alimentare, supermarketuri și centre comerciale. </string>
+    <string name="tutorial_shop_type_text">Ce tip de magazin cauți, alege între: magazin de cartier, piață, supermarket sau centru comercial.</string>
     <string name="tutorial_report_shop_title">Raportează un magazin</string>
-    <string name="tutorial_report_shop_text">Ajută comunitatea Magazoo să mentină o bază de date completă a magazinelor disponibile prin contribuția ta. Raportează magazine inexistente sau proprietăti greșite ale magazinului.</string>
+    <string name="tutorial_report_shop_text">Magazinul de pe hartă nu mai există? Raportează-l și Magazoo îl va șterge.</string>
     <string name="tutorial_navigate_title">Direcții</string>
     <string name="tutorial_navigate_text">Magazoo te localizează pe hartă și îți arată calea cea mai scurtă spre magazinul ales.</string>
     <string name="about">Despre noi</string>
