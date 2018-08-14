@@ -8,8 +8,11 @@ exports.modifyShopProperty = functions.database
     .onWrite((change, context) => {
 
         var reportedShopId = change.after.child("shopId").val();
+        console.log('Reported shop ID: ' + reportedShopId)
         var typeOfReport = change.after.child("regards").val();
+        console.log('Type of report: ' + typeOfReport)
         var valueOfReport = change.after.child("howIsIt").val();
+        console.log('Value of report: ' + valueOfReport)
         //get all reports matching the reported shop id
         return admin.database().ref('/Reports')
             .orderByChild('shopId').equalTo(reportedShopId)

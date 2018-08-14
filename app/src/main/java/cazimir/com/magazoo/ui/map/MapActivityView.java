@@ -41,6 +41,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -563,6 +565,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                                 mAddLatitude = mCurrentLocation.latitude;
                                                 mAddLongitude = mCurrentLocation.longitude;
                                                 showAddShopDialog();
+                                                hideProgressBar();
                                             }
                                         });
                                     }
@@ -573,6 +576,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                             @Override
                                             public void run() {
                                                 showAddLimitAlertPopup();
+                                                hideProgressBar();
                                             }
                                         });
 
@@ -718,10 +722,19 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             report_pos.setText(getString(R.string.popup_report_credit_card_no));
         }
 
-        if (mTicketsLabel.getVisibility() == View.INVISIBLE) {
-            report_tickets.setText(getString(R.string.popup_report_tickets_yes));
-        } else {
-            report_tickets.setText(getString(R.string.popup_report_tickets_no));
+        if(!inRomania(mCurrentLocation)){
+
+            //hiding the meal tickets report for other countries than Romania by setting width to 0.
+            //set Visibility does not work for BootstrapButton. Opened an Issue on github : https://github.com/Bearded-Hen/Android-Bootstrap/issues/220
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) report_tickets.getLayoutParams();
+            lp.width = 0;
+            report_tickets.setLayoutParams(lp);
+
+            if (mTicketsLabel.getVisibility() == View.INVISIBLE) {
+                report_tickets.setText(getString(R.string.popup_report_tickets_yes));
+            } else {
+                report_tickets.setText(getString(R.string.popup_report_tickets_no));
+            }
         }
 
         report_location.setOnClickListener(new OnClickListener() {
@@ -1091,7 +1104,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAddShopDialog() {
-        hideProgressBar();
         Log.d(TAG, "showing add shop dialog");
         if (mAddShopDialog == null) {
             Log.d(TAG, "showAddShopDialog: new one");
@@ -1103,7 +1115,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
             buttonAdd.setBootstrapBrand(mAddButtonBrand);
 
-            if (getShopCountry().equals("Romania")) {
+            if (inRomania(mCurrentLocation)) {
+                Log.d(TAG, "Country is Romania");
                 chkTickets.setVisibility(View.VISIBLE);
             }
 

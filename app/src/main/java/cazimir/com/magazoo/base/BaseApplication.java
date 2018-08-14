@@ -1,6 +1,7 @@
 package cazimir.com.magazoo.base;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.crashlytics.android.Crashlytics;
@@ -12,7 +13,7 @@ import org.slf4j.helpers.Util;
 import cazimir.com.magazoo.BuildConfig;
 import io.fabric.sdk.android.Fabric;
 
-public class BaseApplication extends Application {
+public class BaseApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();

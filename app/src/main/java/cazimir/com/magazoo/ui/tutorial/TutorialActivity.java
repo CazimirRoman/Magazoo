@@ -73,7 +73,7 @@ public class TutorialActivity extends AppCompatActivity {
     private int getLocaleDrawable() {
 
         if(Locale.getDefault().getLanguage().equals("ro")){
-           return R.drawable.tutorial_add_shop_RO;
+           return R.drawable.tutorial_add_shop_ro;
         }
         return R.drawable.tutorial_add_shop;
 
