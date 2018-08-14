@@ -16,6 +16,9 @@ import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
 
+import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
+import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
+
 /**
  * TODO: Add a class header comment!
  */
@@ -137,7 +140,7 @@ public class MapPresenter implements IMapPresenter {
 
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
 
-        if(userId.equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")|| userId.equals("cJEabMRtfLc6h5fHxSuJpJegnNE3")){
+        if(userId.equals(CAZIMIR)|| userId.equals(ANA_MARIA)){
             mapActivityView.isAllowedToAdd();
             return;
         }

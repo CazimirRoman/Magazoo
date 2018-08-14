@@ -66,14 +66,6 @@
     <string name="thanks_adding_text">Thank you for your contribution! The shop has been added to the map</string>
     <!--add shop end-->
 
-    <!--these are the labels that are saved in the Firebase DB, careful when changing these-->
-    <string name="db_add_shop_small">Small shop</string>
-    <string name="db_add_gas_station">Gas station</string>
-    <string name="db_add_shop_farmer">Farmer\'s market</string>
-    <string name="db_add_shop_supermarket">Supermarket</string>
-    <string name="db_add_shop_shopping_center">Shopping center</string>
-    <string name="db_add_shop_hypermarket">Shopping center</string>
-
     <!--shop details start-->
     <string name="shop_type">Shop type</string>
     <string name="pos">Credit cards accepted</string>

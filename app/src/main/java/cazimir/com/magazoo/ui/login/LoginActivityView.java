@@ -183,6 +183,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     public void checkIfOnboardingNeeded() {
         if (isFirstRun()) {
             startTutorialActivity();
+            finish();
         }else{
             goToMap();
         }

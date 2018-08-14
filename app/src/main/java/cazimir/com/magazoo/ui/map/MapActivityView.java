@@ -100,17 +100,18 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 
 import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
+import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
 import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
 import static cazimir.com.magazoo.constants.Constants.FASTEST_INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
 import static cazimir.com.magazoo.constants.Constants.HYPERMARKET;
-import static cazimir.com.magazoo.constants.Constants.INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.SHOPPING_CENTER;
 import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
 import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
+import static cazimir.com.magazoo.constants.Constants.UPDATE_INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.WORLD_MAP_TAG;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -210,7 +211,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         // Create the location request to start receiving updates
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
         // Create LocationSettingsRequest object using location request
@@ -223,7 +224,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -234,6 +234,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
@@ -322,10 +323,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                setMyLocationEnabled();
                 setUpClusterer();
                 setMapTheme();
                 getMapBounds();
-                setMyLocationEnabled();
                 setOnCameraChangeListener();
                 mMap.setIndoorEnabled(false);
                 mMap.setBuildingsEnabled(false);
@@ -603,6 +604,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private boolean isCorrectAccuracy() {
         Log.d(TAG, "currentAccuracy: " + mCurrentAccuracy);
+
+        if(mPresenter.getUserId().equals(ANA_MARIA)){
+            return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED_BAM;
+        }
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
 
     }
@@ -1001,17 +1006,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void setMyLocationEnabled() {
-
         if (ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             setUpMyLocationButton();
-            zoomToCurrentLocation();
-        } else {
-            requestLocationPermissions();
         }
-
     }
 
     private void setUpMyLocationButton() {
@@ -1036,13 +1036,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            requestLocationPermissions();
             return;
         }
         locationClient.getLastLocation()
@@ -1051,6 +1045,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
+                            zoomToCurrentLocation();
                             onLocationChanged(location);
                         }
                     }
@@ -1065,6 +1060,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void animateToCurrentLocation() {
+        Log.d(TAG, "animateToCurrentLocation");
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, Constants.ZOOM_LEVEL_DESIRED));
     }
 
@@ -1082,11 +1078,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (requestCode == Constants.MY_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
-                if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(WORLD_MAP_TAG)) {
-                    mAccuracyDialog.dismiss();
-                    zoomToCurrentLocation();
-                }
-
+                zoomToCurrentLocation();
             } else {
                 Util.buildDialog(this, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
             }
@@ -1240,7 +1232,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
-        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(WORLD_MAP_TAG)) {
+        Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
+
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(WORLD_MAP_TAG)) {
             mAccuracyDialog.dismiss();
         }
 
@@ -1253,10 +1247,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-        updateCameraBearing(mMap, location.getBearing());
 
         if (worldMapShowing()) {
             zoomToCurrentLocation();
+        }else{
+            updateCameraBearing(mMap, location.getBearing());
         }
 
     }
