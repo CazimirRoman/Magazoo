@@ -549,6 +549,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         fabAddShop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                mAddLatitude = mCurrentLocation.latitude;
+                mAddLongitude = mCurrentLocation.longitude;
                 Log.d(TAG, "fabAddShop: clicked");
                 showProgressBar();
                 if (networkActive()) {
@@ -562,8 +564,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                mAddLatitude = mCurrentLocation.latitude;
-                                                mAddLongitude = mCurrentLocation.longitude;
                                                 showAddShopDialog();
                                                 hideProgressBar();
                                             }
