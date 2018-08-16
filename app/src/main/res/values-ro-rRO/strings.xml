@@ -14,6 +14,8 @@
     <string name="email_not_verified">Te rog să îți verifici adresa de email înainte de a continua.</string>
     <string name="password_missing">Introdu parola.</string>
     <string name="login_failed"> Autentificare eșuată. Te rog să verifici adresa ta de e-mail sau parola.</string>
+    <string name="register_failed">Înregistrare eșuată. Te rog să verifici adresa ta de e-mail sau parola.</string>
+    <string name="email_sent">"Emailul de confirmare a fost trimis la: "</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Parola</string>
     <string name="forgot_password_msg">Avem nevoie doar de adresa ta de e-mail pentru a-ți putea trimite instrucțiunile de resetare.</string>

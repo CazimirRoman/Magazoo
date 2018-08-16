@@ -1,5 +1,6 @@
 package cazimir.com.magazoo.presenter.register;
 
+import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
@@ -22,7 +23,7 @@ public class RegisterPresenter implements IRegisterPresenter {
         mAuthPresenter.register(new OnRegisterWithEmailFinishedListener() {
             @Override
             public void onRegisterWithEmailSuccess(String email) {
-                getRegisterActivityView().showToast("Confirmation email sent to: " + email);
+                getRegisterActivityView().showToast(getRegisterActivityView().getActivity().getString(R.string.email_sent) + email);
                 getRegisterActivityView().redirectToLoginPage();
                 getRegisterActivityView().hideProgressBar();
             }
