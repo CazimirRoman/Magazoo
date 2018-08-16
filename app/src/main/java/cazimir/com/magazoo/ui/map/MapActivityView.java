@@ -451,7 +451,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAboutDialog() {
-        Util.buildDialog(this, getString(R.string.about), getString(R.string.application_version) + BuildConfig.VERSION_NAME + "\n" + getString(R.string.developed_by) + "cazimir.roman@gmail.com" + "\n" + getString(R.string.last_update) + BuildConfig.APP_LAST_UPDATE, 0).show();
+        Util.buildDialog(this, getString(R.string.about), getString(R.string.application_version)
+                + BuildConfig.VERSION_NAME + "\n" + getString(R.string.developed_by) + "cazimir.roman@gmail.com"
+                + "\n" + getString(R.string.last_update) + new Date(String.valueOf(BuildConfig.APP_LAST_UPDATE)), 0).show();
     }
 
     private void shareApplication() {

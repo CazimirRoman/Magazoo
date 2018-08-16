@@ -9,20 +9,20 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         multiDexEnabled true
-        versionCode 15
-        versionName "2.4"
+        versionCode 16
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            buildConfigField "String", "APP_LAST_UPDATE", "\"14.08.2018\""
+            buildConfigField "java.util.Date", "APP_LAST_UPDATE", "new java.util.Date(" + System.currentTimeMillis() + "L)"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
-            buildConfigField "String", "APP_LAST_UPDATE", "\"14.08.2018\""
+            buildConfigField "java.util.Date", "APP_LAST_UPDATE", "new java.util.Date(" + System.currentTimeMillis() + "L)"
             splits.abi.enable = false
             splits.density.enable = false
             aaptOptions.cruncherEnabled = false
