@@ -6,7 +6,7 @@ public class Constants {
     public static final String ANA_MARIA = "cJEabMRtfLc6h5fHxSuJpJegnNE3";
 
     public static final String ACCURACY_TAG = "ACCURACY_TAG";
-    public static final String WORLD_MAP_TAG = "WORLD_MAP_TAG";
+    public static final String LOCATION_TAG = "LOCATION_TAG";
     public static final String INTERNET_TAG = "INTERNET_TAG";
     public static final String GPS_TAG = "GPS_TAG";
     public static final String ID_PLACEHOLDER = "check model property for id";
@@ -14,7 +14,7 @@ public class Constants {
     public static final long UPDATE_INTERVAL = 5000;  /* 5 secs */
     public static final long FASTEST_INTERVAL = 2000; /* 2 secs */
     public static final int ACCURACY_DESIRED = 10;
-    public static final int ACCURACY_DESIRED_BAM = 15;
+    public static final int ACCURACY_DESIRED_BAM = 20;
     public static final int ZOOM_LEVEL_DESIRED = 18;
     public static final int ADD_SHOP_LIMIT = 5;
     public static final int REPORT_SHOP_LIMIT = 5;

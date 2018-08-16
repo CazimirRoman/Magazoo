@@ -42,7 +42,6 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,7 +113,7 @@ import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
 import static cazimir.com.magazoo.constants.Constants.UPDATE_INTERVAL;
-import static cazimir.com.magazoo.constants.Constants.WORLD_MAP_TAG;
+import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class MapActivityView extends BaseActivity implements IMapActivityView, LocationListener, OnErrorHandledListener {
@@ -146,6 +145,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private MapPresenter mPresenter;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
     private GoogleMap mMap;
     private ClusterManager<Shop> mClusterManager;
     private float mCurrentAccuracy = 0;
@@ -158,6 +159,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mAddShopDialog;
     private MaterialDialog mFeedbackDialog;
     private MaterialDialog mAccuracyDialog;
+    private MaterialDialog mLocationDialog;
     private MaterialDialog mNoGpsDialog;
     private MaterialDialog mNoInternetDialog;
     private BootstrapBrand mAddButtonBrand;
@@ -170,6 +172,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private Drawable hypermarkerDetailsImage;
     private Drawable gasStationDetailsImage;
     private boolean animatingToMarker = false;
+    private MaterialDialog mAllowLocationDialog;
 
     @Override
     protected void onStart() {
@@ -202,15 +205,25 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new MapPresenter(this);
-        startLocationUpdates();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    onLocationChanged(location);
+                }
+            }
+        };
+
+        //startLocationUpdates();
         setUpMap();
         initUI();
         setupNavigationDrawer();
-        showLocationDialog(WORLD_MAP_TAG, false);
     }
 
     private void startLocationUpdates() {
-        // Create the location request to start receiving updates
+
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -227,24 +240,27 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
 
-        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-                        onLocationChanged(locationResult.getLastLocation());
-                    }
-                },
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback,
                 Looper.myLooper());
+    }
+
+    private boolean locationPermissionGranted() {
+        return ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void showAllowLocationDialog() {
+        if (mAllowLocationDialog == null) {
+            mAllowLocationDialog = Util.buildDialog(this, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
+            return;
+        }
+
+        mAllowLocationDialog.show();
+
+        Log.d(TAG, "showAllowLocationDialog: called");
     }
 
     @Override
@@ -254,8 +270,17 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
         if (gpsNotActive()) {
             showNoGPSErrorDialog();
         }
@@ -264,7 +289,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showNoInternetErrorDialog();
         }
 
-        getLastLocation();
+        if (locationPermissionGranted()) {
+            if (mFusedLocationClient != null) {
+                showLocationDialog();
+                getLastLocation();
+                startLocationUpdates();
+            }
+        } else {
+            showAllowLocationDialog();
+        }
 
         //to avoid animation breakup
         final Handler handler = new Handler();
@@ -549,8 +582,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         fabAddShop.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAddLatitude = mCurrentLocation.latitude;
-                mAddLongitude = mCurrentLocation.longitude;
                 Log.d(TAG, "fabAddShop: clicked");
                 showProgressBar();
                 if (networkActive()) {
@@ -586,7 +617,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        showLocationDialog(ACCURACY_TAG, true);
+                                        showAccuracyDialog();
                                     }
                                 });
 
@@ -609,17 +640,32 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private boolean isCorrectAccuracy() {
         Log.d(TAG, "currentAccuracy: " + mCurrentAccuracy);
 
-        if(mPresenter.getUserId().equals(ANA_MARIA)){
+        if (mPresenter.getUserId().equals(ANA_MARIA)) {
             return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED_BAM;
         }
         return mCurrentAccuracy != 0 && mCurrentAccuracy <= Constants.ACCURACY_DESIRED;
 
     }
 
-    private void showLocationDialog(String tag, boolean isCancelable) {
-        mAccuracyDialog = Util.buildCustomDialog(this, R.layout.location_dialog, isCancelable, tag).show();
-        Log.d(TAG, "mAccuracy dialog is showing: " + mAccuracyDialog.isShowing());
+    private void showAccuracyDialog() {
+
+        if (mAccuracyDialog == null) {
+            mAccuracyDialog = Util.buildCustomDialog(this, R.layout.location_dialog, true, ACCURACY_TAG).show();
+            return;
+        }
+        mAccuracyDialog.show();
     }
+
+    private void showLocationDialog() {
+        Log.d(TAG, "showLocationDialog: called");
+        if (mLocationDialog == null) {
+            mLocationDialog = Util.buildCustomDialog(this, R.layout.location_dialog, false, LOCATION_TAG).show();
+            return;
+        }
+        mLocationDialog.show();
+    }
+
+
 
     private void showNoGPSErrorDialog() {
         if (mNoGpsDialog == null) {
@@ -722,7 +768,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             report_pos.setText(getString(R.string.popup_report_credit_card_no));
         }
 
-        if(!inRomania(mCurrentLocation)){
+        if (!inRomania(mCurrentLocation)) {
 
             //hiding the meal tickets report for other countries than Romania by setting width to 0.
             //set Visibility does not work for BootstrapButton. Opened an Issue on github : https://github.com/Bearded-Hen/Android-Bootstrap/issues/220
@@ -965,7 +1011,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     return;
                 }
 
-                if(reason == REASON_GESTURE){
+                if (reason == REASON_GESTURE) {
                     closeShopDetails();
                 }
 
@@ -1045,14 +1091,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     public void getLastLocation() {
-        // Get last known recent location using new Google Play Services SDK (v11+)
-        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermissions();
             return;
         }
-        locationClient.getLastLocation()
+        mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
@@ -1082,6 +1125,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, Constants.MY_LOCATION_REQUEST_CODE);
             return true;
         }
+
         return false;
     }
 
@@ -1089,11 +1133,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.MY_LOCATION_REQUEST_CODE) {
+            //permission granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setMyLocationEnabled();
                 zoomToCurrentLocation();
+                // permission denied
             } else {
-                Util.buildDialog(this, getString(R.string.popup_location_permission_error_title), getString(R.string.popup_location_permission_error_text), Constants.ERROR_PERMISSION).show();
+                showAllowLocationDialog();
             }
         }
     }
@@ -1247,12 +1293,14 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
 
-        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel() && mAccuracyDialog.getTag().equals(WORLD_MAP_TAG)) {
-            mAccuracyDialog.dismiss();
+        if (mLocationDialog != null && mLocationDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel()) {
+            mLocationDialog.dismiss();
         }
 
-        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isCorrectAccuracy() && mAccuracyDialog.getTag().equals(ACCURACY_TAG)) {
+        if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isCorrectAccuracy()) {
             mAccuracyDialog.dismiss();
+            mAddLatitude = location.getLatitude();
+            mAddLongitude = location.getLongitude();
             Log.d(TAG, "Dismissing accuracy dialog and showing addshopdialog");
             showAddShopDialog();
         }
@@ -1260,10 +1308,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
-
         if (worldMapShowing()) {
             zoomToCurrentLocation();
-        }else{
+        } else {
             updateCameraBearing(mMap, location.getBearing());
         }
 
