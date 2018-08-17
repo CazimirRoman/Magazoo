@@ -164,8 +164,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private MaterialDialog mNoInternetDialog;
     private BootstrapBrand mAddButtonBrand;
     private FrameLayout mProgress;
-    private double mAddLatitude;
-    private double mAddLongitude;
+    private double mAddLatitude = 0.00;
+    private double mAddLongitude = 0.00;
     private Drawable smallShopDetailsImage;
     private Drawable farmerMarketDetailsImage;
     private Drawable supermarkerDetailsImage;
@@ -173,6 +173,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private Drawable gasStationDetailsImage;
     private boolean animatingToMarker = false;
     private MaterialDialog mAllowLocationDialog;
+    private boolean animatingToUserLocation = false;
 
     @Override
     protected void onStart() {
@@ -668,7 +669,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
 
-
     private void showNoGPSErrorDialog() {
         if (mNoGpsDialog == null) {
             mNoGpsDialog = Util.buildCustomDialog(this, R.layout.no_gps_dialog, false, Constants.GPS_TAG).show();
@@ -1025,7 +1025,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             public void onCameraIdle() {
 
                 Log.d(TAG, "onCameraIdle");
-
+                animatingToUserLocation = false;
                 animatingToMarker = false;
 
                 setZoomLevel();
@@ -1087,7 +1087,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     public void zoomToCurrentLocation() {
-        if (mCurrentLocation != null) {
+        if (mCurrentLocation != null && !animatingToUserLocation) {
             animateToCurrentLocation();
         }
     }
@@ -1120,6 +1120,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private void animateToCurrentLocation() {
         Log.d(TAG, "animateToCurrentLocation");
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, Constants.ZOOM_LEVEL_DESIRED));
+        animatingToUserLocation = true;
     }
 
     public boolean requestLocationPermissions() {
@@ -1152,6 +1153,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showAddShopDialog() {
+
+        mAddLatitude = mCurrentLocation.latitude;
+        mAddLongitude = mCurrentLocation.longitude;
+
+        Toast.makeText(this, "Shop will be added at: " + mAddLatitude + " and " + mAddLongitude, Toast.LENGTH_SHORT).show();
+        if (mAddLatitude == 0.00 || mAddLongitude == 0.00) {
+            Toast.makeText(this, "Latitude or longitude is null!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Log.d(TAG, "showing add shop dialog");
         if (mAddShopDialog == null) {
             Log.d(TAG, "showAddShopDialog: new one");
@@ -1293,7 +1304,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
-        Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
 
         if (mLocationDialog != null && mLocationDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel()) {
             mLocationDialog.dismiss();
@@ -1301,8 +1312,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
         if (mAccuracyDialog != null && mAccuracyDialog.isShowing() && isCorrectAccuracy()) {
             mAccuracyDialog.dismiss();
-            mAddLatitude = location.getLatitude();
-            mAddLongitude = location.getLongitude();
             Log.d(TAG, "Dismissing accuracy dialog and showing addshopdialog");
             showAddShopDialog();
         }
