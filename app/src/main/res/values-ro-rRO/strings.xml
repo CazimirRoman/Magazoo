@@ -82,11 +82,11 @@
     <string name="popup_report_question">Ce doreşti să raportezi?</string>
     <string name="popup_report_location">Magazinul nu este aici</string>
     <string name="popup_report_247_yes">Magazinul este deschis non-stop</string>
-    <string name="popup_report_247_no">Magazinul nu este deschis nonstop</string>
+    <string name="popup_report_247_no">Magazinul nu este deschis non-stop</string>
     <string name="popup_report_credit_card_yes">Acceptă plata cu cardul</string>
     <string name="popup_report_credit_card_no">Nu acceptă plata cu cardul</string>
-    <string name="popup_report_tickets_yes">Acceptă bonuri de masă</string>
-    <string name="popup_report_tickets_no">Nu acceptă bonuri de masă</string>
+    <string name="popup_report_tickets_yes">Acceptă tichete</string>
+    <string name="popup_report_tickets_no">Nu acceptă tichete</string>
     <string name="popup_report_limit_error_title">"Limită atinsă"</string>
     <string name="popup_report_limit_error_text">Ai atins limita ta zilnică de raportare.</string>
     <string name="thanks_report">Mulțumim!</string>
