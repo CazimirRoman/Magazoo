@@ -60,9 +60,9 @@
     <string name="popup_add_shop_button_add">Adaugă</string>
     <string name="popup_add_shop_button_cancel">Anulare</string>
     <string name="ok">OK</string>
-    <string name="checkbox_pos">plata cu cardul</string>
-    <string name="checkbox_tickets">tichete de masă</string>
-    <string name="checkbox_nonstop">nonstop</string>
+    <string name="checkbox_pos">card</string>
+    <string name="checkbox_tickets">tichete</string>
+    <string name="checkbox_nonstop">non-stop</string>
     <string name="thanks_adding_title">Mulțumim</string>
     <string name="thanks_adding_text">Îți mulțumim pentru contribuția ta! Magazinul a fost adăugat pe hartă</string>
     <!--add shop end-->
@@ -71,8 +71,8 @@
     <string name="shop_type">Tip magazin</string>
     <string name="pos">Plata cu cardul</string>
     <string name="cash_only">Doar cash</string>
-    <string name="tickets">Bonuri de masă</string>
-    <string name="nonstop">Nonstop</string>
+    <string name="tickets">Tichete</string>
+    <string name="nonstop">Non-stop</string>
     <string name="report">raportează</string>
     <string name="navigate">navighează</string>
     <!--shop details end-->

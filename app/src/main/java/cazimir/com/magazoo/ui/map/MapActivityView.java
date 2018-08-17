@@ -586,6 +586,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "fabAddShop: clicked");
+                closeShopDetails();
                 showProgressBar();
                 if (networkActive()) {
                     new Thread(new Runnable() {
@@ -758,13 +759,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         BootstrapButton report_pos = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_pos);
         BootstrapButton report_tickets = (BootstrapButton) mReportDialog.findViewById(R.id.button_report_tickets);
 
-        if (mNonStopLabel.getVisibility() == View.INVISIBLE) {
+        if (mNonStopLabel.getVisibility() == View.GONE) {
             report_247.setText(getString(R.string.popup_report_247_yes));
         } else {
             report_247.setText(getString(R.string.popup_report_247_no));
         }
 
-        if (mPosLabel.getVisibility() == View.INVISIBLE) {
+        if (mPosLabel.getVisibility() == View.GONE) {
             report_pos.setText(getString(R.string.popup_report_credit_card_yes));
         } else {
             report_pos.setText(getString(R.string.popup_report_credit_card_no));
@@ -778,7 +779,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             lp.width = 0;
             report_tickets.setLayoutParams(lp);
 
-            if (mTicketsLabel.getVisibility() == View.INVISIBLE) {
+            if (mTicketsLabel.getVisibility() == View.GONE) {
                 report_tickets.setText(getString(R.string.popup_report_tickets_yes));
             } else {
                 report_tickets.setText(getString(R.string.popup_report_tickets_no));
@@ -967,21 +968,21 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (nonstop) {
             mNonStopLabel.setVisibility(View.VISIBLE);
         } else {
-            mNonStopLabel.setVisibility(View.INVISIBLE);
+            mNonStopLabel.setVisibility(View.GONE);
         }
 
         if (pos) {
             mPosLabel.setVisibility(View.VISIBLE);
-            mCashOnlyLabel.setVisibility(View.INVISIBLE);
+            mCashOnlyLabel.setVisibility(View.GONE);
         } else {
-            mPosLabel.setVisibility(View.INVISIBLE);
+            mPosLabel.setVisibility(View.GONE);
             mCashOnlyLabel.setVisibility(View.VISIBLE);
         }
 
         if (tickets) {
             mTicketsLabel.setVisibility(View.VISIBLE);
         } else {
-            mTicketsLabel.setVisibility(View.INVISIBLE);
+            mTicketsLabel.setVisibility(View.GONE);
         }
 
     }
@@ -1049,6 +1050,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void showProgressBar() {
+        Log.d(TAG, "showProgressBar: called");
         mProgress.setVisibility(View.VISIBLE);
     }
 
@@ -1174,11 +1176,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             BootstrapButton buttonAdd = (BootstrapButton) mAddShopDialog.findViewById(R.id.buttonAdd);
             buttonAdd.setBootstrapBrand(mAddButtonBrand);
 
-            if (inRomania(mCurrentLocation)) {
-                Log.d(TAG, "Country is Romania");
-                chkTickets.setVisibility(View.VISIBLE);
-            }
-
             List<String> categories = new ArrayList<>();
             categories.add(getString(R.string.popup_add_shop_small));
             categories.add(getString(R.string.popup_add_gas_station));
@@ -1227,7 +1224,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             });
         }
 
+        showViewIfInRomania(mAddShopDialog.getCustomView().findViewById(R.id.checkTickets));
+
         mAddShopDialog.show();
+    }
+
+    private void showViewIfInRomania(View view) {
+        if (inRomania(mCurrentLocation)) {
+            Log.d(TAG, "Country is Romania");
+            view.setVisibility(View.VISIBLE);
+        }
     }
 
     private String getShopType(int selectedItem) {
@@ -1351,8 +1357,11 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean worldMapShowing() {
-        Log.d(TAG, "worldMapShowing: " + String.valueOf(mMap.getCameraPosition().zoom == 2.0));
-        return mMap.getCameraPosition().zoom == 2.0;
+
+        float zoom = mMap.getCameraPosition().zoom;
+        Log.d(TAG, "worldMapShowing: " + String.valueOf(zoom >= 2.0 && zoom < 2.1));
+        Log.d(TAG, "zoom: " + mMap.getCameraPosition().zoom);
+        return zoom >= 2.0 && zoom < 2.1;
     }
 
     private void showAddLimitAlertPopup() {

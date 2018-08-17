@@ -23,6 +23,8 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

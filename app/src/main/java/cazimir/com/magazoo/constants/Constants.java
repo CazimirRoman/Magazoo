@@ -13,7 +13,7 @@ public class Constants {
     public static final int MY_LOCATION_REQUEST_CODE = 523;
     public static final long UPDATE_INTERVAL = 5000;  /* 5 secs */
     public static final long FASTEST_INTERVAL = 2000; /* 2 secs */
-    public static final int ACCURACY_DESIRED = 10;
+    public static final int ACCURACY_DESIRED = 30;
     public static final int ACCURACY_DESIRED_BAM = 20;
     public static final int ZOOM_LEVEL_DESIRED = 18;
     public static final int ADD_SHOP_LIMIT = 5;
