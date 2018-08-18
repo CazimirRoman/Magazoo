@@ -129,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     app:bootstrapBrand="warning"
                     card_view:bootstrapSize="lg"
                     card_view:fontAwesomeIcon="fa_exclamation_circle"
@@ -142,23 +142,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.5"
                     app:bootstrapBrand="info"
                     card_view:bootstrapSize="lg"
                     card_view:fontAwesomeIcon="fa_location_arrow"
-                    card_view:roundedCorners="true"
-                    card_view:showOutline="true"
-                    tools:text="@string/navigate" />
-
-                <com.beardedhen.androidbootstrap.BootstrapButton
-                    android:id="@+id/button_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="0.3"
-                    app:bootstrapBrand="danger"
-                    card_view:bootstrapSize="md"
-                    card_view:fontAwesomeIcon="fa_remove"
                     card_view:roundedCorners="true"
                     card_view:showOutline="true"
                     tools:text="@string/navigate" />

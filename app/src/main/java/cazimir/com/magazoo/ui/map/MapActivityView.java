@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -102,6 +103,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
 import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
+import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
 import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
 import static cazimir.com.magazoo.constants.Constants.FASTEST_INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
@@ -136,8 +138,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     BootstrapButton mButtonReport;
     @BindView(R.id.button_navigate)
     BootstrapButton mButtonNavigate;
-    @BindView(R.id.button_delete)
-    BootstrapButton mButtonDeleteShop;
     @BindView(R.id.shop_details)
     CardView mShopDetails;
     @BindView(R.id.shop_id)
@@ -276,6 +276,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+
+        closeShopDetails();
     }
 
     @Override
@@ -717,8 +719,16 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     private void initShopDetails() {
 
-        if (mPresenter.getUserId().equals("cJEabMRtfLc6h5fHxSuJpJegnNE3") || mPresenter.getUserId().equals("0nErC13lEHfdGcrSyZNJiNyIUHk2")) {
-            mButtonDeleteShop.setVisibility(View.VISIBLE);
+        if (mPresenter.getUserId().equals(CAZIMIR) || mPresenter.getUserId().equals(ANA_MARIA)) {
+            mShopImage.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    closeShopDetails();
+                    showProgressBar();
+                    mPresenter.deleteShopFromDB(mCurrentSelectedShop.getId());
+                    return true;
+                }
+            });
         }
 
         mButtonNavigate.setOnClickListener(new OnClickListener() {
@@ -732,15 +742,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             @Override
             public void onClick(View view) {
                 showReportDialog();
-            }
-        });
-
-        mButtonDeleteShop.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                closeShopDetails();
-                showProgressBar();
-                mPresenter.deleteShopFromDB(mCurrentSelectedShop.getId());
             }
         });
 
