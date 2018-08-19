@@ -30,28 +30,28 @@
 
         <CheckBox
             android:id="@+id/checkPos"
+            android:layout_weight="0.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
             android:gravity="center_vertical"
             android:text="@string/checkbox_pos" />
 
         <CheckBox
             android:id="@+id/checkTickets"
             android:layout_width="wrap_content"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_weight="0.3"
             android:text="@string/checkbox_tickets"
-            tools:visibility="visible"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <CheckBox
             android:id="@+id/checkNonstop"
             android:layout_width="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
+            android:gravity="center_vertical"
             android:text="@string/checkbox_nonstop" />
 
     </LinearLayout>

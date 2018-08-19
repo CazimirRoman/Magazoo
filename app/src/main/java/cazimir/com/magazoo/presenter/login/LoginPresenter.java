@@ -29,8 +29,8 @@ public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinished
 
     @Override
     public void onLoginWithEmailSuccess() {
-        getLoginActivityView().goToMap();
         getLoginActivityView().hideProgressBar();
+        getLoginActivityView().checkIfOnboardingNeeded();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinished
     @Override
     public void onLoginWithFacebookSuccess() {
         getLoginActivityView().hideProgressBar();
-        getLoginActivityView().goToMap();
+        getLoginActivityView().checkIfOnboardingNeeded();
     }
 
     @Override

@@ -32,8 +32,10 @@ public class Report {
         return howIsIt;
     }
 
-    public boolean isNotResolved() {
-        return !resolved;
+    //carefull when changing these getters. it could mess up the automatic deletion and change of the
+    // shop properties in Firebase
+    public boolean isResolved() {
+        return resolved;
     }
 
     public String getReportedBy() {

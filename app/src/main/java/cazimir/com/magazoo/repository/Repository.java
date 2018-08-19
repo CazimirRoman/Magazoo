@@ -184,7 +184,8 @@ public class Repository implements IRepository {
 
                 for (DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {
                     Report report = reportSnapshot.getValue(Report.class);
-                    if(report.isNotResolved()){
+                    assert report != null;
+                    if(!report.isResolved()){
                         reports.add(report);
                     }
                 }

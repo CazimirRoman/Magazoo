@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorWhite"
+            android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -45,20 +45,21 @@
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <FrameLayout
-        android:layout_width="wrap_content"
         android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="invisible"
-        tools:visibility="visible"
-        android:layout_gravity="bottom|center"
-        android:layout_height="wrap_content">
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|center"
+        tools:visibility="visible">
 
         <com.wang.avi.AVLoadingIndicatorView
-            app:indicatorColor="@color/colorPrimary"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:paddingTop="10dp"
             android:layout_height="match_parent"
-            app:indicatorName="BallPulseSyncIndicator"
-             />
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            app:indicatorColor="@color/colorPrimary"
+            app:indicatorName="BallPulseSyncIndicator" />
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

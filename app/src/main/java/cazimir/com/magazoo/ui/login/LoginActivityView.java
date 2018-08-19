@@ -1,18 +1,14 @@
 package cazimir.com.magazoo.ui.login;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -21,10 +17,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,11 +29,13 @@ import cazimir.com.magazoo.presenter.login.LoginPresenter;
 import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
+import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnFormValidatedListener;
 import cazimir.com.magazoo.utils.UtilHelperClass;
 
 public class LoginActivityView extends BaseActivity implements ILoginActivityView {
 
+    private static final String TAG = LoginActivityView.class.getSimpleName();
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.etPassword)
@@ -173,6 +167,36 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     public void goToMap() {
         startActivity(new Intent(LoginActivityView.this, MapActivityView.class));
         finish();
+    }
+
+    @Override
+    public void checkIfOnboardingNeeded() {
+        if (isFirstRun()) {
+            startTutorialActivity();
+            finish();
+        }else{
+            goToMap();
+        }
+    }
+
+    private void startTutorialActivity() {
+        startActivity(new Intent(this, TutorialActivity.class));
+    }
+
+    private boolean isFirstRun() {
+        Boolean mFirstRun;
+        Log.d(TAG, "isFirstRun");
+
+        SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
+        mFirstRun = mPreferences.getBoolean(mAuthPresenter.getUserId(), true);
+        if (mFirstRun) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putBoolean(mAuthPresenter.getUserId(), false);
+            editor.apply();
+            return true;
+        }
+
+        return false;
     }
 
     @Override

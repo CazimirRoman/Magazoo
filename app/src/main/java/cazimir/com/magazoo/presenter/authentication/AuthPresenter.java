@@ -21,6 +21,7 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookFinishedListener;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
+import cazimir.com.magazoo.ui.register.IRegisterActivityView;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsSent;
 
@@ -49,6 +50,8 @@ public class AuthPresenter implements IAuthPresenter {
                                 listener.onLoginWithEmailFailed(getLoginActivityView().getActivity().getString(R.string.email_not_verified));
 
                             }
+                        } else {
+                            listener.onLoginWithEmailFailed(getLoginActivityView().getActivity().getString(R.string.login_failed));
                         }
                     }
                 });
@@ -60,7 +63,7 @@ public class AuthPresenter implements IAuthPresenter {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    registerPresenter.onRegisterWithEmailFailed(task.getException().getMessage());
+                    registerPresenter.onRegisterWithEmailFailed(getRegisterActivityView().getActivity().getString(R.string.register_failed));
                 } else {
                     final FirebaseUser user = mAuthManager.getCurrentUser();
                     if (user != null && !user.isEmailVerified()) {
@@ -70,8 +73,6 @@ public class AuthPresenter implements IAuthPresenter {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             registerPresenter.onRegisterWithEmailSuccess(user.getEmail());
-                                        } else {
-                                            registerPresenter.onRegisterWithEmailFailed(task.getException().getMessage());
                                         }
                                     }
                                 });
@@ -177,5 +178,9 @@ public class AuthPresenter implements IAuthPresenter {
 
     private ILoginActivityView getLoginActivityView() {
         return (ILoginActivityView) this.mView.getInstance();
+    }
+
+    private IRegisterActivityView getRegisterActivityView() {
+        return (IRegisterActivityView) this.mView.getInstance();
     }
 }

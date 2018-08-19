@@ -3,6 +3,8 @@ package cazimir.com.magazoo.base;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +13,10 @@ import android.widget.ImageView;
 
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.blankj.utilcode.util.Utils;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -72,5 +77,23 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
             Drawable logoDrawable = getResources().getDrawable(R.drawable.logo_magazoo_ro);
             logo.setImageDrawable(logoDrawable);
         }
+    }
+
+    protected boolean inRomania(LatLng location){
+        Geocoder gcd = new Geocoder(this, Locale.US);
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(location.latitude, location.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            if(addresses.get(0).getCountryName().equals("Romania")){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }

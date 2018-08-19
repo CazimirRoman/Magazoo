@@ -37,10 +37,11 @@ public class Util {
 
     public static MaterialDialog.Builder buildDialog(final Context context, String title, final String content, final int errorType) {
 
-        final OnErrorHandledListener listener = (OnErrorHandledListener) context;
+        final OnErrorHandledListener callback = (OnErrorHandledListener) context;
 
         return new MaterialDialog.Builder(context)
                 .title(title)
+                .cancelable(errorType != Constants.ERROR_PERMISSION)
                 .content(content)
                 .positiveText(R.string.ok)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -51,7 +52,7 @@ public class Util {
                                 dialog.dismiss();
                                 break;
                             case Constants.ERROR_PERMISSION:
-                                listener.requestLocationPermissions();
+                                callback.requestLocationPermissions();
                                 break;
                             default:
                                 dialog.dismiss();
