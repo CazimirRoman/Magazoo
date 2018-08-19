@@ -3,55 +3,51 @@ package cazimir.com.magazoo.presenter.login;
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
-import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
-import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
+import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 
-public class LoginPresenter implements ILoginPresenter, OnLoginWithEmailFinishedListener, OnLoginWithFacebookFinishedListener {
+public class LoginPresenter implements ILoginPresenter {
 
-    private IGeneralView mView;
-    private AuthPresenter mAuthPresenter;
+    private ILoginActivityView mLoginActivityView;
+    private IAuthPresenter mAuth;
 
-    public LoginPresenter(IGeneralView view) {
-        mView = view;
-        mAuthPresenter = new AuthPresenter(mView);
+    public LoginPresenter(ILoginActivityView view, IAuthPresenter authPresenter) {
+        mLoginActivityView = view;
+        mAuth = authPresenter;
     }
 
     public void performLoginWithEmail(String email, String password) {
-        mAuthPresenter.login(this, email, password);
+        mAuth.login(new OnLoginWithEmailCallback() {
+            @Override
+            public void onSuccess() {
+                mLoginActivityView.hideProgressBar();
+                mLoginActivityView.checkIfOnboardingNeeded();
+            }
+
+            @Override
+            public void onFailed(String error) {
+                mLoginActivityView.hideProgressBar();
+                mLoginActivityView.showToast(error);
+            }
+        }, email, password);
     }
 
     @Override
     public FacebookCallback<LoginResult> performLoginWithFacebook() {
-        return mAuthPresenter.loginWithFacebook(this);
-    }
+        return mAuth.loginWithFacebook(new OnLoginWithFacebookCallback() {
+            @Override
+            public void onSuccess() {
+                mLoginActivityView.hideProgressBar();
+                mLoginActivityView.checkIfOnboardingNeeded();
+            }
 
-    @Override
-    public void onLoginWithEmailSuccess() {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().checkIfOnboardingNeeded();
-    }
-
-    @Override
-    public void onLoginWithEmailFailed(String error) {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().showToast(error);
-    }
-
-    @Override
-    public void onLoginWithFacebookSuccess() {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().checkIfOnboardingNeeded();
-    }
-
-    @Override
-    public void onLoginWithFacebookFailed(String error) {
-        getLoginActivityView().hideProgressBar();
-        getLoginActivityView().showToast(error);
-    }
-
-    private ILoginActivityView getLoginActivityView() {
-        return (ILoginActivityView) mView.getInstance();
+            @Override
+            public void onFailed(String error) {
+                mLoginActivityView.hideProgressBar();
+                mLoginActivityView.showToast(error);
+            }
+        });
     }
 }

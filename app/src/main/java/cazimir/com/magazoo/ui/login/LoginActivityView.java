@@ -30,12 +30,15 @@ import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
-import cazimir.com.magazoo.utils.OnFormValidatedListener;
+import cazimir.com.magazoo.utils.OnFormValidatedCallback;
 import cazimir.com.magazoo.utils.UtilHelperClass;
+
+import static cazimir.com.magazoo.utils.UtilHelperClass.validateFormData;
 
 public class LoginActivityView extends BaseActivity implements ILoginActivityView {
 
     private static final String TAG = LoginActivityView.class.getSimpleName();
+
     @BindView(R.id.etEmail)
     EditText etEmail;
     @BindView(R.id.etPassword)
@@ -64,9 +67,9 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLoginPresenter = new LoginPresenter(this);
-        mFacebookCallbackManager = CallbackManager.Factory.create();
         mAuthPresenter = new AuthPresenter(this);
+        mLoginPresenter = new LoginPresenter(this, mAuthPresenter);
+        mFacebookCallbackManager = CallbackManager.Factory.create();
         initUI();
         redirectToMapScreenIfLoggedIn();
         configureFacebookLogin();
@@ -108,14 +111,14 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
                     showProgressBar();
                     String email = etEmail.getText().toString();
                     String password = etPassword.getText().toString();
-                    UtilHelperClass.validateFormData(new OnFormValidatedListener() {
+                    validateFormData(new OnFormValidatedCallback() {
                         @Override
-                        public void onValidateSuccess(String email, String password) {
+                        public void onSuccess(String email, String password) {
                             mLoginPresenter.performLoginWithEmail(email, password);
                         }
 
                         @Override
-                        public void onValidateFail(String what) {
+                        public void onFailed(String what) {
 
                             hideProgressBar();
 

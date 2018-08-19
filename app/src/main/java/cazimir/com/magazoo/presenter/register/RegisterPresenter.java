@@ -1,42 +1,38 @@
 package cazimir.com.magazoo.presenter.register;
 
 import cazimir.com.magazoo.R;
-import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
-import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
+import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 
 /**
  * Handles the registration process
  */
 public class RegisterPresenter implements IRegisterPresenter {
 
-    private IGeneralView mView;
-    private AuthPresenter mAuthPresenter;
+    private IRegisterActivityView mRegisterActivityView;
+    private IAuthPresenter mAuthPresenter;
 
-    public RegisterPresenter(IGeneralView view) {
-        mView = view;
-        mAuthPresenter = new AuthPresenter(mView);
+    public RegisterPresenter(IRegisterActivityView view, IAuthPresenter authPresenter) {
+        mRegisterActivityView = view;
+        mAuthPresenter = authPresenter;
     }
 
     public void performRegisterWithEmail(String email, String password) {
-        mAuthPresenter.register(new OnRegisterWithEmailFinishedListener() {
+        mAuthPresenter.register(new OnRegisterWithEmailCallback() {
             @Override
-            public void onRegisterWithEmailSuccess(String email) {
-                getRegisterActivityView().showToast(getRegisterActivityView().getActivity().getString(R.string.email_sent) + email);
-                getRegisterActivityView().redirectToLoginPage();
-                getRegisterActivityView().hideProgressBar();
+            public void onSuccess(String email) {
+                mRegisterActivityView.showRegistrationConfirmationToast(email);
+                mRegisterActivityView.redirectToLoginPage();
+                mRegisterActivityView.hideProgressBar();
             }
 
             @Override
-            public void onRegisterWithEmailFailed(String error) {
-                getRegisterActivityView().hideProgressBar();
-                getRegisterActivityView().showToast(error);
+            public void onFailed(String error) {
+                mRegisterActivityView.hideProgressBar();
+                mRegisterActivityView.showToast(error);
             }
         }, email, password);
-    }
-
-    private IRegisterActivityView getRegisterActivityView() {
-        return (IRegisterActivityView) mView.getInstance();
     }
 }

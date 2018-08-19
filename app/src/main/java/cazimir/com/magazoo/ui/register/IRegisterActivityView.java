@@ -8,6 +8,7 @@ import cazimir.com.magazoo.base.IGeneralView;
 public interface IRegisterActivityView extends IGeneralView {
     void redirectToLoginPage();
     void showToast(String message);
+    void showRegistrationConfirmationToast(String email);
     void showProgressBar();
     void hideProgressBar();
 }

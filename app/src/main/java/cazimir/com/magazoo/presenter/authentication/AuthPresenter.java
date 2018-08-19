@@ -18,12 +18,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.IGeneralView;
-import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookFinishedListener;
+import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
-import cazimir.com.magazoo.ui.login.OnLoginWithEmailFinishedListener;
+import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
-import cazimir.com.magazoo.ui.register.OnRegisterWithEmailFinishedListener;
-import cazimir.com.magazoo.ui.reset.OnResetInstructionsSent;
+import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
+import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 
 public class AuthPresenter implements IAuthPresenter {
 
@@ -36,7 +36,7 @@ public class AuthPresenter implements IAuthPresenter {
     }
 
     @Override
-    public void login(final OnLoginWithEmailFinishedListener listener, String email, String password) {
+    public void login(final OnLoginWithEmailCallback listener, String email, String password) {
         mAuthManager.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(mView.getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -44,26 +44,26 @@ public class AuthPresenter implements IAuthPresenter {
                         if (task.isSuccessful()) {
 
                             if (mAuthManager.getCurrentUser().isEmailVerified()) {
-                                listener.onLoginWithEmailSuccess();
+                                listener.onSuccess();
 
                             } else {
-                                listener.onLoginWithEmailFailed(getLoginActivityView().getActivity().getString(R.string.email_not_verified));
+                                listener.onFailed(getLoginActivityView().getActivity().getString(R.string.email_not_verified));
 
                             }
                         } else {
-                            listener.onLoginWithEmailFailed(getLoginActivityView().getActivity().getString(R.string.login_failed));
+                            listener.onFailed(getLoginActivityView().getActivity().getString(R.string.login_failed));
                         }
                     }
                 });
     }
 
     @Override
-    public void register(final OnRegisterWithEmailFinishedListener registerPresenter, String email, String password) {
+    public void register(final OnRegisterWithEmailCallback registerPresenter, String email, String password) {
         mAuthManager.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    registerPresenter.onRegisterWithEmailFailed(getRegisterActivityView().getActivity().getString(R.string.register_failed));
+                    registerPresenter.onFailed(getRegisterActivityView().getActivity().getString(R.string.register_failed));
                 } else {
                     final FirebaseUser user = mAuthManager.getCurrentUser();
                     if (user != null && !user.isEmailVerified()) {
@@ -72,7 +72,7 @@ public class AuthPresenter implements IAuthPresenter {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            registerPresenter.onRegisterWithEmailSuccess(user.getEmail());
+                                            registerPresenter.onSuccess(user.getEmail());
                                         }
                                     }
                                 });
@@ -98,7 +98,7 @@ public class AuthPresenter implements IAuthPresenter {
     }
 
     @Override
-    public FacebookCallback<LoginResult> loginWithFacebook(final OnLoginWithFacebookFinishedListener listener) {
+    public FacebookCallback<LoginResult> loginWithFacebook(final OnLoginWithFacebookCallback listener) {
         return new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -117,15 +117,15 @@ public class AuthPresenter implements IAuthPresenter {
     }
 
     @Override
-    public void sendResetInstructions(final OnResetInstructionsSent forgotPasswordActivityView, String email) {
+    public void sendResetInstructions(final OnResetInstructionsCallback forgotPasswordActivityView, String email) {
         mAuthManager.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            forgotPasswordActivityView.onResetInstructionsSentSuccess();
+                            forgotPasswordActivityView.onSuccess();
                         } else {
-                            forgotPasswordActivityView.onResetInstructionsSentFailed();
+                            forgotPasswordActivityView.onFailed(task.getException().getMessage());
                         }
                     }
                 });
@@ -145,7 +145,7 @@ public class AuthPresenter implements IAuthPresenter {
         LoginManager.getInstance().logOut();
     }
 
-    private void handleFacebookAccessToken(final OnLoginWithFacebookFinishedListener listener, AccessToken accessToken) {
+    private void handleFacebookAccessToken(final OnLoginWithFacebookCallback listener, AccessToken accessToken) {
 
         final ILoginActivityView view = (ILoginActivityView) this.mView.getInstance();
         Activity context = view.getActivity();
@@ -157,11 +157,11 @@ public class AuthPresenter implements IAuthPresenter {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            listener.onLoginWithFacebookSuccess();
+                            listener.onSuccess();
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            listener.onLoginWithFacebookFailed(task.getException().toString());
+                            listener.onFailed(task.getException().toString());
                         }
 
                     }
