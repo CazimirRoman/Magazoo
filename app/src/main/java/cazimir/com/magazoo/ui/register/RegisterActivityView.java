@@ -2,19 +2,15 @@ package cazimir.com.magazoo.ui.register;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,10 +18,13 @@ import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.register.RegisterPresenter;
-import cazimir.com.magazoo.utils.OnFormValidatedListener;
+import cazimir.com.magazoo.utils.OnFormValidatedCallback;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.utils.UtilHelperClass;
+
+import static cazimir.com.magazoo.utils.UtilHelperClass.validateFormData;
 
 public class RegisterActivityView extends BaseBackActivity implements IRegisterActivityView {
 
@@ -41,11 +40,13 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     AVLoadingIndicatorView progress;
 
     private RegisterPresenter mPresenter;
+    private AuthPresenter mAuthPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new RegisterPresenter(this);
+        mAuthPresenter = new AuthPresenter(this);
+        mPresenter = new RegisterPresenter(this, mAuthPresenter);
         btnRegisterWithEmail.setBootstrapBrand(getLoginRegisterbrand());
     }
 
@@ -77,14 +78,14 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
-        UtilHelperClass.validateFormData(new OnFormValidatedListener() {
+        validateFormData(new OnFormValidatedCallback() {
             @Override
-            public void onValidateSuccess(String email, String password) {
+            public void onSuccess(String email, String password) {
                 mPresenter.performRegisterWithEmail(email, password);
             }
 
             @Override
-            public void onValidateFail(String what) {
+            public void onFailed(String what) {
                 hideProgressBar();
                 switch (what) {
                     case Constants.EMAIL_EMPTY:
@@ -122,6 +123,11 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showRegistrationConfirmationToast(String email) {
+        showToast(getString(R.string.email_sent) + email);
     }
 
     @Override

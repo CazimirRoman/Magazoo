@@ -34,40 +34,45 @@ public class UtilHelperClass {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    public static void validateFormData(OnFormValidatedListener listener, String email, String password, String passwordRepeat) {
+    public static void validateFormData(OnFormValidatedCallback listener, String email, String password, String passwordRepeat) {
 
         if (TextUtils.isEmpty(email)) {
-            listener.onValidateFail(Constants.EMAIL_EMPTY);
+            listener.onFailed(Constants.EMAIL_EMPTY);
             return;
         } else {
             if (!isValidEmail(email)) {
-                listener.onValidateFail(Constants.EMAIL_INVALID);
+                listener.onFailed(Constants.EMAIL_INVALID);
                 return;
             }
         }
 
+        if(password.equals(Constants.PASSWORD_NA)){
+            listener.onSuccess(email, Constants.PASSWORD_NA);
+            return;
+        }
+
         if (TextUtils.isEmpty(password)) {
-            listener.onValidateFail(Constants.PASSWORD_EMPTY);
+            listener.onFailed(Constants.PASSWORD_EMPTY);
             return;
         } else {
             if (password.length() < 6) {
-                listener.onValidateFail(Constants.PASSWORD_INVALID);
+                listener.onFailed(Constants.PASSWORD_INVALID);
                 return;
             }
         }
 
         if(!passwordRepeat.equals(Constants.PASSWORD_MATCH_NA)){
             if (TextUtils.isEmpty(passwordRepeat)) {
-                listener.onValidateFail(Constants.PASSWORD_MATCH_ERROR);
+                listener.onFailed(Constants.PASSWORD_MATCH_ERROR);
                 return;
             }
 
             if(!passwordRepeat.equals(password)){
-                listener.onValidateFail(Constants.PASSWORD_MATCH_ERROR);
+                listener.onFailed(Constants.PASSWORD_MATCH_ERROR);
                 return;
             }
         }
 
-        listener.onValidateSuccess(email, password);
+        listener.onSuccess(email, password);
     }
 }
