@@ -38,7 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -93,7 +92,9 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
+import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
@@ -205,7 +206,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapPresenter(this);
+        mPresenter = new MapPresenter(this, new AuthenticationPresenter(this), new Repository());
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback() {
@@ -793,7 +794,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
 
@@ -803,7 +804,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
 
@@ -813,7 +814,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
 
         });
@@ -824,7 +825,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
     }

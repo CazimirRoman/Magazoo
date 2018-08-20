@@ -8,7 +8,7 @@ import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 
-public interface IAuthPresenter {
+public interface IAuthenticationPresenter {
     void login (OnLoginWithEmailCallback listener, String email, String password);
     void register (OnRegisterWithEmailCallback listener, String email, String password);
     boolean isLoggedIn();

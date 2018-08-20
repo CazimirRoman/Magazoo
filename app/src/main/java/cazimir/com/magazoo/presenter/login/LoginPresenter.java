@@ -3,23 +3,22 @@ package cazimir.com.magazoo.presenter.login;
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
+import cazimir.com.magazoo.presenter.authentication.IAuthenticationPresenter;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 
 public class LoginPresenter implements ILoginPresenter {
 
     private ILoginActivityView mLoginActivityView;
-    private IAuthPresenter mAuth;
+    private IAuthenticationPresenter mAuthenticationPresenter;
 
-    public LoginPresenter(ILoginActivityView view, IAuthPresenter authPresenter) {
+    public LoginPresenter(ILoginActivityView view, IAuthenticationPresenter authPresenter) {
         mLoginActivityView = view;
-        mAuth = authPresenter;
+        mAuthenticationPresenter = authPresenter;
     }
 
     public void performLoginWithEmail(String email, String password) {
-        mAuth.login(new OnLoginWithEmailCallback() {
+        mAuthenticationPresenter.login(new OnLoginWithEmailCallback() {
             @Override
             public void onSuccess() {
                 mLoginActivityView.hideProgressBar();
@@ -36,7 +35,7 @@ public class LoginPresenter implements ILoginPresenter {
 
     @Override
     public FacebookCallback<LoginResult> performLoginWithFacebook() {
-        return mAuth.loginWithFacebook(new OnLoginWithFacebookCallback() {
+        return mAuthenticationPresenter.loginWithFacebook(new OnLoginWithFacebookCallback() {
             @Override
             public void onSuccess() {
                 mLoginActivityView.hideProgressBar();

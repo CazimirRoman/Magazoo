@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
 import cazimir.com.magazoo.presenter.login.LoginPresenter;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
@@ -29,7 +29,7 @@ public class LoginPresenterTest {
     private LoginPresenter mLoginPresenter;
 
     @Mock
-    private AuthPresenter mAuthPresenter;
+    private AuthenticationPresenter mAuthenticationPresenter;
 
     @Mock
     private LoginActivityView mLoginActivityView;
@@ -44,7 +44,7 @@ public class LoginPresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         // Get a reference to the class under test
-        mLoginPresenter = new LoginPresenter(mLoginActivityView, mAuthPresenter);
+        mLoginPresenter = new LoginPresenter(mLoginActivityView, mAuthenticationPresenter);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class LoginPresenterTest {
 
         mLoginPresenter.performLoginWithEmail(EMAIL, PASSWORD);
 
-        verify(mAuthPresenter, times(1)).login(mOnLoginWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
+        verify(mAuthenticationPresenter, times(1)).login(mOnLoginWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
 
         mOnLoginWithEmailCallbackCaptor.getValue().onSuccess();
 
@@ -66,7 +66,7 @@ public class LoginPresenterTest {
 
         mLoginPresenter.performLoginWithEmail(EMAIL, PASSWORD);
 
-        verify(mAuthPresenter, times(1)).login(mOnLoginWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
+        verify(mAuthenticationPresenter, times(1)).login(mOnLoginWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
 
         mOnLoginWithEmailCallbackCaptor.getValue().onFailed(ERROR_MESSAGE);
 
@@ -79,7 +79,7 @@ public class LoginPresenterTest {
     public void shouldRedirectToMapIfFacebookLoginSuccess(){
         mLoginPresenter.performLoginWithFacebook();
 
-        verify(mAuthPresenter, times(1)).loginWithFacebook(mOnLoginWithFacebookCallbackCaptor.capture());
+        verify(mAuthenticationPresenter, times(1)).loginWithFacebook(mOnLoginWithFacebookCallbackCaptor.capture());
 
         mOnLoginWithFacebookCallbackCaptor.getValue().onSuccess();
 
@@ -92,7 +92,7 @@ public class LoginPresenterTest {
     public void shouldShowErrorToastIfFacebookLoginFailed(){
         mLoginPresenter.performLoginWithFacebook();
 
-        verify(mAuthPresenter, times(1)).loginWithFacebook(mOnLoginWithFacebookCallbackCaptor.capture());
+        verify(mAuthenticationPresenter, times(1)).loginWithFacebook(mOnLoginWithFacebookCallbackCaptor.capture());
 
         mOnLoginWithFacebookCallbackCaptor.getValue().onFailed(ERROR_MESSAGE);
 

@@ -25,12 +25,12 @@ import cazimir.com.magazoo.ui.register.IRegisterActivityView;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 
-public class AuthPresenter implements IAuthPresenter {
+public class AuthenticationPresenter implements IAuthenticationPresenter {
 
     private IGeneralView mView;
     private FirebaseAuth mAuthManager;
 
-    public AuthPresenter(IGeneralView view) {
+    public AuthenticationPresenter(IGeneralView view) {
         mView = view;
         mAuthManager = FirebaseAuth.getInstance();
     }

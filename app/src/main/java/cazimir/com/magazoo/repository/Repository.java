@@ -8,7 +8,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,14 +20,13 @@ import java.util.Date;
 
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddListenerForNewMarkerAdded;
 import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
-import cazimir.com.magazoo.presenter.map.OnDuplicateReportListener;
+import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
-import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
+import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 import cazimir.com.magazoo.utils.Util;
 
 /**
@@ -173,7 +171,8 @@ public class Repository implements IRepository {
         });
     }
     //resolved reports are not taken into account for this check
-    public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, final Report currentReportedShop) {
+    @Override
+    public void checkIfDuplicateReport(final OnDuplicateReportCallback mapPresenter, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
         Query query = mReportRef.orderByChild("reportedBy").equalTo(currentReportedShop.getReportedBy());
@@ -191,9 +190,9 @@ public class Repository implements IRepository {
                 }
 
                 if (reports.contains(currentReportedShop)) {
-                    mapPresenter.isDuplicateReport();
+                    mapPresenter.isDuplicate();
                 } else {
-                    mapPresenter.isNotDuplicateReport();
+                    mapPresenter.isNotDuplicate();
                 }
             }
 
@@ -204,7 +203,8 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final Report report) {
+    @Override
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseCallback mapPresenter, final Report report) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -212,7 +212,7 @@ public class Repository implements IRepository {
                     mReportRef.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            mapPresenter.onReportWrittenSuccess();
+                            mapPresenter.onSuccess();
                         }
                     });
                 }
@@ -220,7 +220,7 @@ public class Repository implements IRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                mapPresenter.onReportWrittenFailed(databaseError.getMessage());
+                mapPresenter.onFailed(databaseError.getMessage());
             }
         });
     }
