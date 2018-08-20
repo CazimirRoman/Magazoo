@@ -125,7 +125,7 @@ public class AuthPresenter implements IAuthPresenter {
                         if (task.isSuccessful()) {
                             forgotPasswordActivityView.onSuccess();
                         } else {
-                            forgotPasswordActivityView.onFailed(task.getException().getMessage());
+                            forgotPasswordActivityView.onFailed();
                         }
                     }
                 });

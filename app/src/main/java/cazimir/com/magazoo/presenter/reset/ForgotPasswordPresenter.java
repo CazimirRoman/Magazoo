@@ -21,14 +21,14 @@ public class ForgotPasswordPresenter implements IForgotPasswordPresenter {
             @Override
             public void onSuccess() {
                 mForgotPasswordActivityView.hideProgress();
-                mForgotPasswordActivityView.showEmailResetSentToast();
+                mForgotPasswordActivityView.showEmailResetSentToastSuccess();
                 mForgotPasswordActivityView.redirectToLogin();
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onFailed() {
                 mForgotPasswordActivityView.hideProgress();
-                mForgotPasswordActivityView.showEmailResetSentToastError(error);
+                mForgotPasswordActivityView.showEmailResetSentToastError();
             }
         }, email);
     }

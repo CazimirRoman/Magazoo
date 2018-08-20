@@ -94,12 +94,12 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IFor
     }
 
     @Override
-    public void showEmailResetSentToast() {
+    public void showEmailResetSentToastSuccess() {
         showToast(getString(R.string.email_reset_sent));
     }
 
     @Override
-    public void showEmailResetSentToastError(String error) {
+    public void showEmailResetSentToastError() {
         showToast(getString(R.string.email_reset_sent_error));
     }
 

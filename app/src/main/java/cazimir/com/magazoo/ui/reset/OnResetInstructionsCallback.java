@@ -5,5 +5,5 @@ package cazimir.com.magazoo.ui.reset;
  */
 public interface OnResetInstructionsCallback {
     void onSuccess();
-    void onFailed(String error);
+    void onFailed();
 }

@@ -14,7 +14,6 @@ import cazimir.com.magazoo.presenter.reset.ForgotPasswordPresenter;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,7 +23,6 @@ import static org.mockito.Mockito.verify;
  */
 public class ForgotPasswordPresenterTest {
 
-    private static final String ERROR_MESSAGE = "This is an error message";
     private static String EMAIL = "test@email.com";
 
     private ForgotPasswordPresenter mForgotPasswordPresenter;
@@ -46,7 +44,7 @@ public class ForgotPasswordPresenterTest {
     }
 
     @Test
-    public void shouldRedirectToLoginScreenAndShowSuccessToast() {
+    public void shouldRedirectToLoginScreenAndShowSuccessToastIfResetSuccessful() {
 
         mForgotPasswordPresenter.sendResetInstructions(EMAIL);
 
@@ -56,7 +54,21 @@ public class ForgotPasswordPresenterTest {
 
         InOrder inOrder = Mockito.inOrder(mForgotPasswordActivityView);
         inOrder.verify(mForgotPasswordActivityView).hideProgress();
-        inOrder.verify(mForgotPasswordActivityView).showEmailResetSentToast();
+        inOrder.verify(mForgotPasswordActivityView).showEmailResetSentToastSuccess();
         inOrder.verify(mForgotPasswordActivityView).redirectToLogin();
+    }
+
+    @Test
+    public void shouldShowErrorToastIfResetFailed() {
+
+        mForgotPasswordPresenter.sendResetInstructions(EMAIL);
+
+        verify(mAuthPresenter, times(1)).sendResetInstructions(mOnResetInstructionsCallbackArgumentCaptor.capture(), eq(EMAIL));
+
+        mOnResetInstructionsCallbackArgumentCaptor.getValue().onFailed();
+
+        InOrder inOrder = Mockito.inOrder(mForgotPasswordActivityView);
+        inOrder.verify(mForgotPasswordActivityView).hideProgress();
+        inOrder.verify(mForgotPasswordActivityView).showEmailResetSentToastError();
     }
 }

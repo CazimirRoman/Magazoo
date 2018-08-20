@@ -5,8 +5,8 @@ package cazimir.com.magazoo.ui.reset;
  */
 public interface IForgotPasswordActivityView {
     void showToast(String message);
-    void showEmailResetSentToast();
-    void showEmailResetSentToastError(String error);
+    void showEmailResetSentToastSuccess();
+    void showEmailResetSentToastError();
     void showProgress();
     void hideProgress();
     void redirectToLogin();
