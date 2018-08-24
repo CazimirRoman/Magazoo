@@ -112,7 +112,7 @@
     <string name="tutorial_add_shop_title">Add shops</string>
     <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? \n Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
     <string name="tutorial_shop_type_title">Type of shops</string>
-    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, supermarkets and shopping centers.</string>
+    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, gas stations, supermarkets and shopping centers.</string>
     <string name="tutorial_report_shop_title">Report a shop</string>
     <string name="tutorial_report_shop_text">Help the Magazoo community maintain an accurate database of available shops by actively contributing. Report non-existent shops or wrong shop properties with 1 click.</string>
     <string name="tutorial_navigate_title">Navigate</string>
