@@ -284,10 +284,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     protected void onResume() {
         super.onResume();
 
-        if (gpsNotActive()) {
-            showNoGPSErrorDialog();
-        }
-
         if (!networkActive()) {
             showNoInternetErrorDialog();
         }
@@ -297,6 +293,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 showLocationDialog();
                 getLastLocation();
                 startLocationUpdates();
+                if (gpsNotActive()) {
+                    showNoGPSErrorDialog();
+                }
             }
         } else {
             showAllowLocationDialog();
@@ -1106,8 +1105,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
-                            zoomToCurrentLocation();
                             onLocationChanged(location);
+                            //zoomToCurrentLocation();
                         }
                     }
                 })
@@ -1231,6 +1230,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showViewIfInRomania(View view) {
+
+
+
         if (inRomania(mCurrentLocation)) {
             Log.d(TAG, "Country is Romania");
             view.setVisibility(View.VISIBLE);
@@ -1311,6 +1313,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
+        mCurrentAccuracy = location.getAccuracy();
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
         //Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
 
         if (mLocationDialog != null && mLocationDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel()) {
@@ -1323,9 +1328,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showAddShopDialog();
         }
 
-        mCurrentAccuracy = location.getAccuracy();
-        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
         if (worldMapShowing()) {
             zoomToCurrentLocation();
         } else {
@@ -1335,14 +1337,17 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void updateCameraBearing(GoogleMap mMap, float bearing) {
-        if (mMap == null) return;
-        CameraPosition camPos = CameraPosition
-                .builder(
-                        mMap.getCameraPosition()
-                )
-                .bearing(bearing)
-                .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+
+        if(!animatingToUserLocation){
+            if (mMap == null) return;
+            CameraPosition camPos = CameraPosition
+                    .builder(
+                            mMap.getCameraPosition()
+                    )
+                    .bearing(bearing)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+        }
     }
 
     private void closeNoGpsDialog() {

@@ -84,14 +84,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         List<Address> addresses = null;
         try {
             addresses = gcd.getFromLocation(location.latitude, location.longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (addresses.size() > 0) {
-            if(addresses.get(0).getCountryName().equals("Romania")){
-                return true;
+            if (addresses.size() > 0) {
+                if(addresses.get(0).getCountryName().equals("Romania")){
+                    return true;
+                }
             }
+
+        } catch (IOException e) {
+            Log.d(TAG, "inRomania: " + e.getMessage());
+            e.printStackTrace();
+
         }
+
 
         return false;
 
