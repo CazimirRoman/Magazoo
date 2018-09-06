@@ -18,12 +18,16 @@ import com.google.firebase.auth.FirebaseUser;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.IGeneralView;
+import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
+
+import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
+import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
 
 public class AuthPresenter implements IAuthPresenter {
 
@@ -143,6 +147,15 @@ public class AuthPresenter implements IAuthPresenter {
     public void signOut() {
         mAuthManager.signOut();
         LoginManager.getInstance().logOut();
+    }
+
+    @Override
+    public boolean isAdmin() {
+        if(mAuthManager.getCurrentUser().getUid().equals(ANA_MARIA) ||
+                mAuthManager.getCurrentUser().getUid().equals(CAZIMIR)){
+            return true;
+        }
+        return false;
     }
 
     private void handleFacebookAccessToken(final OnLoginWithFacebookCallback listener, AccessToken accessToken) {

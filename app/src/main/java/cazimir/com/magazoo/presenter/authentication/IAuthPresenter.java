@@ -18,4 +18,5 @@ public interface IAuthPresenter {
     void sendResetInstructions(OnResetInstructionsCallback listener, String email);
     void checkIfUserLoggedInAndRedirectToMap();
     void signOut();
+    boolean isAdmin();
 }
