@@ -16,4 +16,5 @@ public interface IMapPresenter {
     void getAllMarkers(LatLngBounds mBounds);
     void addMarkerToFirebase(Shop markerToAdd);
     void deleteShopFromDB(String id);
+    boolean isAdmin();
 }

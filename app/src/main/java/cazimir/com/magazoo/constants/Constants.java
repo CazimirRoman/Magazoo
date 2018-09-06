@@ -2,6 +2,8 @@ package cazimir.com.magazoo.constants;
 
 public class Constants {
 
+    public static final String EVENT_ADDED = "shop_added";
+
     public static final String CAZIMIR = "0nErC13lEHfdGcrSyZNJiNyIUHk2";
     public static final String ANA_MARIA = "cJEabMRtfLc6h5fHxSuJpJegnNE3";
 
@@ -40,8 +42,7 @@ public class Constants {
 
     public static final String SMALL_SHOP = "Small shop";
     public static final String GAS_STATION = "Gas station";
-    public static final String FARMER_MARKET = "Farmer\\'s market";
+    public static final String FARMER_MARKET = "Farmer\'s market";
     public static final String SUPERMARKET = "Supermarket";
     public static final String SHOPPING_CENTER = "Shopping center";
-    public static final String HYPERMARKET = "Hypermarket";
 }

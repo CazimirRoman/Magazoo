@@ -1,6 +1,8 @@
 package cazimir.com.magazoo.repository;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -8,7 +10,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,18 +19,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddListenerForNewMarkerAdded;
 import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportListener;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
+import cazimir.com.magazoo.reports.OnGetAllShopsReportCallback;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
 import cazimir.com.magazoo.utils.Util;
+
+import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
+import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
+import static cazimir.com.magazoo.constants.Constants.SHOPPING_CENTER;
+import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
+import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
 
 /**
  * TODO: Add a class header comment!
@@ -138,6 +148,117 @@ public class Repository implements IRepository {
                 }else{
                     mapPresenter.onDeleteFailed(task.getException().toString());
                 }
+            }
+        });
+    }
+
+    @Override
+    public void getAllShops(final OnGetAllShopsReportCallback callback) {
+        mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                int totalNumberOfShops = 0;
+
+                int smallShops = 0;
+                int farmersMarkets = 0;
+                int gasStations = 0;
+                int superMarkets = 0;
+                int shoppingCenters = 0;
+
+                Map<String, String> shopTypes = new HashMap<>();
+                Map<String, Integer> shopCountry = new HashMap<>();
+                Map<String, Integer> shopType = new HashMap<>();
+
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                    Shop marker = markerSnapshot.getValue(Shop.class);
+
+                    switch(marker.getType()){
+                        case SMALL_SHOP:
+                            smallShops++;
+                            break;
+                        case Constants.FARMER_MARKET:
+                            farmersMarkets++;
+                            break;
+                        case Constants.GAS_STATION:
+                            gasStations++;
+                            break;
+                        case Constants.SUPERMARKET:
+                            superMarkets++;
+                            break;
+                        case Constants.SHOPPING_CENTER:
+                            shoppingCenters++;
+                            break;
+                    }
+
+                    String country = marker.getCountry();
+                    String type = marker.getType();
+
+                    if(country != null){
+
+                        //country exists in hashmap
+                        if(shopCountry.get(country) != null){
+                            shopCountry.put(country, shopCountry.get(country) + 1);
+                        }else{
+                            shopCountry.put(country, 1);
+                        }
+                    }
+
+                    if(type != null){
+
+                        //country exists in hashmap
+                        if(shopType.get(type) != null){
+                            shopType.put(type, shopType.get(type) + 1);
+                        }else{
+                            shopType.put(type, 1);
+                        }
+                    }
+
+                    totalNumberOfShops++;
+                }
+
+                shopTypes.put(SMALL_SHOP, String.valueOf(smallShops));
+                shopTypes.put(FARMER_MARKET, String.valueOf(farmersMarkets));
+                shopTypes.put(GAS_STATION, String.valueOf(gasStations));
+                shopTypes.put(SUPERMARKET, String.valueOf(superMarkets));
+                shopTypes.put(SHOPPING_CENTER, String.valueOf(shoppingCenters));
+
+                callback.onSuccess(totalNumberOfShops, shopType, shopCountry);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                callback.onFailed();
+            }
+        });
+    }
+
+    @Override
+    public void updateShopProperty(final Context context) {
+        mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<Shop> shops = new ArrayList<>();
+
+                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                    Shop marker = markerSnapshot.getValue(Shop.class);
+                    if(marker.getType().equals("something")){
+
+                        mStoreRef.child(markerSnapshot.getKey()).child("type").setValue(Constants.SHOPPING_CENTER, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

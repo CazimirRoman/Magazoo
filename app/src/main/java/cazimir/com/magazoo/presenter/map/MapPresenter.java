@@ -26,7 +26,6 @@ public class MapPresenter implements IMapPresenter {
 
     private static final String TAG = MapPresenter.class.getSimpleName();
 
-
     private Repository mRepository;
     private IGeneralView mView;
     private AuthPresenter mAuthenticationPresenter;
@@ -101,6 +100,7 @@ public class MapPresenter implements IMapPresenter {
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
+
                 Log.d(TAG, "onAddMarkerSuccess: called");
                 getMapActivityView().hideProgressBar();
                 getMapActivityView().refreshMarkersOnMap();
@@ -132,6 +132,11 @@ public class MapPresenter implements IMapPresenter {
                 getMapActivityView().showToast(error);
             }
         }, shopId);
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return mAuthenticationPresenter.isAdmin();
     }
 
     private boolean isUnderTheReportLimit(ArrayList<Report> reportsAddedToday) {

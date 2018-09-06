@@ -14,12 +14,14 @@ import android.widget.ImageView;
 import com.beardedhen.androidbootstrap.api.attributes.BootstrapBrand;
 import com.blankj.utilcode.util.Utils;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
+import cazimir.com.magazoo.BuildConfig;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.utils.MyAlertDialog;
 import cazimir.com.magazoo.utils.LoginRegisterBrand;
@@ -31,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
     private Toolbar mToolbar;
     LoginRegisterBrand loginRegisterBrand;
     BootstrapBrand greenButtons;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public LoginRegisterBrand getLoginRegisterbrand() {
         return loginRegisterBrand;
@@ -46,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         loginRegisterBrand = new LoginRegisterBrand(this);
         Utils.init(getApplication());
+        getFirebaseAnalytics().setAnalyticsCollectionEnabled(!BuildConfig.DEBUG);
 
     }
 
@@ -96,8 +100,19 @@ public abstract class BaseActivity extends AppCompatActivity implements IGeneral
 
         }
 
-
         return false;
 
+    }
+
+    protected FirebaseAnalytics getFirebaseAnalytics() {
+        if (mFirebaseAnalytics != null) {
+            return mFirebaseAnalytics;
+        }
+
+        return FirebaseAnalytics.getInstance(this);
+    }
+
+    protected void logEvent(String event, Bundle bundle) {
+        getFirebaseAnalytics().logEvent(event, bundle);
     }
 }

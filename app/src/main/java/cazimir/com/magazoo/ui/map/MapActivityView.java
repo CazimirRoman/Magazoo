@@ -34,11 +34,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -94,6 +94,7 @@ import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
+import cazimir.com.magazoo.reports.ReportsActivity;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
@@ -104,10 +105,11 @@ import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
 import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
 import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
+import static cazimir.com.magazoo.constants.Constants.EVENT_ADDED;
 import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
 import static cazimir.com.magazoo.constants.Constants.FASTEST_INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
-import static cazimir.com.magazoo.constants.Constants.HYPERMARKET;
+import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static cazimir.com.magazoo.constants.Constants.SHOPPING_CENTER;
 import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
 import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
@@ -115,7 +117,6 @@ import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
 import static cazimir.com.magazoo.constants.Constants.UPDATE_INTERVAL;
-import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class MapActivityView extends BaseActivity implements IMapActivityView, LocationListener, OnErrorHandledListener {
@@ -411,6 +412,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if(mPresenter.isAdmin()){
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_reports).setVisible(true);
+        }
+
         navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -430,6 +437,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     showFeedbackDialog();
                 } else if (id == R.id.nav_about) {
                     showAboutDialog();
+                } else if (id == R.id.nav_reports){
+                    startReportActivity();
                 }
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -446,6 +455,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
         }
+    }
+
+    private void startReportActivity() {
+        startActivity(new Intent(MapActivityView.this, ReportsActivity.class));
     }
 
     private void startTutorialActivity() {
@@ -847,8 +860,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_supermarket);
         } else if (type.equals(FARMER_MARKET)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
-        } else if (type.equals(SHOPPING_CENTER) || type.equals(HYPERMARKET)) {
-            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
+        } else if (type.equals(SHOPPING_CENTER)) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_shopping_center);
         } else if (type.equals(GAS_STATION)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_gas_station);
         }
@@ -912,6 +925,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     public void showAddThanksPopup() {
+        logEvent(EVENT_ADDED, null);
         Util.buildDialog(this, getString(R.string.thanks_adding_title), getString(R.string.thanks_adding_text), 0).show();
     }
 
@@ -950,9 +964,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 populate(supermarkerDetailsImage, getString(R.string.popup_add_shop_supermarket), shop.getNonstop(), shop.getTickets(), shop.getPos());
                 break;
             case SHOPPING_CENTER:
-                populate(hypermarkerDetailsImage, getString(R.string.popup_add_shop_shopping_center), shop.getNonstop(), shop.getTickets(), shop.getPos());
-                break;
-            case HYPERMARKET:
                 populate(hypermarkerDetailsImage, getString(R.string.popup_add_shop_shopping_center), shop.getNonstop(), shop.getTickets(), shop.getPos());
                 break;
             case GAS_STATION:
@@ -1230,8 +1241,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showViewIfInRomania(View view) {
-
-
 
         if (inRomania(mCurrentLocation)) {
             Log.d(TAG, "Country is Romania");

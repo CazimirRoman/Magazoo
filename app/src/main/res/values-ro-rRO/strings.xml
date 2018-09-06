@@ -19,7 +19,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Parola</string>
     <string name="forgot_password_msg">Avem nevoie doar de adresa ta de e-mail pentru a-ți putea trimite instrucțiunile de resetare.</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Export</string>
     <string name="password_minimum">Parola este prea scurtă. Te rog să introduci minim 6 caractere.</string>
     <string name="login">Logare cu email</string>
     <string name="facebook_login">Logare cu Facebook</string>
