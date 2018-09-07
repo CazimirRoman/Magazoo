@@ -100,6 +100,7 @@
     <string name="signout">Logout</string>
     <string name="sign_in">Sign in</string>
     <string name="reports">Reports</string>
+
     <string name="send_feedback_hint">Please enter any comments, questions, suggestions or feedback…</string>
     <string name="feedback_empty">You did not enter any text.</string>
     <string name="feedback_sent">Thank you! Your feedback is important to us</string>
@@ -124,8 +125,8 @@
     <string name="developed_by">"Developed by: "</string>
     <string name="last_update">"Last update: "</string>
     <string name="register_failed">Registration failed. Please check your username or password.</string>
-    <string name="report_total_shops">Total magazine: %1$s</string>
-    <string name="share_using">Trimite la</string>
+    <string name="report_total_shops">Total shops: %1$s</string>
+    <string name="share_using">Send with</string>
     <!--tutorial end-->
 
 </resources>

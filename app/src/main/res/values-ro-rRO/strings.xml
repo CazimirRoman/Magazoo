@@ -99,6 +99,8 @@
     <string name="send_feedback">Contactează-ne</string>
     <string name="signout">Deconectare</string>
     <string name="sign_in">Conectare</string>
+    <string name="reports">Rapoarte</string>
+
     <string name="send_feedback_hint">Introdu orice comentariu, întrebare, sugestie sau feedback … </string>
     <string name="feedback_empty">Nu ai introdus niciun text.</string>
     <string name="feedback_sent">Mulțumim! Părerea ta este importantă pentru noi</string>
@@ -122,6 +124,9 @@
     <string name="application_version">"Versiunea aplicației este: "</string>
     <string name="developed_by">"Dezvoltată de: "</string>
     <string name="last_update">"Ultima actualizare: "</string>
+    <string name="report_total_shops">Total magazine: %1$s</string>
+    <string name="share_using">Trimite la</string>
+
     <!--tutorial end-->
 
 </resources>
