@@ -47,7 +47,7 @@ public class ReportsActivity extends BaseBackActivity {
     }
 
     private void updateAdminData() {
-        mRepository.updateAdminName();
+        mRepository.updateAdminNameForBucharest();
     }
 
     private void getReportData() {

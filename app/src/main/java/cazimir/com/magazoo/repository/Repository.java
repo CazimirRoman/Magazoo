@@ -266,7 +266,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void updateAdminName() {
+    public void updateAdminNameForBucharest() {
         mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -276,8 +276,9 @@ public class Repository implements IRepository {
                     while (mPaused) {
                         // An infinite loop that keeps on going until the pause flag is set to false
                     }
-                        Shop marker = markerSnapshot.getValue(Shop.class);
+                    Shop marker = markerSnapshot.getValue(Shop.class);
 
+                    if (marker.getCity().equals("București")) {
                         getAdminNameForLocation(new OnGetAdminNameCallback() {
                             @Override
                             public void onSuccess(String adminName) {
@@ -298,6 +299,9 @@ public class Repository implements IRepository {
 
                         mPaused = true;
                     }
+
+
+                }
             }
 
             @Override

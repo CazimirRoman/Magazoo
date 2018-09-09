@@ -20,5 +20,5 @@ public interface IRepository {
     void deleteShop(OnDeleteShopListener listener, String id);
 
     void getAllShopsForReport(OnGetAllShopsReportCallback callback);
-    void updateAdminName();
+    void updateAdminNameForBucharest();
 }

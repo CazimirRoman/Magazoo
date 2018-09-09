@@ -75,12 +75,13 @@ public class PlacesService {
             JSONObject jsonObj = new JSONObject(jsonResults.toString());
             JSONArray results = jsonObj.getJSONArray("results");
             if(results.length() > 0){
-                JSONArray address_components = (JSONArray) results.getJSONObject(0).getJSONArray("address_components");
+                JSONArray address_components = results.getJSONObject(0).getJSONArray("address_components");
 
-                adminName = address_components.getJSONObject(2).getString("short_name");
-
-                if(!adminName.contains("Sector")){
-                    adminName = address_components.getJSONObject(3).getString("short_name");
+                for (int i=0; i < address_components.length(); i++) {
+                    if(address_components.getJSONObject(i).getString("short_name").contains("Sector")){
+                        adminName = address_components.getJSONObject(i).getString("short_name");
+                        break;
+                    }
                 }
 
             }else{
