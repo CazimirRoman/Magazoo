@@ -43,7 +43,7 @@ public class ReportsActivity extends BaseBackActivity {
         super.onCreate(savedInstanceState);
         mRepository = new Repository();
         getReportData();
-        updateAdminData();
+        //updateAdminData();
     }
 
     private void updateAdminData() {

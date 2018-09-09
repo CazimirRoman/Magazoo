@@ -299,8 +299,6 @@ public class Repository implements IRepository {
 
                         mPaused = true;
                     }
-
-
                 }
             }
 
