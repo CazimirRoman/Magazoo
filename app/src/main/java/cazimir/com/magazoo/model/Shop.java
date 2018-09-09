@@ -19,6 +19,7 @@ public class Shop implements ClusterItem {
     private String createdBy;
     private String city;
     private String country;
+    private String adminName;
 
 
     public Shop() {
@@ -116,5 +117,9 @@ public class Shop implements ClusterItem {
     @Override
     public String getSnippet() {
         return null;
+    }
+
+    public String getAdminName() {
+        return adminName;
     }
 }

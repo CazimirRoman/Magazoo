@@ -19,6 +19,6 @@ public interface IRepository {
     void addMarkerToDatabase(OnAddMarkerToDatabaseListener listener, Shop markerToAdd);
     void deleteShop(OnDeleteShopListener listener, String id);
 
-    void getAllShops(OnGetAllShopsReportCallback callback);
-    void updateShopProperty(Context context);
+    void getAllShopsForReport(OnGetAllShopsReportCallback callback);
+    void updateAdminName();
 }

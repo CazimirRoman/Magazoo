@@ -33,13 +33,11 @@ import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.reports.OnGetAllShopsReportCallback;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
+import cazimir.com.magazoo.utils.ApiFailedException;
+import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 
-import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
-import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
-import static cazimir.com.magazoo.constants.Constants.SHOPPING_CENTER;
 import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
-import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
 
 /**
  * TODO: Add a class header comment!
@@ -47,6 +45,8 @@ import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
 public class Repository implements IRepository {
 
     private static final String TAG = Repository.class.getSimpleName();
+
+    private volatile boolean mPaused = false;
 
     private DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
@@ -153,41 +153,72 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void getAllShops(final OnGetAllShopsReportCallback callback) {
+    public void getAllShopsForReport(final OnGetAllShopsReportCallback callback) {
         mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                int totalNumberOfShops = 0;
+                int totalNumberOfShopsWorld = 0;
+                int totalNumberOfShopsBucuresti = 0;
 
-                int smallShops = 0;
-                int farmersMarkets = 0;
-                int gasStations = 0;
-                int superMarkets = 0;
-                int shoppingCenters = 0;
+                int smallShopsWorld = 0;
+                int smallShopsBucuresti = 0;
+                int farmersMarketsWorld = 0;
+                int farmersMarketsBucuresti = 0;
+                int gasStationsWorld = 0;
+                int gasStationsBucuresti = 0;
+                int superMarketsWorld = 0;
+                int superMarketsBucuresti = 0;
+                int shoppingCentersWorld = 0;
+                int shoppingCentersBucuresti = 0;
 
-                Map<String, String> shopTypes = new HashMap<>();
-                Map<String, Integer> shopCountry = new HashMap<>();
-                Map<String, Integer> shopType = new HashMap<>();
+                Map<String, Integer> shopCountryWorld = new HashMap<>();
+                Map<String, Integer> shopTypeWorld = new HashMap<>();
+                Map<String, Integer> shopTypeBucuresti = new HashMap<>();
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     Shop marker = markerSnapshot.getValue(Shop.class);
 
+                    if(marker.getCity() != null){
+                        if(marker.getCity().equals("București")){
+
+                            totalNumberOfShopsBucuresti++;
+
+                            switch(marker.getType()){
+                                case SMALL_SHOP:
+                                    smallShopsBucuresti++;
+                                    break;
+                                case Constants.FARMER_MARKET:
+                                    farmersMarketsBucuresti++;
+                                    break;
+                                case Constants.GAS_STATION:
+                                    gasStationsBucuresti++;
+                                    break;
+                                case Constants.SUPERMARKET:
+                                    superMarketsBucuresti++;
+                                    break;
+                                case Constants.SHOPPING_CENTER:
+                                    shoppingCentersBucuresti++;
+                                    break;
+                            }
+                        }
+                    }
+
                     switch(marker.getType()){
                         case SMALL_SHOP:
-                            smallShops++;
+                            smallShopsWorld++;
                             break;
                         case Constants.FARMER_MARKET:
-                            farmersMarkets++;
+                            farmersMarketsWorld++;
                             break;
                         case Constants.GAS_STATION:
-                            gasStations++;
+                            gasStationsWorld++;
                             break;
                         case Constants.SUPERMARKET:
-                            superMarkets++;
+                            superMarketsWorld++;
                             break;
                         case Constants.SHOPPING_CENTER:
-                            shoppingCenters++;
+                            shoppingCentersWorld++;
                             break;
                     }
 
@@ -196,34 +227,34 @@ public class Repository implements IRepository {
 
                     if(country != null){
 
-                        //country exists in hashmap
-                        if(shopCountry.get(country) != null){
-                            shopCountry.put(country, shopCountry.get(country) + 1);
+                        //shop country exists in hashmap
+                        if(shopCountryWorld.get(country) != null){
+                            shopCountryWorld.put(country, shopCountryWorld.get(country) + 1);
                         }else{
-                            shopCountry.put(country, 1);
+                            shopCountryWorld.put(country, 1);
                         }
                     }
 
                     if(type != null){
 
-                        //country exists in hashmap
-                        if(shopType.get(type) != null){
-                            shopType.put(type, shopType.get(type) + 1);
+                        //shop type exists in hashmap
+                        if(shopTypeWorld.get(type) != null){
+                            shopTypeWorld.put(type, shopTypeWorld.get(type) + 1);
                         }else{
-                            shopType.put(type, 1);
+                            shopTypeWorld.put(type, 1);
                         }
                     }
 
-                    totalNumberOfShops++;
+                    shopTypeBucuresti.put(Constants.SMALL_SHOP, smallShopsBucuresti);
+                    shopTypeBucuresti.put(Constants.FARMER_MARKET, farmersMarketsBucuresti);
+                    shopTypeBucuresti.put(Constants.GAS_STATION, gasStationsBucuresti);
+                    shopTypeBucuresti.put(Constants.SUPERMARKET, superMarketsBucuresti);
+                    shopTypeBucuresti.put(Constants.SHOPPING_CENTER, shoppingCentersBucuresti);
+
+                    totalNumberOfShopsWorld++;
                 }
 
-                shopTypes.put(SMALL_SHOP, String.valueOf(smallShops));
-                shopTypes.put(FARMER_MARKET, String.valueOf(farmersMarkets));
-                shopTypes.put(GAS_STATION, String.valueOf(gasStations));
-                shopTypes.put(SUPERMARKET, String.valueOf(superMarkets));
-                shopTypes.put(SHOPPING_CENTER, String.valueOf(shoppingCenters));
-
-                callback.onSuccess(totalNumberOfShops, shopType, shopCountry);
+                callback.onSuccess(totalNumberOfShopsWorld, shopTypeWorld, shopCountryWorld, totalNumberOfShopsBucuresti, shopTypeBucuresti);
             }
 
             @Override
@@ -235,25 +266,38 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void updateShopProperty(final Context context) {
+    public void updateAdminName() {
         mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<Shop> shops = new ArrayList<>();
+                for (final DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
 
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Shop marker = markerSnapshot.getValue(Shop.class);
-                    if(marker.getType().equals("something")){
+                    while (mPaused) {
+                        // An infinite loop that keeps on going until the pause flag is set to false
+                    }
+                        Shop marker = markerSnapshot.getValue(Shop.class);
 
-                        mStoreRef.child(markerSnapshot.getKey()).child("type").setValue(Constants.SHOPPING_CENTER, new DatabaseReference.CompletionListener() {
+                        getAdminNameForLocation(new OnGetAdminNameCallback() {
                             @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            public void onSuccess(String adminName) {
+                                mPaused = false;
+                                mStoreRef.child(markerSnapshot.getKey()).child("adminName").setValue(adminName, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailed() {
 
                             }
-                        });
+                        }, new LatLng(marker.getLat(), marker.getLon()));
+
+                        mPaused = true;
                     }
-                }
             }
 
             @Override
@@ -261,6 +305,44 @@ public class Repository implements IRepository {
 
             }
         });
+    }
+
+    private void getAdminNameForLocation(final OnGetAdminNameCallback callback, final LatLng location) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PlacesService.getAdminName(new OnGetAdminNameCallback() {
+                        @Override
+                        public void onSuccess(String adminName) {
+                            callback.onSuccess(adminName);
+                            Log.d(TAG, "adminName is: "+adminName);
+                        }
+
+                        @Override
+                        public void onFailed() {
+
+                        }
+                    }, location.latitude, location.longitude);
+                } catch (ApiFailedException e) {
+                    //try again
+                    getAdminNameForLocation(new OnGetAdminNameCallback() {
+                        @Override
+                        public void onSuccess(String adminName) {
+                            callback.onSuccess(adminName);
+                        }
+
+                        @Override
+                        public void onFailed() {
+
+                        }
+                    }, location);
+                }
+            }
+        });
+
+        thread.start();
     }
 
     public void getShopsAddedToday(final OnGetShopsAddedTodayListener mapPresenter, String userId) {

@@ -32,6 +32,10 @@ public class ReportsActivity extends BaseBackActivity {
 
     ArrayList<String> mShopsInCountries;
     ArrayList<String> mTypeOfShops;
+    @BindView(R.id.report_total_shops_bucuresti)
+    TextView mTotalShopsBucurestiTextView;
+    @BindView(R.id.list_type_bucuresti)
+    ListView mListTypeBucuresti;
     private int mTotalNumberOfShops;
 
     @Override
@@ -39,21 +43,23 @@ public class ReportsActivity extends BaseBackActivity {
         super.onCreate(savedInstanceState);
         mRepository = new Repository();
         getReportData();
-        //updateData();
+        updateAdminData();
     }
 
-    private void updateData() {
-        mRepository.updateShopProperty(this);
+    private void updateAdminData() {
+        mRepository.updateAdminName();
     }
 
     private void getReportData() {
-        mRepository.getAllShops(new OnGetAllShopsReportCallback() {
+        mRepository.getAllShopsForReport(new OnGetAllShopsReportCallback() {
             @Override
-            public void onSuccess(int total, Map<String, Integer> shopType, Map<String, Integer> shopCountry) {
+            public void onSuccess(int total, Map<String, Integer> shopType, Map<String, Integer> shopCountry, int totalNumberOfShopsBucuresti, Map<String, Integer> shopTypeBucuresti) {
                 mTotalShopsTextView.setText(String.format(getString(R.string.report_total_shops), String.valueOf(total)));
+                mTotalShopsBucurestiTextView.setText(String.format(getString(R.string.report_total_shops_bucuresti), String.valueOf(totalNumberOfShopsBucuresti)));
                 mTotalNumberOfShops = total;
                 populateCountryList(shopCountry);
                 populateTypeList(shopType);
+                populateTypeListBucuresti(shopTypeBucuresti);
             }
 
             @Override
@@ -61,6 +67,22 @@ public class ReportsActivity extends BaseBackActivity {
 
             }
         });
+    }
+
+    private void populateTypeListBucuresti(Map<String, Integer> shopTypeBucuresti) {
+
+        mTypeOfShops = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : shopTypeBucuresti.entrySet()) {
+            String type = entry.getKey();
+            Integer total = entry.getValue();
+            mTypeOfShops.add(type + " " + total);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, mTypeOfShops);
+
+        mListTypeBucuresti.setAdapter(adapter);
     }
 
     private void populateTypeList(Map<String, Integer> shopType) {
@@ -141,26 +163,23 @@ public class ReportsActivity extends BaseBackActivity {
         report.append("\n\n");
 
         report.append("Tipuri de magazine").append("\n\n");
-        for (String string: mTypeOfShops
+        for (String string : mTypeOfShops
                 ) {
             report.append(string).append("\n");
         }
 
         report.append("Magazine pe țări").append("\n\n");
-        for (String string: mShopsInCountries
+        for (String string : mShopsInCountries
                 ) {
 
             report.append(string).append("\n");
         }
 
 
-
-
-
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Raportul tau pentru Magazoo");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, report.toString());
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Raportul tau pentru Magazoo");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, report.toString());
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
     }
 

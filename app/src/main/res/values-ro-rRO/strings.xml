@@ -124,7 +124,8 @@
     <string name="application_version">"Versiunea aplicației este: "</string>
     <string name="developed_by">"Dezvoltată de: "</string>
     <string name="last_update">"Ultima actualizare: "</string>
-    <string name="report_total_shops">Total magazine: %1$s</string>
+    <string name="report_total_shops">Total magazine in lume: %1$s</string>
+    <string name="report_total_shops_bucuresti">Total magazine in București: %1$s</string>
     <string name="share_using">Trimite la</string>
 
     <!--tutorial end-->
