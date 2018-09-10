@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="match_parent">
+        android:layout_weight="0.8"
+        android:layout_height="0dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -116,7 +117,31 @@
     </LinearLayout>
 
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_weight="0.2"
+    android:orientation="horizontal"
+    android:layout_height="0dp">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="importShopsFromJson"
+        android:visibility="gone"
+        android:id="@+id/import_shops"
+        android:text="Import"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:onClick="deleteTypeShops"
+        android:id="@+id/delete_type_shops"
+        android:text="Delete"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
 
 
 

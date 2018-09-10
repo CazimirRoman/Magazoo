@@ -1,5 +1,6 @@
 package cazimir.com.magazoo.presenter.map;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import cazimir.com.magazoo.model.Shop;

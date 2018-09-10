@@ -1,7 +1,6 @@
 package cazimir.com.magazoo.repository;
 
-import android.content.Context;
-
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import cazimir.com.magazoo.model.Shop;
@@ -14,6 +13,9 @@ import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 
 public interface IRepository {
     void getReportsAddedToday(OnGetReportsFromDatabaseListener listener, String userId);
+
+    void getAdminNameForLocation(OnGetAdminNameCallback callback, LatLng location);
+
     void getShopsAddedToday(OnGetShopsAddedTodayListener listener, String userId);
     void getMarkers(OnGetMarkersListener listener, LatLngBounds bounds);
     void addMarkerToDatabase(OnAddMarkerToDatabaseListener listener, Shop markerToAdd);
@@ -21,4 +23,6 @@ public interface IRepository {
 
     void getAllShopsForReport(OnGetAllShopsReportCallback callback);
     void updateAdminNameForBucharest();
+
+    void deleteShopWithTypeInCity(String type, String city);
 }

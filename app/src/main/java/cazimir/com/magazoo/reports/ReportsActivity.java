@@ -5,11 +5,18 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,9 +25,23 @@ import butterknife.BindView;
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
+import cazimir.com.magazoo.constants.Constants;
+import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
+import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.repository.Repository;
+import cazimir.com.magazoo.utils.ApiFailedException;
+import cazimir.com.magazoo.utils.PlacesService;
+import cazimir.com.magazoo.utils.Util;
 
 public class ReportsActivity extends BaseBackActivity {
+
+    private static final String TAG = ReportsActivity.class.getSimpleName();
+
+    boolean mPausedForAddingShop = false;
+    boolean mPausedForGettingAdmin = false;
+    int mTotalNumberOfImportedShops = 0;
+    String mAdminName = "";
 
     Repository mRepository;
     @BindView(R.id.report_total_shops)
@@ -36,6 +57,8 @@ public class ReportsActivity extends BaseBackActivity {
     TextView mTotalShopsBucurestiTextView;
     @BindView(R.id.list_type_bucuresti)
     ListView mListTypeBucuresti;
+    @BindView(R.id.import_shops)
+    Button mImportShops;
     private int mTotalNumberOfShops;
 
     @Override
@@ -183,6 +206,90 @@ public class ReportsActivity extends BaseBackActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
     }
 
+    public void importShopsFromJson(View view) {
+
+        String json = Util.loadJSONFromAsset(this);
+
+        JSONObject jsonObj = null;
+        try {
+            jsonObj = new JSONObject(json.toString());
+
+            JSONArray results = jsonObj.getJSONArray("elements");
+
+            if(results.length() > 0){
+
+                for (int i=0; i < results.length(); i++) {
+
+                    final String lat = results.getJSONObject(i).getString("lat");
+                    final String lon = results.getJSONObject(i).getString("lon");
+
+                    mPausedForGettingAdmin = true;
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                PlacesService.getAdminName(new OnGetAdminNameCallback() {
+                                    @Override
+                                    public void onSuccess(String adminName) {
+                                        mAdminName = adminName;
+                                        mPausedForGettingAdmin = false;
+                                    }
+
+                                    @Override
+                                    public void onFailed() {
+
+                                    }
+                                }, Double.valueOf(lat), Double.valueOf(lon));
+                            } catch (ApiFailedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+                    while(mPausedForGettingAdmin) {
+                        Log.d(TAG, "pausing and waiting until admin name is fetched... ");
+                    }
+
+                    final Shop shop = new Shop(Constants.ID_PLACEHOLDER, Double.valueOf(lat), Double.valueOf(lon), mAdminName, Constants.GAS_STATION, true,
+                            true, false, Constants.CAZIMIR, "București", "Romania");
+
+                    //mRepository.deleteShopWithTypeInCity(Constants.GAS_STATION);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
+                                @Override
+                                public void onAddMarkerSuccess() {
+                                    Log.d(TAG, "added gas station to map");
+                                    mPausedForAddingShop = false;
+                                    mTotalNumberOfImportedShops++;
+                                }
+
+                                @Override
+                                public void onAddMarkerFailed(String error) {
+                                    Log.e(TAG, "failed adding gas station to map");
+                                }
+                            }, shop);
+                        }
+                    }).start();
+
+//                    while(mPausedForAddingShop) {
+//                        Log.d(TAG, "pausing and waiting until shop is added to db... ");
+//                    }
+                }
+
+                Log.d(TAG, "Total number of gas station imported: " + mTotalNumberOfImportedShops);
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "something is wrong with the JSON file");
+        }
+    }
+
     @Override
     public IGeneralView getInstance() {
         return this;
@@ -191,5 +298,9 @@ public class ReportsActivity extends BaseBackActivity {
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    public void deleteTypeShops(View view) {
+        mRepository.deleteShopWithTypeInCity(Constants.GAS_STATION, Constants.BUCURESTI);
     }
 }

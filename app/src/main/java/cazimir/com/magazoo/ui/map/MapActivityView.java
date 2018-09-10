@@ -95,9 +95,12 @@ import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.reports.ReportsActivity;
+import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
+import cazimir.com.magazoo.utils.ApiFailedException;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
+import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -175,6 +178,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private boolean animatingToMarker = false;
     private MaterialDialog mAllowLocationDialog;
     private boolean animatingToUserLocation = false;
+    private String mAdminName = "";
+    private boolean mPausedForGettingAdmin = false;
 
     @Override
     protected void onStart() {
@@ -1208,7 +1213,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                     if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude, getShopType(spinner.getSelectedItemPosition()), chkPos.isChecked(),
+                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude, mAdminName, getShopType(spinner.getSelectedItemPosition()), chkPos.isChecked(),
                                 chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry());
 
                         closeAddShopDialog();

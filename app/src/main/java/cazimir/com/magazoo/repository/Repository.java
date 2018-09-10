@@ -1,6 +1,5 @@
 package cazimir.com.magazoo.repository;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -49,6 +48,7 @@ public class Repository implements IRepository {
     private volatile boolean mPaused = false;
 
     private DatabaseReference mStoreRef = FirebaseDatabase.getInstance().getReference("Stores");
+    private DatabaseReference mStoreRefDev = FirebaseDatabase.getInstance().getReference("StoresDev");
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("Reports");
 
     public void getReportsAddedToday(final OnGetReportsFromDatabaseListener mapPresenter, String userId) {
@@ -309,7 +309,47 @@ public class Repository implements IRepository {
         });
     }
 
-    private void getAdminNameForLocation(final OnGetAdminNameCallback callback, final LatLng location) {
+    @Override
+    public void deleteShopWithTypeInCity(final String type, final String city) {
+
+        Query query = mStoreRef.orderByChild("type").equalTo(type);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (final DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+
+                    Shop marker = markerSnapshot.getValue(Shop.class);
+
+                    if(marker.getCity() != null){
+                        if(marker.getCity().equals(city)){
+                            mStoreRef.child(markerSnapshot.getKey()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d(TAG, "deleted shop");
+                                    }else{
+
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getAdminNameForLocation(final OnGetAdminNameCallback callback, final LatLng location) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
