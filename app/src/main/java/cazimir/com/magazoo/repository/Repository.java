@@ -172,9 +172,18 @@ public class Repository implements IRepository {
                 int shoppingCentersWorld = 0;
                 int shoppingCentersBucuresti = 0;
 
+                int sector1 = 0;
+                int sector2 = 0;
+                int sector3 = 0;
+                int sector4 = 0;
+                int sector5 = 0;
+                int sector6 = 0;
+
+
                 Map<String, Integer> shopCountryWorld = new HashMap<>();
                 Map<String, Integer> shopTypeWorld = new HashMap<>();
                 Map<String, Integer> shopTypeBucuresti = new HashMap<>();
+                Map<String, Integer> shopSectorBucuresti = new HashMap<>();
 
                 for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
                     Shop marker = markerSnapshot.getValue(Shop.class);
@@ -183,6 +192,28 @@ public class Repository implements IRepository {
                         if(marker.getCity().equals("București")){
 
                             totalNumberOfShopsBucuresti++;
+
+                            switch(marker.getAdminName()){
+                                case "Sector 1":
+                                    sector1++;
+                                    break;
+                                case "Sector 2":
+                                    sector2++;
+                                    break;
+                                case "Sector 3":
+                                    sector3++;
+                                    break;
+                                case "Sector 4":
+                                    sector4++;
+                                    break;
+                                case "Sector 5":
+                                    sector5++;
+                                    break;
+
+                                case "Sector 6":
+                                    sector6++;
+                                    break;
+                            }
 
                             switch(marker.getType()){
                                 case SMALL_SHOP:
@@ -251,10 +282,17 @@ public class Repository implements IRepository {
                     shopTypeBucuresti.put(Constants.SUPERMARKET, superMarketsBucuresti);
                     shopTypeBucuresti.put(Constants.SHOPPING_CENTER, shoppingCentersBucuresti);
 
+                    shopSectorBucuresti.put("Sector 1", sector1);
+                    shopSectorBucuresti.put("Sector 2", sector2);
+                    shopSectorBucuresti.put("Sector 3", sector3);
+                    shopSectorBucuresti.put("Sector 4", sector4);
+                    shopSectorBucuresti.put("Sector 5", sector5);
+                    shopSectorBucuresti.put("Sector 6", sector6);
+
                     totalNumberOfShopsWorld++;
                 }
 
-                callback.onSuccess(totalNumberOfShopsWorld, shopTypeWorld, shopCountryWorld, totalNumberOfShopsBucuresti, shopTypeBucuresti);
+                callback.onSuccess(totalNumberOfShopsWorld, shopTypeWorld, shopCountryWorld, totalNumberOfShopsBucuresti, shopTypeBucuresti, shopSectorBucuresti);
             }
 
             @Override

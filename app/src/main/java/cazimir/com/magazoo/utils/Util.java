@@ -83,10 +83,10 @@ public class Util {
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 
-    public static String loadJSONFromAsset(Activity activity) {
+    public static String loadJSONFromAsset(Activity activity, String jsonFile) {
         String json = null;
         try {
-            InputStream is = activity.getAssets().open("import.json");
+            InputStream is = activity.getAssets().open(jsonFile);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

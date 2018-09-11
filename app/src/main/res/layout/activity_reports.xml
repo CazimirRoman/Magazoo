@@ -89,7 +89,40 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipuri de magazine in Bucuresti"
+                        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ListView
+                        android:id="@+id/list_type_bucuresti"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5">
+
+                    </ListView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:padding="10dp"
+                android:layout_weight="0.5"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -99,10 +132,10 @@
                     android:textSize="18sp"
                     android:textAppearance="?android:attr/textAppearanceListItemSmall"
                     android:textStyle="bold"
-                    android:text="Tipuri de magazine in Bucuresti" />
+                    android:text="Sector" />
 
                 <ListView
-                    android:id="@+id/list_type_bucuresti"
+                    android:id="@+id/list_total_bucuresti_sector"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5">
@@ -119,7 +152,7 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_weight="0.2"
+    android:layout_weight="0.1"
     android:orientation="horizontal"
     android:layout_height="0dp">
 
