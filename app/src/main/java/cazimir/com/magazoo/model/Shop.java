@@ -19,12 +19,13 @@ public class Shop implements ClusterItem {
     private String createdBy;
     private String city;
     private String country;
+    private String adminName;
 
 
     public Shop() {
     }
 
-    public Shop(String id, Double lat, Double lon, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId, String city, String country) {
+    public Shop(String id, Double lat, Double lon, String adminName, String type, Boolean pos, Boolean nonstop, Boolean tickets, String userId, String city, String country) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
@@ -36,6 +37,7 @@ public class Shop implements ClusterItem {
         this.createdBy = userId;
         this.city = city;
         this.country = country;
+        this.adminName = adminName;
     }
 
     public void setTickets(boolean tickets) {
@@ -116,5 +118,9 @@ public class Shop implements ClusterItem {
     @Override
     public String getSnippet() {
         return null;
+    }
+
+    public String getAdminName() {
+        return adminName;
     }
 }

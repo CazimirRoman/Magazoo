@@ -2,6 +2,7 @@ package cazimir.com.magazoo.presenter.map;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
+import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;

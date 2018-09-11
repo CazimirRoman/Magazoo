@@ -12,53 +12,170 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/report_total_shops"
-        android:layout_width="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:layout_height="wrap_content"
-        android:text="@string/report_total_shops" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_weight="0.8"
+        android:layout_height="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textStyle="bold"
-            android:text="Număr de magazine pe țări" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/list_country"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5">
+            <TextView
+                android:id="@+id/report_total_shops"
+                android:layout_width="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:layout_height="wrap_content"
+                android:text="@string/report_total_shops" />
 
-        </ListView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textStyle="bold"
-            android:text="Tipuri de magazine" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textStyle="bold"
+                    android:text="Număr de magazine pe țări" />
 
-        <ListView
-            android:id="@+id/list_type"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5">
+                <ListView
+                    android:id="@+id/list_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5">
 
-        </ListView>
+                </ListView>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textStyle="bold"
+                    android:text="Tipuri de magazine" />
+
+                <ListView
+                    android:id="@+id/list_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5">
+
+                </ListView>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/report_total_shops_bucuresti"
+                android:layout_width="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:layout_height="wrap_content"
+                android:text="@string/report_total_shops_bucuresti" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipuri de magazine in Bucuresti"
+                        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ListView
+                        android:id="@+id/list_type_bucuresti"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5">
+
+                    </ListView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textStyle="bold"
+                    android:text="Sector" />
+
+                <ListView
+                    android:id="@+id/list_total_bucuresti_sector"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5">
+
+                </ListView>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_weight="0.1"
+    android:orientation="horizontal"
+    android:layout_height="0dp">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="importShopsFromJson"
+        android:visibility="gone"
+        android:id="@+id/import_shops"
+        android:text="Import"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:onClick="deleteTypeShops"
+        android:id="@+id/delete_type_shops"
+        android:text="Delete"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
 
 
 </LinearLayout>

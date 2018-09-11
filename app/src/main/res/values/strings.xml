@@ -125,7 +125,8 @@
     <string name="developed_by">"Developed by: "</string>
     <string name="last_update">"Last update: "</string>
     <string name="register_failed">Registration failed. Please check your username or password.</string>
-    <string name="report_total_shops">Total shops: %1$s</string>
+    <string name="report_total_shops">Total magazine in lume: %1$s</string>
+    <string name="report_total_shops_bucuresti">Total shops in Bucharest: %1$s</string>
     <string name="share_using">Send with</string>
     <!--tutorial end-->
 

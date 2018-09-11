@@ -45,4 +45,5 @@ public class Constants {
     public static final String FARMER_MARKET = "Farmer\'s market";
     public static final String SUPERMARKET = "Supermarket";
     public static final String SHOPPING_CENTER = "Shopping center";
+    public static final String BUCURESTI = "București";
 }
