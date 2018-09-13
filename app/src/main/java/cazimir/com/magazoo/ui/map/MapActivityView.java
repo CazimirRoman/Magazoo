@@ -222,8 +222,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 }
             }
         };
-
-        //startLocationUpdates();
         setUpMap();
         initUI();
         setupNavigationDrawer();
@@ -1055,7 +1053,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean isDesiredZoomLevel() {
-        return mCurrentZoomLevel <= Constants.ZOOM_LEVEL_DESIRED;
+        return mCurrentZoomLevel == Constants.ZOOM_LEVEL_DESIRED;
     }
 
     @Override
