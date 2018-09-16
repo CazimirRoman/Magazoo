@@ -1,0 +1,3882 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-11T08:43:02Z",
+    "timestamp_areas_base": "2018-09-11T08:26:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+    {
+      "type": "node",
+      "id": 166147534,
+      "lat": 44.4156260,
+      "lon": 26.0408149,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Home and Design mall",
+        "name:en": "Home and Design mall",
+        "name:ro": "Home and Design mall",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 286683632,
+      "lat": 44.4176718,
+      "lon": 26.0202483,
+      "tags": {
+        "created_by": "Potlatch 0.10b",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 286692498,
+      "lat": 44.4153545,
+      "lon": 26.0436372,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 286914160,
+      "lat": 44.4338779,
+      "lon": 26.0338774,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 302952722,
+      "lat": 44.4512846,
+      "lon": 26.0481977,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 305920252,
+      "lat": 44.4236159,
+      "lon": 26.0417425,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 328599511,
+      "lat": 44.4612365,
+      "lon": 26.0944662,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Nic Dorobanți Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "node",
+      "id": 328617948,
+      "lat": 44.4431987,
+      "lon": 26.0979032,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "9",
+        "addr:street": "Bulevardul General Gheorghe Magheru",
+        "name": "Mega Image Magheru",
+        "opening_hours": "Mo-Su 07:30-24:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 408604689,
+      "lat": 44.4391653,
+      "lon": 26.0228776,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 412366230,
+      "lat": 44.4778149,
+      "lon": 26.0914538,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "is_in:city": "București",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 432783497,
+      "lat": 44.4406358,
+      "lon": 26.1925594,
+      "tags": {
+        "addr:city": "București",
+        "building": "yes",
+        "internet_access": "wlan",
+        "is_in:city": "București",
+        "layer": "-3",
+        "name": "Pantelimon",
+        "network": "Metrorex",
+        "operator": "Metrorex",
+        "railway": "station",
+        "shop": "supermarket",
+        "station": "subway",
+        "wikidata": "Q3116217"
+      }
+    },
+    {
+      "type": "node",
+      "id": 440159105,
+      "lat": 44.4423844,
+      "lon": 26.1423412,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 440159108,
+      "lat": 44.4440006,
+      "lon": 26.1446447,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Profi",
+        "operator": "Prodas",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 440190212,
+      "lat": 44.4433207,
+      "lon": 26.1551394,
+      "tags": {
+        "addr:city": "București",
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "name:ro": "Mega Image",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 442896792,
+      "lat": 44.4206096,
+      "lon": 26.1800694,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "33A",
+        "addr:street": "Bulevardul 1 Decembrie 1918",
+        "is_in:city": "București",
+        "name": "Auchan Titan",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 444361328,
+      "lat": 44.4824033,
+      "lon": 26.0555645,
+      "tags": {
+        "addr:housenumber": "24",
+        "addr:street": "Strada Pajurei",
+        "is_in:city": "București",
+        "name": "Profi City Pajura",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-22:00",
+        "shop": "supermarket",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 444361858,
+      "lat": 44.4823081,
+      "lon": 26.0478621,
+      "tags": {
+        "addr:housenumber": "7a",
+        "addr:street": "Strada Pajurei",
+        "internet_access": "wlan",
+        "is_in:city": "București",
+        "name": "Profi",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "shop": "supermarket",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 494781795,
+      "lat": 44.4287661,
+      "lon": 26.1058273,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Carrefour Unirii Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 505350124,
+      "lat": 44.4014710,
+      "lon": 26.0976723,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "addr:interpolation": "odd",
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 505350139,
+      "lat": 44.4011535,
+      "lon": 26.0994626,
+      "tags": {
+        "is_in:city": "București",
+        "name": "BILLA - Eroii Revoluției",
+        "shop": "supermarket",
+        "source": "Norc.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 559958670,
+      "lat": 44.4416352,
+      "lon": 26.1332752,
+      "tags": {
+        "is_in:city": "București",
+        "name": "InterMacedonia",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 587733239,
+      "lat": 44.3745628,
+      "lon": 26.1193573,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Carrefour Berceni (Grand Arena)",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 598988686,
+      "lat": 44.4186560,
+      "lon": 26.0132049,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "131-137",
+        "addr:postcode": "061973",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Valea Oltului",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 599004295,
+      "lat": 44.4157244,
+      "lon": 26.0174562,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 601725541,
+      "lat": 44.4101266,
+      "lon": 26.0792122,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Penny Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 619899934,
+      "lat": 44.4307747,
+      "lon": 26.0264176,
+      "tags": {
+        "name": "Vase de portelan",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 623664514,
+      "lat": 44.4119220,
+      "lon": 26.1636386,
+      "tags": {
+        "is_in:city": "București",
+        "name": "BI & DI",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 634932697,
+      "lat": 44.4303466,
+      "lon": 26.1661205,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image Miniș",
+        "opening_hours": "Mo-Sa 08:00-22:00; Su 08:00-21:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 640449604,
+      "lat": 44.4386976,
+      "lon": 26.0928101,
+      "tags": {
+        "addr:housenumber": "60",
+        "addr:street": "Strada Ion Brezoianu",
+        "is_in:city": "București",
+        "name": "Mega Image Brezoianu",
+        "operator": "Angst",
+        "shop": "supermarket",
+        "website": "București"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642264297,
+      "lat": 44.4123128,
+      "lon": 26.1638213,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643633195,
+      "lat": 44.4177565,
+      "lon": 26.1454734,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643778170,
+      "lat": 44.4189539,
+      "lon": 26.1404026,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image Dristor Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 658742394,
+      "lat": 44.4141965,
+      "lon": 26.0244422,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 659012039,
+      "lat": 44.4316623,
+      "lon": 26.1375088,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "25-27-29",
+        "addr:postcode": "030964",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Decebal",
+        "is_in:city": "București",
+        "name": "Mega Image Piața Muncii",
+        "opening_hours": "24/7",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 659912535,
+      "lat": 44.4111298,
+      "lon": 26.1734588,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "toilets:wheelchair": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 678833927,
+      "lat": 44.4232443,
+      "lon": 26.1343168,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "is_in:city": "București",
+        "name": "Carrefour Market",
+        "opening_hours": "Mo-Sa 07:00-22:00; Su 07:30-22:00",
+        "operator": "Billa",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 749241536,
+      "lat": 44.4631619,
+      "lon": 26.1308396,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "is_in:city": "București",
+        "name": "Market Succes Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 871991222,
+      "lat": 44.4259955,
+      "lon": 26.1479221,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 885364085,
+      "lat": 44.4360355,
+      "lon": 26.1365166,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 929291646,
+      "lat": 44.4124466,
+      "lon": 26.0731651,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image Rahova",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1143685270,
+      "lat": 44.4604577,
+      "lon": 26.0751684,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1145157706,
+      "lat": 44.4579580,
+      "lon": 26.0783903,
+      "tags": {
+        "name": "Mega Image piața 1Mai Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1211816438,
+      "lat": 44.4717775,
+      "lon": 26.0492331,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Chibrit",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1211891937,
+      "lat": 44.4925048,
+      "lon": 26.0338895,
+      "tags": {
+        "name": "CRIS-TIM",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1213004701,
+      "lat": 44.4848744,
+      "lon": 26.0326640,
+      "tags": {
+        "name": "Supermarket NIC",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1273328819,
+      "lat": 44.4447687,
+      "lon": 26.1356596,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Strada Ritmului",
+        "is_in:city": "București",
+        "name": "Profi Ritmului",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-20:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1281729994,
+      "lat": 44.4145667,
+      "lon": 26.0805716,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1305583258,
+      "lat": 44.4170164,
+      "lon": 26.0283664,
+      "tags": {
+        "addr:street": "Strada Chilia Veche",
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "name:en": "Carrefour New",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1305765263,
+      "lat": 44.4288186,
+      "lon": 26.1676852,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "12A",
+        "addr:postcode": "032758",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Aleea Barajul Dunării",
+        "cuisine": "international",
+        "designation": "Market",
+        "name": "Carrefour Market Miniș",
+        "shop": "supermarket",
+        "website": "http://www.carrefour.ro/"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1305802579,
+      "lat": 44.4256376,
+      "lon": 26.1658521,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "13-15",
+        "addr:street": "Strada Liviu Rebreanu",
+        "name": "Mega Image Titan Non-Stop",
+        "opening_hours": "24/7",
+        "operator": "Mega Image",
+        "phone": "+40 21 340 2996",
+        "shop": "supermarket",
+        "source": "http://www.mega-image.ro/corporate/harta_magazine.php"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1366395076,
+      "lat": 44.4215748,
+      "lon": 26.0896704,
+      "tags": {
+        "name": "Profi Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1393093079,
+      "lat": 44.4435916,
+      "lon": 26.0954343,
+      "tags": {
+        "addr:city": "București",
+        "addr:postcode": "010345",
+        "addr:street": "Strada Piața Amzei",
+        "name": "Mega Image Amzei Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1439628129,
+      "lat": 44.4285358,
+      "lon": 26.1042495,
+      "tags": {
+        "addr:city": "București",
+        "designation": "Supermarket Mega Image",
+        "is_in": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1460514671,
+      "lat": 44.4283322,
+      "lon": 26.1544965,
+      "tags": {
+        "name": "Mega Image Gloria",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1493444893,
+      "lat": 44.4875814,
+      "lon": 26.0931569,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "60",
+        "addr:street": "Strada Căpitan Aviator Alexandru Șerbănescu",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1510015597,
+      "lat": 44.4331056,
+      "lon": 26.0970617,
+      "tags": {
+        "name": "Mag.Victoria",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1535896645,
+      "lat": 44.4260155,
+      "lon": 26.0184250,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1666673782,
+      "lat": 44.4257949,
+      "lon": 26.1684211,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "19",
+        "addr:postcode": "031775",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Liviu Rebreanu",
+        "name": "Lidl Titan",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-20:00",
+        "shop": "supermarket",
+        "source": "http://www.lidl.ro/cps/rde/SID-DEF6A32D-69F727CC/www_lidl_ro/hs.xsl/cautare-magazin.htm"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1674583371,
+      "lat": 44.4315301,
+      "lon": 26.1296576,
+      "tags": {
+        "name": "Mega Image Delea Nouă",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1679545690,
+      "lat": 44.4200622,
+      "lon": 26.0659522,
+      "tags": {
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1695232694,
+      "lat": 44.4347502,
+      "lon": 26.0895304,
+      "tags": {
+        "name": "Mega Image Elisabeta Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1704020450,
+      "lat": 44.4822980,
+      "lon": 26.0921689,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "71",
+        "addr:street": "Strada Nicolae Caramfil",
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1708134435,
+      "lat": 44.4324672,
+      "lon": 26.0717443,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "47",
+        "addr:postcode": "050524",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Sfântul Elefterie",
+        "name": "Mega Image",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1722794436,
+      "lat": 44.4622353,
+      "lon": 26.1321940,
+      "tags": {
+        "addr:city": "București",
+        "is_in:city": "București",
+        "name": "ED&SA",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1725768094,
+      "lat": 44.4423528,
+      "lon": 26.1627622,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "opening_hours": "Mo-Su 08:00-24:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1738605904,
+      "lat": 44.4343980,
+      "lon": 26.0195038,
+      "tags": {
+        "name": "Carrefour Market - Piața Gorjului",
+        "opening_hours": "Tu-Su 08:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1762277750,
+      "lat": 44.4524680,
+      "lon": 26.0975963,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "89-97",
+        "addr:postcode": "010627",
+        "addr:street": "Strada Grigore Alexandrescu",
+        "name": "Mega Image - IANCU DE HUNEDOARA",
+        "opening_hours": "Mo-Su 07:00-24:00",
+        "operator": "Mega Image",
+        "shop": "supermarket",
+        "website": "https://www.mega-image.ro/corporate/magazin_detalii.php?oras=Bucuresti&magazin=IANCU+DE+HUNEDOARA"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1768896770,
+      "lat": 44.4484433,
+      "lon": 26.0987711,
+      "tags": {
+        "internet_access": "wlan",
+        "name": "CARREFOUR - Dorobanți",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 07:30-23:00",
+        "phone": "0212109675",
+        "shop": "supermarket",
+        "website": "http://www.carrefour.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1768913335,
+      "lat": 44.4646470,
+      "lon": 26.0884970,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1787869829,
+      "lat": 44.4600120,
+      "lon": 26.1136868,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1811804820,
+      "lat": 44.4910585,
+      "lon": 26.0797939,
+      "tags": {
+        "addr:city": "București",
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1811804825,
+      "lat": 44.4941339,
+      "lon": 26.0808871,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "2-8",
+        "addr:postcode": "014054",
+        "addr:street": "Bulevardul Aerogării",
+        "mapillary": "HHB4yzbjmPwFdIWEkbj2MA",
+        "name": "Fine Store",
+        "opening_hours": "Mo-Fr 11:00-19:00; Sa 11:-15:00",
+        "operator": "Fine Store România",
+        "shop": "supermarket",
+        "website": "https://www.finestore.ro/"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1814915105,
+      "lat": 44.4499669,
+      "lon": 26.1235889,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1814926285,
+      "lat": 44.4515995,
+      "lon": 26.1201894,
+      "tags": {
+        "name": "Mega Image Lizeanu Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1845802364,
+      "lat": 44.4293900,
+      "lon": 26.1706854,
+      "tags": {
+        "is_in:city": "București",
+        "name": "BILLA - Miniș",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1890485068,
+      "lat": 44.4416718,
+      "lon": 26.1779457,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1890565824,
+      "lat": 44.4333028,
+      "lon": 26.1205511,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image - Hala Traian",
+        "opening_hours": "Mo-Sa 08:00-22:00;Su 08:00-21:00",
+        "shop": "supermarket",
+        "wheelchair": "designated"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1904514961,
+      "lat": 44.4319046,
+      "lon": 26.1208792,
+      "tags": {
+        "name": "Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1935441401,
+      "lat": 44.4666434,
+      "lon": 26.1376755,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Colentina Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1977615016,
+      "lat": 44.4519525,
+      "lon": 26.0795630,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2084364663,
+      "lat": 44.4201816,
+      "lon": 26.0196961,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "90-92",
+        "addr:postcode": "061418",
+        "addr:street": "Drumul Taberei",
+        "description": "Supermarket",
+        "email": "marketing@profi.ro",
+        "name": "Profi",
+        "opening_hours": "Mo-Sa 6:00-23:30; Su 7:00-23:30",
+        "phone": "+40734-336985",
+        "shop": "supermarket",
+        "source": "Owner",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2084372984,
+      "lat": 44.4227180,
+      "lon": 26.0217844,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "website": "mega-image.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2084377002,
+      "lat": 44.4243681,
+      "lon": 26.0214733,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2084379829,
+      "lat": 44.4260691,
+      "lon": 26.0243916,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2117094257,
+      "lat": 44.4197147,
+      "lon": 26.1764771,
+      "tags": {
+        "addr:city": "București",
+        "is_in:city": "București",
+        "name": "Penny Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2144220142,
+      "lat": 44.4331960,
+      "lon": 26.0104132,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2207065213,
+      "lat": 44.3892086,
+      "lon": 26.1163205,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "50-54",
+        "addr:street": "Strada Sergent Nițu Vasile",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2269584264,
+      "lat": 44.4730047,
+      "lon": 26.0587201,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "addr:housenumber": "101",
+        "addr:postcode": "012102",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Expoziției",
+        "name": "Mega Image",
+        "opening_hours": "Mo-Su 07:30-23:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2288407752,
+      "lat": 44.4137713,
+      "lon": 26.1056511,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2290859501,
+      "lat": 44.3890240,
+      "lon": 26.1254859,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2290859505,
+      "lat": 44.3848206,
+      "lon": 26.1217254,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2310330618,
+      "lat": 44.3738098,
+      "lon": 26.1158137,
+      "tags": {
+        "name": "Selgros Berceni",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2320874031,
+      "lat": 44.3996536,
+      "lon": 26.0439168,
+      "tags": {
+        "name": "Cora Alexandriei",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2342833206,
+      "lat": 44.4414907,
+      "lon": 26.1755357,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2344024963,
+      "lat": 44.3841018,
+      "lon": 26.1018993,
+      "tags": {
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2405133285,
+      "lat": 44.3917240,
+      "lon": 26.1101719,
+      "tags": {
+        "name": "Mega Image Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2423790682,
+      "lat": 44.4245996,
+      "lon": 26.0465559,
+      "tags": {
+        "name": "Mega Image Favorit",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2423989877,
+      "lat": 44.3708399,
+      "lon": 26.0909626,
+      "tags": {
+        "name": "Dedeman",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2431151497,
+      "lat": 44.4410585,
+      "lon": 26.0326860,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2434239934,
+      "lat": 44.3716157,
+      "lon": 26.0896601,
+      "tags": {
+        "is_in": "București",
+        "name": "Supermarket Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2437227325,
+      "lat": 44.4584557,
+      "lon": 26.1379916,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image Doamna Ghica 2",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2440135062,
+      "lat": 44.4407504,
+      "lon": 26.1003470,
+      "tags": {
+        "name": "Mega Image Rosetti Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2442917636,
+      "lat": 44.4421300,
+      "lon": 26.1062769,
+      "tags": {
+        "name": "MyAuchan",
+        "opening_hours": "24/7",
+        "operator": "Auchan",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2454181645,
+      "lat": 44.4441604,
+      "lon": 26.1304834,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2455286115,
+      "lat": 44.4100460,
+      "lon": 26.1158529,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2459742729,
+      "lat": 44.4658188,
+      "lon": 26.1715081,
+      "tags": {
+        "int_name": "Chance",
+        "name": "Shop&Go",
+        "name:en": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2461468849,
+      "lat": 44.4228928,
+      "lon": 26.1387863,
+      "tags": {
+        "name": "BILLA - Dristor",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2463175654,
+      "lat": 44.4570841,
+      "lon": 26.0472943,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2464209322,
+      "lat": 44.4189859,
+      "lon": 26.0433414,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2469758724,
+      "lat": 44.4228018,
+      "lon": 26.0355117,
+      "tags": {
+        "name": "Mega Image Piața Drumul Taberei (Moghioroș)",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470506167,
+      "lat": 44.4711371,
+      "lon": 26.1458081,
+      "tags": {
+        "name": "Alege",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470519066,
+      "lat": 44.4471520,
+      "lon": 26.1224334,
+      "tags": {
+        "addr:housenumber": "239",
+        "addr:street": "Calea Moșilor",
+        "is_in:city": "București",
+        "name": "Mega Image Făinari",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2477636293,
+      "lat": 44.4432370,
+      "lon": 26.1585339,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "is_in:city": "București",
+        "name": "Carrefour Market",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2479005966,
+      "lat": 44.4627102,
+      "lon": 26.1314167,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2479032011,
+      "lat": 44.4244426,
+      "lon": 26.1611057,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Titan Mall",
+        "shop": "supermarket",
+        "source": "http://www.mega-image.ro/corporate/harta_magazine.php"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2479429066,
+      "lat": 44.4895111,
+      "lon": 26.0261469,
+      "tags": {
+        "is_in": "București",
+        "name": "City Shop Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2485369674,
+      "lat": 44.3964822,
+      "lon": 26.1080684,
+      "tags": {
+        "is_in": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2487022517,
+      "lat": 44.4565629,
+      "lon": 26.0436483,
+      "tags": {
+        "is_in": "București",
+        "name": "Profi",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2487027544,
+      "lat": 44.4622641,
+      "lon": 26.0572940,
+      "tags": {
+        "is_in": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2494671466,
+      "lat": 44.4447420,
+      "lon": 26.1114382,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "108-116",
+        "addr:postcode": "020506",
+        "addr:street": "Strada Vasile Lascăr",
+        "is_in": "București",
+        "name": "Mega Image Concept Store",
+        "shop": "supermarket",
+        "source": "survey",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2509614369,
+      "lat": 44.4369965,
+      "lon": 26.1624146,
+      "tags": {
+        "is_in": "București",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2514218982,
+      "lat": 44.4114801,
+      "lon": 26.0155225,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2514760865,
+      "lat": 44.4185557,
+      "lon": 26.0961428,
+      "tags": {
+        "name": "Succes",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2537336579,
+      "lat": 44.4446422,
+      "lon": 26.0203189,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2561013617,
+      "lat": 44.4186085,
+      "lon": 26.0963341,
+      "tags": {
+        "name": "Shop & Go",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2576725082,
+      "lat": 44.4059324,
+      "lon": 26.0749571,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "133",
+        "addr:postcode": "051893",
+        "addr:street": "Șoseaua Sălaj",
+        "description": "Supermarket",
+        "email": "marketing@profi.ro",
+        "name": "Profi",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-22:00",
+        "phone": "+40731-160542",
+        "shop": "supermarket",
+        "source": "Survey, keypad mapper, vespucci",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2582581922,
+      "lat": 44.4521424,
+      "lon": 26.1259416,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "3A",
+        "addr:postcode": "021152",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Șoseaua Colentina",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2610571104,
+      "lat": 44.4642901,
+      "lon": 26.1262317,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2637553770,
+      "lat": 44.4272770,
+      "lon": 26.0661717,
+      "tags": {
+        "addr:housenumber": "71",
+        "addr:street": "Șoseaua Panduri",
+        "name": "Carrefour Panduri",
+        "opening_hours": "Mo-Sa 08:00-22:00;Su 08:00-20:00",
+        "phone": "+40374201134",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2690858427,
+      "lat": 44.3850174,
+      "lon": 26.1097715,
+      "tags": {
+        "addr:postcode": "041455",
+        "addr:street": "Bulevardul Constantin Brâncoveanu",
+        "name": "Mega Image - Izvorul Crișului",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2701105647,
+      "lat": 44.4640280,
+      "lon": 26.0621963,
+      "tags": {
+        "addr:city": "survey",
+        "addr:housenumber": "6-12",
+        "addr:street": "Strada Copilului",
+        "name": "Annabella",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2701628005,
+      "lat": 44.3927738,
+      "lon": 26.0822601,
+      "tags": {
+        "addr:city": "București",
+        "name": "Profi Ferentari",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2732714181,
+      "lat": 44.3826745,
+      "lon": 26.1291536,
+      "tags": {
+        "addr:housenumber": "15 A",
+        "addr:street": "Aleea Moldovița",
+        "name": "Trident",
+        "name:ro": "Rema Retail Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2784023979,
+      "lat": 44.4444282,
+      "lon": 26.1010454,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "76",
+        "addr:postcode": "010459",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Dionisie Lupu",
+        "name": "Bacania Coco",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2815557034,
+      "lat": 44.4133902,
+      "lon": 26.1428617,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2815557036,
+      "lat": 44.4328760,
+      "lon": 26.1508481,
+      "tags": {
+        "name": "Shop & Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2816667023,
+      "lat": 44.4278614,
+      "lon": 26.0308922,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "42C",
+        "addr:postcode": "061332",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Timișoara",
+        "name": "Lidl",
+        "shop": "supermarket",
+        "website": "www.lidl.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2865886744,
+      "lat": 44.4450012,
+      "lon": 26.0740563,
+      "tags": {
+        "name": "Shop & Go",
+        "opening_hours": "Mo-Su 08:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2907494534,
+      "lat": 44.3951670,
+      "lon": 26.1170608,
+      "tags": {
+        "addr:housename": "Sun Valedo",
+        "name": "Sun Valedo",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2907589797,
+      "lat": 44.3964679,
+      "lon": 26.1135496,
+      "tags": {
+        "addr:housename": "Supermarket nonstop",
+        "addr:housenumber": "142",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "Supermarket nonstop",
+        "name:ro": "Comproexim",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2907592124,
+      "lat": 44.3981151,
+      "lon": 26.1086639,
+      "tags": {
+        "addr:housenumber": "58",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "Issa Express Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2907592125,
+      "lat": 44.3989468,
+      "lon": 26.1070305,
+      "tags": {
+        "addr:housename": "Mega Image",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2908801707,
+      "lat": 44.4253647,
+      "lon": 26.0973910,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2925747577,
+      "lat": 44.4221619,
+      "lon": 26.0119029,
+      "tags": {
+        "name": "Kaufland Valea Oltului",
+        "opening_hours": "Mo-Sa 07:30-22:00; Su 08:00-20:00",
+        "operator": "Kaufland",
+        "phone": "+40370 907 001",
+        "shop": "supermarket",
+        "website": "http://www.kaufland.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2929087589,
+      "lat": 44.4553599,
+      "lon": 26.1284662,
+      "tags": {
+        "name": "Cristim",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2929115156,
+      "lat": 44.4654954,
+      "lon": 26.0674836,
+      "tags": {
+        "name": "Mega Image Domenii Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2929442913,
+      "lat": 44.4296590,
+      "lon": 26.1466650,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "36",
+        "addr:postcode": "030373",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Câmpia Libertății",
+        "name": "Mega Image - Câmpia Libertății",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2941792801,
+      "lat": 44.4214234,
+      "lon": 26.1638018,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "20",
+        "addr:postcode": "030453",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Nicolae Grigorescu",
+        "name": "Shop&Go Nicolae Grigorescu 20",
+        "shop": "supermarket",
+        "source": "http://www.mega-image.ro/corporate/harta_magazine.php"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2942589801,
+      "lat": 44.4441954,
+      "lon": 26.1419267,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Profi Non-Stop Baicului",
+        "opening_hours": "24/7",
+        "operator": "Prodas",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2958707820,
+      "lat": 44.4746274,
+      "lon": 26.1573538,
+      "tags": {
+        "name": "Asia Supermarket",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2969713941,
+      "lat": 44.4113424,
+      "lon": 26.1362574,
+      "tags": {
+        "name": "Mega Image Lugojana Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2970919733,
+      "lat": 44.4082662,
+      "lon": 26.0962249,
+      "tags": {
+        "addr:housenumber": "256",
+        "addr:street": "Calea Șerban Vodă",
+        "name": "Issa Supermarket Non-Stop",
+        "name:ro": "Issa Supermarket Non-Stop (Serban Voda)",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2980380833,
+      "lat": 44.4647624,
+      "lon": 26.1487030,
+      "tags": {
+        "addr:housenumber": "10A",
+        "addr:street": "Strada Ițcani",
+        "name": "Aedemia CO",
+        "name:ro": "Aedemia CO",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2981929465,
+      "lat": 44.4384828,
+      "lon": 26.1386653,
+      "tags": {
+        "name": "Mega Image Vatra Luminoasă",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2985628616,
+      "lat": 44.3786785,
+      "lon": 26.1358839,
+      "tags": {
+        "addr:street": "Piața Apărătorii Patriei",
+        "description": "Supermarket",
+        "email": "marketing@profi.ro",
+        "name": "Profi",
+        "opening_hours": "Mo-Sa 07:00-23:00;Su 8:00-22:00",
+        "phone": "+40724-343036",
+        "shop": "supermarket",
+        "source": "Owner",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2987425618,
+      "lat": 44.4096327,
+      "lon": 26.0694758,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "355",
+        "addr:postcode": "050905",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Calea Rahovei",
+        "description": "Supermarket",
+        "email": "marketing@profi.ro",
+        "name": "Profi",
+        "opening_hours": "Mo-Sa 06:00-23:00;Su 8:00-22:00",
+        "phone": "+40731-160531",
+        "shop": "supermarket",
+        "source": "Survey, keypad mapper, vespucci",
+        "website": "www.profi.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2997614034,
+      "lat": 44.4228429,
+      "lon": 26.1244436,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "addr:housenumber": "13-19",
+        "addr:postcode": "031281",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Calea Vitan",
+        "name": "Mega Image",
+        "opening_hours": "24/7",
+        "operator": "Mega Image",
+        "shop": "supermarket",
+        "website": "http://www.mega-image.ro/"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3060138833,
+      "lat": 44.4296613,
+      "lon": 26.1342093,
+      "tags": {
+        "name": "Succes Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3067030864,
+      "lat": 44.4181757,
+      "lon": 26.0722420,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Strada Progresului",
+        "name": "Carrefour Vulcan",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3069907219,
+      "lat": 44.4176064,
+      "lon": 26.0742451,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Strada Progresului",
+        "name": "Jysk",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3121754092,
+      "lat": 44.5116372,
+      "lon": 26.0203457,
+      "tags": {
+        "addr:housenumber": "22A",
+        "addr:street": "Șoseaua București-Târgoviște",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3136936372,
+      "lat": 44.4143885,
+      "lon": 26.1326338,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Dâmbovița Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3202888596,
+      "lat": 44.3802074,
+      "lon": 26.0995923,
+      "tags": {
+        "addr:housenumber": "4",
+        "addr:street": "Strada Reșița",
+        "name": "Mega Image Reșița",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3253964872,
+      "lat": 44.4621991,
+      "lon": 26.1195347,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "115",
+        "addr:street": "Bulevardul Lacul Tei",
+        "name": "Issa Supermarket",
+        "name:ro": "Issa Supermarket (Lacul tei)",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3261889711,
+      "lat": 44.4520619,
+      "lon": 26.0760032,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Blocul 8",
+        "addr:housenumber": "95-103",
+        "addr:postcode": "011135",
+        "addr:street": "Șoseaua Nicolae Titulescu",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "website": "http://www.mega-image.ro/"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3295578961,
+      "lat": 44.3826639,
+      "lon": 26.1323096,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "41",
+        "addr:postcode": "041908",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Șoseaua Berceni",
+        "name": "Mega Image - Berceni",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3296739062,
+      "lat": 44.4364761,
+      "lon": 26.1109104,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "101",
+        "addr:postcode": "020852",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Calea Moșilor",
+        "is_in": "București",
+        "name": "Mega Image Paleologu",
+        "opening_hours": "Mo-Sa 08:00-22:00; Su 08:00-21:00",
+        "operator": "Mega Image",
+        "shop": "supermarket",
+        "website": "https://www.mega-image.ro/corporate/magazin_detalii.php?oras=bucuresti&magazin=PALEOLOGU"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3299507961,
+      "lat": 44.4246950,
+      "lon": 26.0807336,
+      "tags": {
+        "addr:housenumber": "75-79",
+        "addr:street": "Calea 13 Septembrie",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "website": "București"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3305039361,
+      "lat": 44.4199983,
+      "lon": 26.1136234,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "17-19",
+        "addr:postcode": "031025",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Aleea Apahida",
+        "name": "Mega Image - Apahida",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3312306379,
+      "lat": 44.4407835,
+      "lon": 26.1345867,
+      "tags": {
+        "addr:city": "București",
+        "name": "White Jaguar",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3314787413,
+      "lat": 44.4935993,
+      "lon": 26.0848083,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "38A",
+        "addr:street": "Bulevardul Aerogării",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "website": "București"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3315059807,
+      "lat": 44.4381620,
+      "lon": 26.0141214,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "50",
+        "addr:postcode": "062288",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Strada Apusului",
+        "name": "Mega Image - Apusului",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3316597124,
+      "lat": 44.4123413,
+      "lon": 26.1141805,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "220-224",
+        "addr:postcode": "040057",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Calea Văcărești",
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3317872861,
+      "lat": 44.3817303,
+      "lon": 26.1160256,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Bulevardul Alexandru Obregia",
+        "name": "Carrefour Express;Cinema Cultural",
+        "opening_hours": "08:00-22:00",
+        "shop": "supermarket",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3324123961,
+      "lat": 44.3954327,
+      "lon": 26.1238093,
+      "tags": {
+        "email": "su@cora.ro",
+        "name": "Cora Sun Plaza",
+        "opening_hours": "Mo-Su 08:00-22:00",
+        "phone": "+40374 11 75 00",
+        "shop": "supermarket",
+        "website": "www.cora.ro",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3507751793,
+      "lat": 44.4325336,
+      "lon": 26.1031889,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3529187238,
+      "lat": 44.4275260,
+      "lon": 26.0973426,
+      "tags": {
+        "addr:city": "București",
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3562434593,
+      "lat": 44.3711268,
+      "lon": 26.1411896,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3622249757,
+      "lat": 44.4424504,
+      "lon": 26.1707622,
+      "tags": {
+        "name": "Profi City",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-24:00",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3640739494,
+      "lat": 44.4754226,
+      "lon": 26.1611007,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "426-426A",
+        "addr:street": "Șoseaua Colentina",
+        "name": "Carrefour Colentina",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3649454793,
+      "lat": 44.3887432,
+      "lon": 26.1003859,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Drumul Găzarului",
+        "name": "Mini market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3649454794,
+      "lat": 44.3875146,
+      "lon": 26.0975267,
+      "tags": {
+        "addr:city": "București",
+        "addr:street": "Drumul Găzarului",
+        "name": "Magazin alimentar",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3693272534,
+      "lat": 44.4882862,
+      "lon": 26.0149029,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "205",
+        "addr:postcode": "12388",
+        "addr:street": "Șoseaua Chitilei",
+        "name": "Tigla metalica",
+        "operator": "Auvent",
+        "phone": "+40 74 342 8456",
+        "shop": "supermarket",
+        "website": "http://www.tabla-tip-tigla-bucuresti.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3694811041,
+      "lat": 44.4320479,
+      "lon": 26.0285737,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3700327028,
+      "lat": 44.3824940,
+      "lon": 26.1237893,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Emil Racoviță",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3711412481,
+      "lat": 44.4101492,
+      "lon": 26.1817820,
+      "tags": {
+        "name": "Penny",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3716138625,
+      "lat": 44.4509892,
+      "lon": 26.0697187,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image Titulescu 2",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3748890801,
+      "lat": 44.4294019,
+      "lon": 26.1015800,
+      "tags": {
+        "name": "dm",
+        "operator": "dm-drogerie markt",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3757869479,
+      "lat": 44.4450784,
+      "lon": 26.0328280,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3759186606,
+      "lat": 44.4484615,
+      "lon": 26.0766247,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3766017240,
+      "lat": 44.4588790,
+      "lon": 26.0953768,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3811776890,
+      "lat": 44.4084360,
+      "lon": 26.1789706,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3831396379,
+      "lat": 44.4009084,
+      "lon": 26.1004567,
+      "tags": {
+        "addr:housenumber": "10",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "Issa Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3847576157,
+      "lat": 44.4267728,
+      "lon": 26.1374847,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3863402167,
+      "lat": 44.4097597,
+      "lon": 26.1775501,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3864828841,
+      "lat": 44.3790753,
+      "lon": 26.1143469,
+      "tags": {
+        "name": "Profi",
+        "opening_hours": "Mo-Sa 07:00-23:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3873169251,
+      "lat": 44.4317926,
+      "lon": 26.1291053,
+      "tags": {
+        "name": "Supermarket Altra",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3877013766,
+      "lat": 44.4160266,
+      "lon": 26.1469899,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3888032214,
+      "lat": 44.3954108,
+      "lon": 26.0550200,
+      "tags": {
+        "name": "Supermarket La Complex",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3888040822,
+      "lat": 44.4020991,
+      "lon": 26.0625462,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3888082343,
+      "lat": 44.4073533,
+      "lon": 26.0591827,
+      "tags": {
+        "name": "Coral Market 4",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3888340058,
+      "lat": 44.4340348,
+      "lon": 26.1574650,
+      "tags": {
+        "addr:housenumber": "116",
+        "addr:street": "Bulevardul Basarabia",
+        "name": "Mega Image",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3905394374,
+      "lat": 44.4125282,
+      "lon": 26.0651464,
+      "tags": {
+        "name": "Supermarket Miruna",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3905912206,
+      "lat": 44.4128506,
+      "lon": 26.0314894,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3909469978,
+      "lat": 44.3801406,
+      "lon": 26.0924647,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3915107162,
+      "lat": 44.4072881,
+      "lon": 25.9893915,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3919486447,
+      "lat": 44.3888113,
+      "lon": 26.0102478,
+      "tags": {
+        "name": "Penny",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4025317098,
+      "lat": 44.4362916,
+      "lon": 26.1668106,
+      "tags": {
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4064254489,
+      "lat": 44.4626770,
+      "lon": 26.1205139,
+      "tags": {
+        "name": "Mega Image Maica Domnului Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4100381994,
+      "lat": 44.4323473,
+      "lon": 26.0719384,
+      "tags": {
+        "name": "Economat",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4102271550,
+      "lat": 44.4515333,
+      "lon": 26.0467400,
+      "tags": {
+        "name": "Penny",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4151705164,
+      "lat": 44.4289698,
+      "lon": 26.1183986,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4151705165,
+      "lat": 44.4302764,
+      "lon": 26.1207558,
+      "tags": {
+        "name": "Shop & Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4181292853,
+      "lat": 44.4658351,
+      "lon": 26.0666610,
+      "tags": {
+        "name": "Branza Sibiu",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4208071989,
+      "lat": 44.4282604,
+      "lon": 26.0344435,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4208071990,
+      "lat": 44.4310912,
+      "lon": 26.0503886,
+      "tags": {
+        "addr:city": "București",
+        "name": "Auchan Cotroceni",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4210766189,
+      "lat": 44.4215811,
+      "lon": 26.0654331,
+      "tags": {
+        "addr:street": "Strada Mihail Sebastian",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4212139002,
+      "lat": 44.4201480,
+      "lon": 26.1241337,
+      "tags": {
+        "name": "Profi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4232303995,
+      "lat": 44.4486707,
+      "lon": 26.0683002,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "46",
+        "addr:street": "Șoseaua Orhideelor",
+        "name": "Kaufland",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4245032751,
+      "lat": 44.4410699,
+      "lon": 26.1528428,
+      "tags": {
+        "name": "Carrefour",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4264489200,
+      "lat": 44.4075548,
+      "lon": 26.0757443,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4273469037,
+      "lat": 44.3901481,
+      "lon": 26.1308794,
+      "tags": {
+        "name": "Supermarket Larnic",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4283881390,
+      "lat": 44.4110224,
+      "lon": 26.0712143,
+      "tags": {
+        "name": "Mega Image Shop & Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4285711241,
+      "lat": 44.3890206,
+      "lon": 26.1318641,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "240",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "Mega Image Olteniței",
+        "opening_hours": "Mo-Su 07:00-24:00",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4285711242,
+      "lat": 44.3863186,
+      "lon": 26.1381263,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "252",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "Shop & Go",
+        "opening_hours": "Mo-Fr 07:00 - 22:00",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4291351289,
+      "lat": 44.4131770,
+      "lon": 26.1145019,
+      "tags": {
+        "addr:housenumber": "213",
+        "addr:street": "Strada V.V. Stanciu",
+        "name": "Penny Market",
+        "opening_hours": "Mo-Sa 07:00-23:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4297610889,
+      "lat": 44.4296661,
+      "lon": 26.1307926,
+      "tags": {
+        "addr:housenumber": "24",
+        "addr:street": "Strada Învingătorilor",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4305385894,
+      "lat": 44.4049975,
+      "lon": 25.9899553,
+      "tags": {
+        "name": "Shop&Go ",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4305410090,
+      "lat": 44.4238002,
+      "lon": 26.1213732,
+      "tags": {
+        "addr:housenumber": "24",
+        "addr:street": "Bulevardul Octavian Goga",
+        "name": "Shop&Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4305410091,
+      "lat": 44.3879220,
+      "lon": 26.0616746,
+      "tags": {
+        "addr:housenumber": "347",
+        "addr:street": "Șoseaua Sălaj",
+        "name": "Mega Image ",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4305410092,
+      "lat": 44.3877532,
+      "lon": 26.0609218,
+      "tags": {
+        "name": "Coral Market 5",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4318026598,
+      "lat": 44.4680643,
+      "lon": 26.0536506,
+      "tags": {
+        "name": "Magazin Alimentar",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4319219301,
+      "lat": 44.4214905,
+      "lon": 26.0647107,
+      "tags": {
+        "addr:housenumber": "135",
+        "addr:street": "Strada Mihail Sebastian",
+        "name": "Mayo Next",
+        "name:ro": "Mayo Next",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4319264791,
+      "lat": 44.4235236,
+      "lon": 26.1295572,
+      "tags": {
+        "addr:street": "Strada Școala Ciocanul",
+        "name": "MiniMarket",
+        "name:ro": "TUBOL MiniMarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4321619994,
+      "lat": 44.4484864,
+      "lon": 26.1246074,
+      "tags": {
+        "addr:city": "București",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4325168930,
+      "lat": 44.4391562,
+      "lon": 26.0281910,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4329534693,
+      "lat": 44.4068570,
+      "lon": 26.0773732,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "62",
+        "addr:street": "Calea Ferentari",
+        "name": "Kaufland",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 08:00-22:00",
+        "phone": "0370303101",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4336693511,
+      "lat": 44.4150580,
+      "lon": 26.0614343,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4349818796,
+      "lat": 44.4014395,
+      "lon": 26.0560627,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "4-8",
+        "addr:postcode": "051396",
+        "addr:street": "Strada Teiuș",
+        "name": "Lidl",
+        "opening_hours": "Mo-Sa 07:30-22:00; Su 08:00-21:00",
+        "phone": "0800 896 622",
+        "shop": "supermarket",
+        "source": "survey",
+        "website": "http://www.lidl.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4353590534,
+      "lat": 44.4381374,
+      "lon": 26.1013645,
+      "tags": {
+        "name": "Pravalia Maestrului",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4359906689,
+      "lat": 44.4321098,
+      "lon": 26.0286378,
+      "tags": {
+        "name:en": "Non-Stop shop",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4366101300,
+      "lat": 44.4603778,
+      "lon": 26.1270395,
+      "tags": {
+        "name": "Best Supermarket",
+        "name:ro": "Best Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4373317396,
+      "lat": 44.4775951,
+      "lon": 26.0415022,
+      "tags": {
+        "name": "Pronto Expres",
+        "name:ro": "Pronto Expres",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4373534394,
+      "lat": 44.4524506,
+      "lon": 26.0722031,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "80",
+        "addr:street": "Șoseaua Nicolae Titulescu",
+        "name": "Best Market 1",
+        "name:ro": "Best Market 1",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4388764294,
+      "lat": 44.4226268,
+      "lon": 26.1114443,
+      "tags": {
+        "addr:street": "Bulevardul Mircea Vodă",
+        "name": "MGV Supermarket Zeno",
+        "name:ro": "MGV Supermarket Zeno",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4388765801,
+      "lat": 44.4207280,
+      "lon": 26.1165161,
+      "tags": {
+        "addr:housenumber": "17-19",
+        "addr:street": "Bulevardul Nerva Traian",
+        "name": "MGV Green Expres",
+        "name:ro": "BGV Green Expres",
+        "opening_hours": "24/7",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4388791490,
+      "lat": 44.4226189,
+      "lon": 26.1090806,
+      "tags": {
+        "addr:housenumber": "18 A",
+        "addr:street": "Strada Bucur",
+        "name": "ClicMarket",
+        "name:ro": "ClicMarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4393208390,
+      "lat": 44.4560503,
+      "lon": 26.0429222,
+      "tags": {
+        "addr:housenumber": "Nr 20",
+        "addr:street": "Strada Mehadia",
+        "name": "Oval Market",
+        "name:ro": "Oval Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4397036806,
+      "lat": 44.3963677,
+      "lon": 26.1137754,
+      "tags": {
+        "addr:housenumber": "142",
+        "addr:street": "Șoseaua Olteniței",
+        "name": "B&A Comercial Trade",
+        "name:ro": "B&A Comercial Trade",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4397177100,
+      "lat": 44.3817807,
+      "lon": 26.1255008,
+      "tags": {
+        "addr:housenumber": "25",
+        "addr:street": "Strada Emil Racoviță",
+        "name": "Speed Market for you",
+        "name:ro": "Speed Market for you",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4397213790,
+      "lat": 44.3789919,
+      "lon": 26.1184970,
+      "tags": {
+        "addr:housenumber": "35",
+        "addr:street": "Bulevardul Alexandru Obregia",
+        "name": "Pars German",
+        "name:ro": "Pars German",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4404004800,
+      "lat": 44.4418051,
+      "lon": 26.0995615,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "8-10",
+        "addr:postcode": "010332",
+        "addr:street": "Bulevardul General Gheorghe Magheru",
+        "name": "ilanplant",
+        "opening_hours": "Mo-Fr 09:00-20:00; Sa 10:00-19:00; Su 10:00-17:00",
+        "operator": "ilanplant",
+        "organic": "only",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4405318389,
+      "lat": 44.5058372,
+      "lon": 26.0805309,
+      "tags": {
+        "addr:postcode": "013685",
+        "addr:street": "Șoseaua București-Ploiești",
+        "name": "Mega Image Băneasa",
+        "name:en": "Mega Image Băneasa",
+        "name:it": "Mega Image",
+        "name:ro": "Mega Image Băneasa",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4407746690,
+      "lat": 44.4261832,
+      "lon": 26.1372401,
+      "tags": {
+        "name": "Radcom 2001",
+        "name:ro": "Radcom 2001",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4407894199,
+      "lat": 44.3853957,
+      "lon": 26.1356687,
+      "tags": {
+        "name": "Iulio",
+        "name:ro": "Iulio",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4407991989,
+      "lat": 44.3768970,
+      "lon": 26.1093710,
+      "tags": {
+        "addr:housenumber": "130-132",
+        "addr:street": "Bulevardul Constantin Brâncoveanu",
+        "name": "supermarket",
+        "name:ro": "supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4411044690,
+      "lat": 44.3860843,
+      "lon": 26.0925633,
+      "tags": {
+        "addr:street": "Șoseaua Giurgiului",
+        "name": "M & B",
+        "name:ro": "M & B",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4411358991,
+      "lat": 44.4104971,
+      "lon": 26.0636599,
+      "tags": {
+        "addr:housenumber": "11",
+        "addr:street": "Strada Bârcă",
+        "name": "Coral Market 3",
+        "name:ro": "Coral Market 3",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4411395290,
+      "lat": 44.4071083,
+      "lon": 26.0588334,
+      "tags": {
+        "addr:street": "Strada Mărgeanului",
+        "name": "Coral Market 1",
+        "name:ro": "Coral Market 1",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4412720693,
+      "lat": 44.4572154,
+      "lon": 26.0470800,
+      "tags": {
+        "addr:housenumber": "22",
+        "addr:street": "Strada Ceahlăul",
+        "name": "Clau & Ove",
+        "name:ro": "Clau & Ove",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4413106990,
+      "lat": 44.3845373,
+      "lon": 26.0823654,
+      "tags": {
+        "addr:housenumber": "4",
+        "addr:street": "Strada Baciului",
+        "name": "AlexMar Supermarket",
+        "name:ro": "AlexMar Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4413115792,
+      "lat": 44.4072444,
+      "lon": 26.0589655,
+      "tags": {
+        "addr:street": "Strada Buzoieni",
+        "name": "AlexMar Supermarket 2",
+        "name:ro": "AlexMar Supermarket 2",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432418006,
+      "lat": 44.3833860,
+      "lon": 26.0927181,
+      "tags": {
+        "addr:street": "Strada Grădiștea",
+        "name": "Atlant Impex",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432418007,
+      "lat": 44.4572724,
+      "lon": 26.0469716,
+      "tags": {
+        "addr:housenumber": "22",
+        "addr:street": "Strada Ceahlăul",
+        "name": "Clau & Ove",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432465090,
+      "lat": 44.4026282,
+      "lon": 26.0555186,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "92",
+        "addr:street": "Șoseaua Alexandria",
+        "name": "Coral Market 2",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432465091,
+      "lat": 44.3844801,
+      "lon": 26.0823171,
+      "tags": {
+        "addr:housenumber": "4",
+        "name": "AlexMar Supermarket 1",
+        "name:ro": "AlexMar Supermarket 1",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4432471489,
+      "lat": 44.4104905,
+      "lon": 26.0635538,
+      "tags": {
+        "name": "Coral Market 3",
+        "name:ro": "Coral Market 3",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4433778189,
+      "lat": 44.4621040,
+      "lon": 26.0574562,
+      "tags": {
+        "addr:street": "Calea Griviței",
+        "name": "Rom Sep",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4434044790,
+      "lat": 44.4370271,
+      "lon": 26.0242323,
+      "tags": {
+        "addr:housenumber": "41",
+        "addr:street": "Strada Cetatea de Baltă",
+        "name": "Nortia Retail",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4435817990,
+      "lat": 44.4257447,
+      "lon": 26.0174080,
+      "tags": {
+        "addr:housenumber": "73",
+        "addr:street": "Bulevardul Timișoara",
+        "name": "Eurocard",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4435993191,
+      "lat": 44.4238752,
+      "lon": 26.0259880,
+      "tags": {
+        "addr:street": "Strada Nera",
+        "name": "Sandos Food",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4443594190,
+      "lat": 44.4257693,
+      "lon": 26.0177144,
+      "tags": {
+        "addr:housenumber": "73",
+        "addr:street": "Bulevardul Timișoara",
+        "name": "Supermarket Eurocarn",
+        "name:ro": "Supermarket Eurocarn",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4445627489,
+      "lat": 44.4155404,
+      "lon": 26.1541706,
+      "tags": {
+        "name": "Supermarket",
+        "name:ro": "Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4447035397,
+      "lat": 44.4167234,
+      "lon": 26.1819343,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "2",
+        "addr:street": "Strada Buhuși",
+        "name": "Mega Image Shop&Go",
+        "name:ro": "Mega Image Shop&Go",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4449316900,
+      "lat": 44.3887686,
+      "lon": 26.1247597,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "8",
+        "addr:street": "Șoseaua Berceni",
+        "name": "Lidl Berceni",
+        "note": "deschidere pe 17 octombrie 2017",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4450711593,
+      "lat": 44.3845235,
+      "lon": 26.0823552,
+      "tags": {
+        "addr:housenumber": "4",
+        "addr:street": "Strada Baciului",
+        "name": "Alex Mar 1",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4454741173,
+      "lat": 44.3754298,
+      "lon": 26.1110498,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4454757991,
+      "lat": 44.4212071,
+      "lon": 26.1214062,
+      "tags": {
+        "addr:housenumber": "42",
+        "addr:street": "Strada Siminocului",
+        "name": "Vio-Flor Prodservicom",
+        "name:ro": "Vio-Flor Prodservicom",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4471021648,
+      "lat": 44.4516077,
+      "lon": 26.1311607,
+      "tags": {
+        "name": "Carrefour",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4494083365,
+      "lat": 44.3881789,
+      "lon": 26.1077374,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "30-32",
+        "addr:street": "Strada Izvorul Rece",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4498478591,
+      "lat": 44.4570804,
+      "lon": 26.1374773,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "64-70",
+        "addr:street": "Șoseaua Gherase",
+        "name": "Penny Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4502281895,
+      "lat": 44.4441064,
+      "lon": 26.1434769,
+      "tags": {
+        "addr:housenumber": "98-110",
+        "addr:street": "Șoseaua Pantelimon",
+        "name": "M.G Nicom Serv Impex",
+        "name:ro": "M.G Nicom Serv Impex",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4502668390,
+      "lat": 44.4780570,
+      "lon": 26.0713016,
+      "tags": {
+        "addr:postcode": "013702",
+        "name": "Mega Image",
+        "name:en": "Mega Image",
+        "name:ro": "Mega Image",
+        "opening_hours": "Mo-Fr 07:00-21:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4549705862,
+      "lat": 44.4275912,
+      "lon": 26.0944512,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4550864690,
+      "lat": 44.4036822,
+      "lon": 25.9847277,
+      "tags": {
+        "addr:city": "Bragadiru",
+        "addr:housenumber": "12",
+        "addr:postcode": "077025",
+        "addr:street": "Strada Cireșar",
+        "name": "Shop & Go / Mega Image",
+        "opening_hours": "07:00-22:00",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4568244583,
+      "lat": 44.4202470,
+      "lon": 26.1270141,
+      "tags": {
+        "level": "0",
+        "name": "Mega Image București Mall",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4585737874,
+      "lat": 44.4195656,
+      "lon": 26.1301651,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4618747780,
+      "lat": 44.4794587,
+      "lon": 26.1052632,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4720540860,
+      "lat": 44.4881745,
+      "lon": 26.0943784,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4862253412,
+      "lat": 44.3828150,
+      "lon": 26.1029464,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "15",
+        "addr:street": "Strada Uioara",
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4866483524,
+      "lat": 44.4790066,
+      "lon": 26.1033313,
+      "tags": {
+        "addr:city": "București",
+        "name": "Billa",
+        "name:en": "Billa",
+        "name:it": "Billa",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4934455122,
+      "lat": 44.4110750,
+      "lon": 26.0160102,
+      "tags": {
+        "name": "eMAG Supermarket",
+        "name:ro": "eMAG Supermarket",
+        "opening_hours": "Mo-Fr 07:00-23:00; Sa 08:30-17:00; Su 12:30-14:00",
+        "shop": "supermarket",
+        "website": "http://www.emag.ro/supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4985374425,
+      "lat": 44.4690077,
+      "lon": 26.1714100,
+      "tags": {
+        "name": "La Doi Pasi",
+        "name:ro": "La Doi Pasi",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4985378627,
+      "lat": 44.4687898,
+      "lon": 26.1718284,
+      "tags": {
+        "name": "Shop&Go",
+        "name:en": "Mega Image",
+        "name:ro": "Shop&Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4997248582,
+      "lat": 44.4304053,
+      "lon": 26.1067897,
+      "tags": {
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5032322806,
+      "lat": 44.3694972,
+      "lon": 26.1227726,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "51",
+        "addr:street": "Drumul Binelui",
+        "name": "Lidl",
+        "opening_hours": "Mo-Su 07:30-22:00",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5040456395,
+      "lat": 44.3976523,
+      "lon": 26.1115911,
+      "tags": {
+        "name": "Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5053274547,
+      "lat": 44.4359043,
+      "lon": 26.0345508,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5056061380,
+      "lat": 44.4563023,
+      "lon": 26.1289374,
+      "tags": {
+        "name": "Penny Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5056064774,
+      "lat": 44.4566559,
+      "lon": 26.1291895,
+      "tags": {
+        "name": "Doinei Supermarket",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5068656516,
+      "lat": 44.4547285,
+      "lon": 26.0980091,
+      "tags": {
+        "name": "Carrefour Express",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5099831081,
+      "lat": 44.5004807,
+      "lon": 26.0686820,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5101278923,
+      "lat": 44.4933893,
+      "lon": 26.0796098,
+      "tags": {
+        "name": "Best Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5103204624,
+      "lat": 44.4264580,
+      "lon": 26.0181846,
+      "tags": {
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5103998403,
+      "lat": 44.4164847,
+      "lon": 26.1241278,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "8",
+        "addr:street": "Strada Zizin",
+        "name": "Mega Image Zizin 2",
+        "opening_hours": "07:00-22:00",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5124829852,
+      "lat": 44.4385109,
+      "lon": 26.0175631,
+      "tags": {
+        "name": "Mega Image Shop&Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5144715180,
+      "lat": 44.4765564,
+      "lon": 26.0928983,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5183790880,
+      "lat": 44.4226329,
+      "lon": 26.1082880,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5201413676,
+      "lat": 44.4096016,
+      "lon": 26.0803112,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5252148989,
+      "lat": 44.4531251,
+      "lon": 26.0495796,
+      "tags": {
+        "brand": "Carrefour Market",
+        "brand:wikidata": "Q2689639",
+        "name": "Carrefour Market",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5295093625,
+      "lat": 44.4107301,
+      "lon": 26.1476462,
+      "tags": {
+        "addr:street": "Fizicienilor",
+        "name": "Penny Fizicienilor",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5303000444,
+      "lat": 44.3838692,
+      "lon": 26.0039898,
+      "tags": {
+        "addr:city": "Bragadiru",
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5435691324,
+      "lat": 44.4955679,
+      "lon": 26.1808551,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5539346126,
+      "lat": 44.4271753,
+      "lon": 26.1785094,
+      "tags": {
+        "name": "Shop & Go",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5549736832,
+      "lat": 44.3894360,
+      "lon": 26.1325884,
+      "tags": {
+        "name": "Lidl",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5549746704,
+      "lat": 44.3906444,
+      "lon": 26.1281307,
+      "tags": {
+        "name": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5817849907,
+      "lat": 44.4432938,
+      "lon": 26.0459409,
+      "tags": {
+        "name": "Mega Image",
+        "operator": "Mega Image",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5832762987,
+      "lat": 44.4605236,
+      "lon": 26.1000319,
+      "tags": {
+        "addr:housenumber": "43",
+        "addr:street": "Strada Banul Antonache",
+        "name": "Megaimage Floreasca",
+        "name:en": "Mega Image - Piata Floreasca",
+        "name:ro": "Mega Image - Piata Floreasca",
+        "opening_hours": "Mo-Sa 08:00-22:00; Su 08:00-21:00",
+        "shop": "supermarket"
+      }
+    }
+
+  ]
+}

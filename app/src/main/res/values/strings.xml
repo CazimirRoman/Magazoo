@@ -19,7 +19,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="forgot_password_msg">We just need your email address to send you the reset instructions.</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Export</string>
     <string name="password_minimum">The password is to short. Please enter a minimum of 6 characters.</string>
     <string name="login">Login with email</string>
     <string name="facebook_login">  Login with Facebook</string>
@@ -99,6 +99,8 @@
     <string name="send_feedback">Contact us</string>
     <string name="signout">Logout</string>
     <string name="sign_in">Sign in</string>
+    <string name="reports">Reports</string>
+
     <string name="send_feedback_hint">Please enter any comments, questions, suggestions or feedback…</string>
     <string name="feedback_empty">You did not enter any text.</string>
     <string name="feedback_sent">Thank you! Your feedback is important to us</string>
@@ -112,7 +114,7 @@
     <string name="tutorial_add_shop_title">Add shops</string>
     <string name="tutorial_add_shop_text">Do you know a shop that is not on the map? \n Add it in 2 simple steps, this way you will contribute to the Magazoo community!</string>
     <string name="tutorial_shop_type_title">Type of shops</string>
-    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, supermarkets and shopping centers.</string>
+    <string name="tutorial_shop_type_text">Choose whatever shop you like: small shops, farmer\'s markets, gas stations, supermarkets and shopping centers.</string>
     <string name="tutorial_report_shop_title">Report a shop</string>
     <string name="tutorial_report_shop_text">Help the Magazoo community maintain an accurate database of available shops by actively contributing. Report non-existent shops or wrong shop properties with 1 click.</string>
     <string name="tutorial_navigate_title">Navigate</string>
@@ -123,6 +125,9 @@
     <string name="developed_by">"Developed by: "</string>
     <string name="last_update">"Last update: "</string>
     <string name="register_failed">Registration failed. Please check your username or password.</string>
+    <string name="report_total_shops">Total magazine in lume: %1$s</string>
+    <string name="report_total_shops_bucuresti">Total shops in Bucharest: %1$s</string>
+    <string name="share_using">Send with</string>
     <!--tutorial end-->
 
 </resources>

@@ -15,6 +15,12 @@
         android:id="@+id/nav_contact"
         android:icon="@drawable/ic_action_icon_menu_message"
         android:title="@string/send_feedback" />
+
+    <item
+        android:id="@+id/nav_reports"
+        android:visible="false"
+        android:icon="@drawable/ic_action_icon_menu_message"
+        android:title="@string/reports" />
     <item
         android:id="@+id/nav_signout"
         android:icon="@drawable/ic_action_icon_menu_logout"

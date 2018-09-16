@@ -1,0 +1,1194 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-11T09:47:02Z",
+    "timestamp_areas_base": "2018-09-11T08:26:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+    {
+      "type": "node",
+      "id": 642265044,
+      "lat": 44.4128077,
+      "lon": 26.1641740,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642275549,
+      "lat": 44.4143048,
+      "lon": 26.1646220,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642277484,
+      "lat": 44.4133344,
+      "lon": 26.1632126,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642279795,
+      "lat": 44.4135051,
+      "lon": 26.1615047,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642414200,
+      "lat": 44.4156608,
+      "lon": 26.1651259,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 642968354,
+      "lat": 44.4149076,
+      "lon": 26.1543649,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643629452,
+      "lat": 44.4179661,
+      "lon": 26.1468974,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643631436,
+      "lat": 44.4179853,
+      "lon": 26.1464441,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643631911,
+      "lat": 44.4180121,
+      "lon": 26.1462563,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643790235,
+      "lat": 44.4189870,
+      "lon": 26.1402396,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Mixt",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643802780,
+      "lat": 44.4196489,
+      "lon": 26.1402774,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 643804506,
+      "lat": 44.4197447,
+      "lon": 26.1393172,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 644564892,
+      "lat": 44.4261531,
+      "lon": 26.1493567,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 649595477,
+      "lat": 44.4254290,
+      "lon": 26.1444564,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 649659889,
+      "lat": 44.4289136,
+      "lon": 26.1560720,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 649737831,
+      "lat": 44.4287320,
+      "lon": 26.1620636,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 655304791,
+      "lat": 44.4176110,
+      "lon": 26.0282543,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 659908415,
+      "lat": 44.4103307,
+      "lon": 26.1778409,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 661142465,
+      "lat": 44.4185123,
+      "lon": 26.1759194,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 661142467,
+      "lat": 44.4186191,
+      "lon": 26.1759112,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 699737380,
+      "lat": 44.4167423,
+      "lon": 26.1495464,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 712626757,
+      "lat": 44.4654345,
+      "lon": 26.0872184,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1033257322,
+      "lat": 44.4361075,
+      "lon": 26.1010402,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1123249703,
+      "lat": 44.4358686,
+      "lon": 26.0199567,
+      "tags": {
+        "name": "Magazin non-stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1659109150,
+      "lat": 44.4208483,
+      "lon": 26.1623828,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1666673780,
+      "lat": 44.4252249,
+      "lon": 26.1695895,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1668626038,
+      "lat": 44.4251485,
+      "lon": 26.1629435,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1668626039,
+      "lat": 44.4254485,
+      "lon": 26.1634713,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Acces Press",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1668626045,
+      "lat": 44.4254672,
+      "lon": 26.1723649,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1668626426,
+      "lat": 44.4255146,
+      "lon": 26.1670776,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1722794731,
+      "lat": 44.4623712,
+      "lon": 26.1319207,
+      "tags": {
+        "addr:city": "București",
+        "is_in:city": "București",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1731040992,
+      "lat": 44.4295492,
+      "lon": 26.1005706,
+      "tags": {
+        "addr:city": "București",
+        "name": "magazin non-stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1738605974,
+      "lat": 44.4341410,
+      "lon": 26.0421852,
+      "tags": {
+        "name": "Magazin",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1738605983,
+      "lat": 44.4360801,
+      "lon": 26.0182072,
+      "tags": {
+        "name": "butic",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1738605985,
+      "lat": 44.4345146,
+      "lon": 26.0418930,
+      "tags": {
+        "amenity": "bar",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1743398784,
+      "lat": 44.4413579,
+      "lon": 26.1501868,
+      "tags": {
+        "name": "Magazin",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744215692,
+      "lat": 44.4431066,
+      "lon": 26.1471256,
+      "tags": {
+        "name": "Magazin",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744583936,
+      "lat": 44.4431616,
+      "lon": 26.1558853,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Butic Ziare",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744583944,
+      "lat": 44.4423868,
+      "lon": 26.1572088,
+      "tags": {
+        "addr:city": "București",
+        "is_in:city": "București",
+        "name": "Chioșc Ziare Acces Press",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744583980,
+      "lat": 44.4408567,
+      "lon": 26.1572140,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin diverse copii",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744636474,
+      "lat": 44.4400694,
+      "lon": 26.1575595,
+      "tags": {
+        "name": "Fructe Legume",
+        "organic": "no",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744636497,
+      "lat": 44.4384317,
+      "lon": 26.1582795,
+      "tags": {
+        "name": "Toneta ziare",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1754330666,
+      "lat": 44.4352806,
+      "lon": 26.1005277,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1754330673,
+      "lat": 44.4354284,
+      "lon": 26.1013221,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1754330683,
+      "lat": 44.4358465,
+      "lon": 26.1032182,
+      "tags": {
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1754330690,
+      "lat": 44.4361029,
+      "lon": 26.1019657,
+      "tags": {
+        "is_in:city": "București",
+        "name": "AccesPress",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1754331591,
+      "lat": 44.4365047,
+      "lon": 26.1017306,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1756130714,
+      "lat": 44.4634063,
+      "lon": 26.1325036,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1756130720,
+      "lat": 44.4634431,
+      "lon": 26.1324577,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1814926282,
+      "lat": 44.4518873,
+      "lon": 26.1193411,
+      "tags": {
+        "name": "Magazin Mixt Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1820148718,
+      "lat": 44.4628633,
+      "lon": 26.1279519,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1886690467,
+      "lat": 44.4328222,
+      "lon": 26.0906320,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2354476944,
+      "lat": 44.4465815,
+      "lon": 26.0764879,
+      "tags": {
+        "name": "mini market",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2433654830,
+      "lat": 44.4244984,
+      "lon": 26.1632055,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2433654831,
+      "lat": 44.4243415,
+      "lon": 26.1632724,
+      "tags": {
+        "name": "Acces Press",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2437651077,
+      "lat": 44.4468315,
+      "lon": 26.1436090,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2446403523,
+      "lat": 44.4328230,
+      "lon": 26.1546367,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2454186794,
+      "lat": 44.4434513,
+      "lon": 26.1289816,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2454188937,
+      "lat": 44.4433778,
+      "lon": 26.1284007,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2455265220,
+      "lat": 44.4375981,
+      "lon": 26.0953361,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2458527261,
+      "lat": 44.4251487,
+      "lon": 26.1699462,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Mixt Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2464416542,
+      "lat": 44.4278022,
+      "lon": 26.0416266,
+      "tags": {
+        "addr:housenumber": "29",
+        "addr:street": "Bulevardul Timișoara",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470532818,
+      "lat": 44.4348599,
+      "lon": 26.0879625,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470532820,
+      "lat": 44.4266030,
+      "lon": 26.0589884,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470542782,
+      "lat": 44.4459711,
+      "lon": 26.1270469,
+      "tags": {
+        "name": "Magazin Mixt Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2470923707,
+      "lat": 44.4268479,
+      "lon": 26.0239163,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2473164076,
+      "lat": 44.3782242,
+      "lon": 26.0914226,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2479082523,
+      "lat": 44.4443660,
+      "lon": 26.0988277,
+      "tags": {
+        "is_in:city": "București",
+        "name": "Magazin Mixt Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2480045455,
+      "lat": 44.4122221,
+      "lon": 26.0684418,
+      "tags": {
+        "is_in": "București",
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2490633398,
+      "lat": 44.3849526,
+      "lon": 26.0788052,
+      "tags": {
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2491945366,
+      "lat": 44.4408342,
+      "lon": 26.0952605,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2494911249,
+      "lat": 44.4221695,
+      "lon": 26.0180542,
+      "tags": {
+        "name": "Magazin Mixt Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2503525317,
+      "lat": 44.4291786,
+      "lon": 26.1609220,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2503525320,
+      "lat": 44.4263044,
+      "lon": 26.1505573,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2504341091,
+      "lat": 44.4301171,
+      "lon": 26.1661350,
+      "tags": {
+        "is_in": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2516016948,
+      "lat": 44.4160058,
+      "lon": 26.0244828,
+      "tags": {
+        "name": "Magaxin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2535850894,
+      "lat": 44.4526366,
+      "lon": 26.0465953,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2535850914,
+      "lat": 44.4524299,
+      "lon": 26.0469344,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2546324265,
+      "lat": 44.4424336,
+      "lon": 26.0992611,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2550235256,
+      "lat": 44.4349715,
+      "lon": 26.0346972,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2551910594,
+      "lat": 44.4399350,
+      "lon": 26.0933224,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2578727709,
+      "lat": 44.4592024,
+      "lon": 26.1199845,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2584022349,
+      "lat": 44.4180908,
+      "lon": 26.1294196,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2591969807,
+      "lat": 44.4475436,
+      "lon": 26.1225616,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2610463095,
+      "lat": 44.4259709,
+      "lon": 26.0599306,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2610463314,
+      "lat": 44.4218588,
+      "lon": 26.0694471,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2611842517,
+      "lat": 44.4584643,
+      "lon": 26.0776563,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2616877611,
+      "lat": 44.4608605,
+      "lon": 26.1321790,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2616877612,
+      "lat": 44.4609041,
+      "lon": 26.1322004,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin Mixt",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2621875123,
+      "lat": 44.4686719,
+      "lon": 26.1423840,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2759395639,
+      "lat": 44.4652534,
+      "lon": 26.0876249,
+      "tags": {
+        "name": "Reviste, ziare",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2820816303,
+      "lat": 44.3883560,
+      "lon": 26.1181466,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2873903901,
+      "lat": 44.4654303,
+      "lon": 26.0676044,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2901428915,
+      "lat": 44.4371058,
+      "lon": 26.0422757,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2980252356,
+      "lat": 44.4085415,
+      "lon": 26.1159406,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2980319633,
+      "lat": 44.4412845,
+      "lon": 26.0997153,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2981972833,
+      "lat": 44.4151853,
+      "lon": 26.1333540,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3003861833,
+      "lat": 44.4293653,
+      "lon": 26.1627941,
+      "tags": {
+        "is_in": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3251186967,
+      "lat": 44.4329672,
+      "lon": 26.1547464,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3251186968,
+      "lat": 44.4330607,
+      "lon": 26.1547185,
+      "tags": {
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3283268161,
+      "lat": 44.4402207,
+      "lon": 26.1342940,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3409747893,
+      "lat": 44.4450811,
+      "lon": 26.0572842,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3503779393,
+      "lat": 44.4374687,
+      "lon": 26.0947708,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3507788394,
+      "lat": 44.3883245,
+      "lon": 26.1121998,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3575723193,
+      "lat": 44.4328853,
+      "lon": 26.0251212,
+      "tags": {
+        "name": "Magazin Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3924587573,
+      "lat": 44.4173550,
+      "lon": 26.1305936,
+      "tags": {
+        "name": "Mini Market Non-Stop",
+        "opening_hours": "24/7",
+        "shop": "kiosk"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4900467400,
+      "lat": 44.4854028,
+      "lon": 26.0386255,
+      "tags": {
+        "shop": "kiosk"
+      }
+    }
+
+  ]
+}

@@ -2,6 +2,8 @@ package cazimir.com.magazoo.constants;
 
 public class Constants {
 
+    public static final String EVENT_ADDED = "shop_added";
+
     public static final String CAZIMIR = "0nErC13lEHfdGcrSyZNJiNyIUHk2";
     public static final String ANA_MARIA = "cJEabMRtfLc6h5fHxSuJpJegnNE3";
 
@@ -11,8 +13,8 @@ public class Constants {
     public static final String GPS_TAG = "GPS_TAG";
     public static final String ID_PLACEHOLDER = "check model property for id";
     public static final int MY_LOCATION_REQUEST_CODE = 523;
-    public static final long UPDATE_INTERVAL = 5000;  /* 5 secs */
-    public static final long FASTEST_INTERVAL = 2000; /* 2 secs */
+    public static final long UPDATE_INTERVAL = 2000;  /* 2 secs */
+    public static final long FASTEST_INTERVAL = 1000; /* 1 secs */
     public static final int ACCURACY_DESIRED = 12;
     public static final int ACCURACY_DESIRED_BAM = 20;
     public static final int ZOOM_LEVEL_DESIRED = 18;
@@ -40,8 +42,8 @@ public class Constants {
 
     public static final String SMALL_SHOP = "Small shop";
     public static final String GAS_STATION = "Gas station";
-    public static final String FARMER_MARKET = "Farmer\\'s market";
+    public static final String FARMER_MARKET = "Farmer\'s market";
     public static final String SUPERMARKET = "Supermarket";
     public static final String SHOPPING_CENTER = "Shopping center";
-    public static final String HYPERMARKET = "Hypermarket";
+    public static final String BUCURESTI = "București";
 }

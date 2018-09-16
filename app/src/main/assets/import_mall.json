@@ -1,0 +1,174 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-11T09:25:02Z",
+    "timestamp_areas_base": "2018-09-11T08:26:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+    {
+      "type": "node",
+      "id": 503980545,
+      "lat": 44.5060424,
+      "lon": 26.0888515,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "addr:postcode": "015011",
+        "addr:street": "Șoseaua București-Ploiești",
+        "name": "Băneasa Shopping City 2",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "mall",
+        "toilets:wheelchair": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1652846712,
+      "lat": 44.4589544,
+      "lon": 26.0953321,
+      "tags": {
+        "addr:city": "București",
+        "addr:housenumber": "172",
+        "addr:postcode": "010582",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Calea Dorobanților",
+        "is_in": "București",
+        "name": "Mario Plaza",
+        "phone": "021.230.47.71",
+        "shop": "mall",
+        "website": "http://www.marioplaza.eu",
+        "wheelchair": "limited",
+        "wheelchair:description": "There is a ramp for wheelchairs, but the stairs inside have no alternative."
+      }
+    },
+    {
+      "type": "node",
+      "id": 2117094244,
+      "lat": 44.4199519,
+      "lon": 26.1776871,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Iris Titan Shopping Center",
+        "addr:housenumber": "33A",
+        "addr:postcode": "032455",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul 1 Decembrie 1918",
+        "name": "Iris Titan Shopping Center",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2499265910,
+      "lat": 44.5081438,
+      "lon": 26.0893944,
+      "tags": {
+        "addr:city": "București",
+        "addr:country": "RO",
+        "addr:housenumber": "42/d",
+        "addr:postcode": "015011",
+        "addr:street": "Șoseaua București-Ploiești",
+        "email": "info.bsc@baneasa.ro",
+        "name": "Băneasa Shopping City 1",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "phone": "+40213065505",
+        "shop": "mall",
+        "toilets:wheelchair": "yes",
+        "website": "https://www.baneasa.ro",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3195273122,
+      "lat": 44.5079732,
+      "lon": 26.0890804,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Băneasa Shopping City",
+        "addr:housenumber": "42/d",
+        "addr:postcode": "015011",
+        "addr:street": "Șoseaua București-Ploiești",
+        "email": "info.bsc@baneasa.ro",
+        "name": "Băneasa Shopping City",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "phone": "+40213065505",
+        "shop": "mall",
+        "toilets:wheelchair": "yes",
+        "website": "https://www.baneasa.ro",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3195281824,
+      "lat": 44.3748992,
+      "lon": 26.1202500,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Grand Arena",
+        "addr:housenumber": "12-18",
+        "addr:postcode": "041833",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Metalurgiei",
+        "name": "Grand Arena",
+        "name:en": "Grand Arena Bucharest (Hornbach nearby)",
+        "name:ro": "Grand Arena Bucharest (Hornbach nearby)",
+        "shop": "mall",
+        "website": "http://www.grandarena.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3195320774,
+      "lat": 44.4151249,
+      "lon": 26.0801428,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Liberty Center Mall",
+        "addr:postcode": "050694",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "name": "Liberty Center Mall",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3195324862,
+      "lat": 44.4392507,
+      "lon": 25.9823292,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Militari Shopping Center Mall",
+        "addr:housenumber": "536-560",
+        "addr:postcode": "061129",
+        "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+        "addr:street": "Bulevardul Iuliu Maniu",
+        "name": "Militari Shopping Center Mall",
+        "shop": "mall",
+        "website": "www.militari-shopping.ro"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3195334990,
+      "lat": 44.4290913,
+      "lon": 26.0348218,
+      "tags": {
+        "addr:city": "București",
+        "addr:housename": "Plaza România",
+        "addr:housenumber": "26",
+        "addr:postcode": "061331",
+        "addr:street": "Bulevardul Timișoara",
+        "name": "Plaza România",
+        "shop": "mall",
+        "website": "www.plazaromania.ro"
+      }
+    }
+
+  ]
+}

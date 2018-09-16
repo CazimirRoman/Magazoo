@@ -6,11 +6,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 
+import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.authentication.IAuthenticationPresenter;
-import cazimir.com.magazoo.repository.IRepository;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
+import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
+import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
@@ -100,6 +102,7 @@ public class MapPresenter implements IMapPresenter {
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
             @Override
             public void onAddMarkerSuccess() {
+
                 Log.d(TAG, "onAddMarkerSuccess: called");
                 mMapActivityView.hideProgressBar();
                 mMapActivityView.refreshMarkersOnMap();
@@ -134,6 +137,9 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
+    public boolean isAdmin() {
+        return mAuthenticationPresenter.isAdmin();
+    }
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
 
         if(userId.equals(CAZIMIR)|| userId.equals(ANA_MARIA)){

@@ -34,10 +34,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -92,12 +94,15 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
+import cazimir.com.magazoo.reports.ReportsActivity;
+import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
+import cazimir.com.magazoo.utils.ApiFailedException;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
+import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -105,10 +110,11 @@ import static cazimir.com.magazoo.R.id.map;
 import static cazimir.com.magazoo.constants.Constants.ACCURACY_TAG;
 import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
 import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
+import static cazimir.com.magazoo.constants.Constants.EVENT_ADDED;
 import static cazimir.com.magazoo.constants.Constants.FARMER_MARKET;
 import static cazimir.com.magazoo.constants.Constants.FASTEST_INTERVAL;
 import static cazimir.com.magazoo.constants.Constants.GAS_STATION;
-import static cazimir.com.magazoo.constants.Constants.HYPERMARKET;
+import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static cazimir.com.magazoo.constants.Constants.SHOPPING_CENTER;
 import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
 import static cazimir.com.magazoo.constants.Constants.SUPERMARKET;
@@ -175,6 +181,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private boolean animatingToMarker = false;
     private MaterialDialog mAllowLocationDialog;
     private boolean animatingToUserLocation = false;
+    private String mAdminName = "";
+    private boolean mPausedForGettingAdmin = false;
 
     @Override
     protected void onStart() {
@@ -217,8 +225,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 }
             }
         };
-
-        //startLocationUpdates();
         setUpMap();
         initUI();
         setupNavigationDrawer();
@@ -285,10 +291,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     protected void onResume() {
         super.onResume();
 
-        if (gpsNotActive()) {
-            showNoGPSErrorDialog();
-        }
-
         if (!networkActive()) {
             showNoInternetErrorDialog();
         }
@@ -298,6 +300,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 showLocationDialog();
                 getLastLocation();
                 startLocationUpdates();
+                if (gpsNotActive()) {
+                    showNoGPSErrorDialog();
+                }
             }
         } else {
             showAllowLocationDialog();
@@ -413,6 +418,12 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if(mPresenter.isAdmin()){
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_reports).setVisible(true);
+        }
+
         navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -432,6 +443,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     showFeedbackDialog();
                 } else if (id == R.id.nav_about) {
                     showAboutDialog();
+                } else if (id == R.id.nav_reports){
+                    startReportActivity();
                 }
 
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -448,6 +461,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         } else {
             navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
         }
+    }
+
+    private void startReportActivity() {
+        startActivity(new Intent(MapActivityView.this, ReportsActivity.class));
     }
 
     private void startTutorialActivity() {
@@ -849,8 +866,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_supermarket);
         } else if (type.equals(FARMER_MARKET)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_farmer_market);
-        } else if (type.equals(SHOPPING_CENTER) || type.equals(HYPERMARKET)) {
-            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_hypermarket);
+        } else if (type.equals(SHOPPING_CENTER)) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_shopping_center);
         } else if (type.equals(GAS_STATION)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_icon_gas_station);
         }
@@ -914,6 +931,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     public void showAddThanksPopup() {
+        logEvent(EVENT_ADDED, null);
         Util.buildDialog(this, getString(R.string.thanks_adding_title), getString(R.string.thanks_adding_text), 0).show();
     }
 
@@ -952,9 +970,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 populate(supermarkerDetailsImage, getString(R.string.popup_add_shop_supermarket), shop.getNonstop(), shop.getTickets(), shop.getPos());
                 break;
             case SHOPPING_CENTER:
-                populate(hypermarkerDetailsImage, getString(R.string.popup_add_shop_shopping_center), shop.getNonstop(), shop.getTickets(), shop.getPos());
-                break;
-            case HYPERMARKET:
                 populate(hypermarkerDetailsImage, getString(R.string.popup_add_shop_shopping_center), shop.getNonstop(), shop.getTickets(), shop.getPos());
                 break;
             case GAS_STATION:
@@ -1041,7 +1056,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private boolean isDesiredZoomLevel() {
-        return mCurrentZoomLevel <= Constants.ZOOM_LEVEL_DESIRED;
+        return mCurrentZoomLevel == Constants.ZOOM_LEVEL_DESIRED;
     }
 
     @Override
@@ -1107,7 +1122,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
-                            zoomToCurrentLocation();
                             onLocationChanged(location);
                         }
                     }
@@ -1199,7 +1213,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
                     if (!spinner.getSelectedItem().equals(getString(R.string.popup_add_shop_type))) {
 
-                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude, getShopType(spinner.getSelectedItemPosition()), chkPos.isChecked(),
+                        final Shop shop = new Shop(Constants.ID_PLACEHOLDER, mAddLatitude, mAddLongitude, mAdminName, getShopType(spinner.getSelectedItemPosition()), chkPos.isChecked(),
                                 chkNonstop.isChecked(), chkTickets.isChecked(), mPresenter.getUserId(), getShopCity(), getShopCountry());
 
                         closeAddShopDialog();
@@ -1232,6 +1246,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void showViewIfInRomania(View view) {
+
         if (inRomania(mCurrentLocation)) {
             Log.d(TAG, "Country is Romania");
             view.setVisibility(View.VISIBLE);
@@ -1312,6 +1327,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void onLocationChanged(Location location) {
 
+        mCurrentAccuracy = location.getAccuracy();
+        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
         //Toast.makeText(this, "Current accuracy is: " + mCurrentAccuracy + " meters.", Toast.LENGTH_SHORT).show();
 
         if (mLocationDialog != null && mLocationDialog.isShowing() && mCurrentAccuracy > 0 && isDesiredZoomLevel()) {
@@ -1324,9 +1342,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             showAddShopDialog();
         }
 
-        mCurrentAccuracy = location.getAccuracy();
-        mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
         if (worldMapShowing()) {
             zoomToCurrentLocation();
         } else {
@@ -1336,14 +1351,17 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     private void updateCameraBearing(GoogleMap mMap, float bearing) {
-        if (mMap == null) return;
-        CameraPosition camPos = CameraPosition
-                .builder(
-                        mMap.getCameraPosition()
-                )
-                .bearing(bearing)
-                .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+
+        if(!animatingToUserLocation){
+            if (mMap == null) return;
+            CameraPosition camPos = CameraPosition
+                    .builder(
+                            mMap.getCameraPosition()
+                    )
+                    .bearing(bearing)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+        }
     }
 
     private void closeNoGpsDialog() {

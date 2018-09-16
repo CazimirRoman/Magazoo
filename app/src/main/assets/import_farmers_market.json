@@ -1,0 +1,166 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-11T09:42:02Z",
+    "timestamp_areas_base": "2018-09-11T08:26:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+    {
+      "type": "node",
+      "id": 703836757,
+      "lat": 44.4241128,
+      "lon": 26.1295171,
+      "tags": {
+        "addr:postcode": "031108",
+        "is_in:city": "București",
+        "name": "Carrefour Market",
+        "name:ro": "mini carrfour",
+        "opening_hours": "24/7",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1669436639,
+      "lat": 44.4255896,
+      "lon": 26.1496176,
+      "tags": {
+        "amenity": "shop",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1744215671,
+      "lat": 44.4431941,
+      "lon": 26.1470974,
+      "tags": {
+        "name": "Magazin Fructe",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1811804823,
+      "lat": 44.4910292,
+      "lon": 26.0800360,
+      "tags": {
+        "addr:city": "București",
+        "name": "Magazin fructe",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1820148541,
+      "lat": 44.4620002,
+      "lon": 26.1310225,
+      "tags": {
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1845802392,
+      "lat": 44.4291183,
+      "lon": 26.1699081,
+      "tags": {
+        "is_in:city": "București",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1908318672,
+      "lat": 44.4630905,
+      "lon": 26.1309651,
+      "tags": {
+        "addr:city": "București",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1908318695,
+      "lat": 44.4634582,
+      "lon": 26.1303720,
+      "tags": {
+        "addr:city": "București",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1982932072,
+      "lat": 44.4594216,
+      "lon": 26.1273063,
+      "tags": {
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2084452317,
+      "lat": 44.4161919,
+      "lon": 26.0213231,
+      "tags": {
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2445622388,
+      "lat": 44.4193332,
+      "lon": 26.1389764,
+      "tags": {
+        "name": "Legume Fructe",
+        "shop": "greengrocer",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3288293462,
+      "lat": 44.3861930,
+      "lon": 26.1097441,
+      "tags": {
+        "name": "Veselo Selo ",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3495740733,
+      "lat": 44.4338081,
+      "lon": 26.1566770,
+      "tags": {
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4787541252,
+      "lat": 44.4111722,
+      "lon": 26.0699145,
+      "tags": {
+        "addr:housenumber": "2",
+        "addr:street": "Strada Petre Ispirescu",
+        "name:ro": "Magazin alimentar",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5841365585,
+      "lat": 44.4043723,
+      "lon": 26.0629200,
+      "tags": {
+        "shop": "greengrocer"
+      }
+    }
+
+  ]
+}

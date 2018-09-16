@@ -1,0 +1,2560 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-10T15:24:02Z",
+    "timestamp_areas_base": "2018-09-10T13:06:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 101007882,
+  "lat": 44.3842886,
+  "lon": 26.1015425,
+  "tags": {
+    "addr:housenumber": "14",
+    "addr:street": "Strada Reșița",
+    "amenity": "fuel",
+    "name": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 113705761,
+  "lat": 44.3948174,
+  "lon": 26.1199594,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 113707518,
+  "lat": 44.3885386,
+  "lon": 26.1094391,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 113954737,
+  "lat": 44.4089398,
+  "lon": 26.1217303,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 116889784,
+  "lat": 44.4764071,
+  "lon": 26.0449030,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "1",
+    "addr:postcode": "012381",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Șoseaua Chitilei",
+    "amenity": "fuel",
+    "name": "Lukoil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 117211687,
+  "lat": 44.3891937,
+  "lon": 26.0918165,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 125273305,
+  "lat": 44.3775636,
+  "lon": 26.0986231,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 127733946,
+  "lat": 44.4652541,
+  "lon": 26.1274959,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:diesel": "yes",
+    "fuel:octane_100": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "Lukoil Petricani",
+    "opening_hours": "24/7",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 254282284,
+  "lat": 44.4234491,
+  "lon": 26.0955297,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "10",
+    "addr:postcode": "040172",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Strada 11 Iunie",
+    "amenity": "fuel",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "yes",
+    "name": "Petrom - 11 Iunie",
+    "operator": "Petrom",
+    "source": "survey, field survey ( 2014 - 2016)"
+  }
+},
+{
+  "type": "node",
+  "id": 254374695,
+  "lat": 44.4346438,
+  "lon": 26.0840411,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "62A",
+    "addr:postcode": "050108",
+    "addr:street": "Bulevardul Mihail Kogălniceanu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Vasile Pârvan",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 254385621,
+  "lat": 44.4205237,
+  "lon": 26.0756174,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 254458315,
+  "lat": 44.4156998,
+  "lon": 26.1140906,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Timpuri Noi",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 256244843,
+  "lat": 44.4146119,
+  "lon": 26.0790381,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "Mol",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 256319743,
+  "lat": 44.4009253,
+  "lon": 26.0506312,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 256552519,
+  "lat": 44.4883588,
+  "lon": 26.0157663,
+  "tags": {
+    "amenity": "fuel",
+    "name": "OMV Chitila",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 256668128,
+  "lat": 44.4479018,
+  "lon": 26.1658959,
+  "tags": {
+    "addr:housenumber": "21-25",
+    "addr:street": "Șoseaua Fundeni",
+    "amenity": "fuel",
+    "name": "Rompetrol Fundeni",
+    "opening_hours": "24/7",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 256720860,
+  "lat": 44.4112980,
+  "lon": 26.1274079,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "485-489",
+    "addr:postcode": "030314",
+    "addr:street": "Șoseaua Mihai Bravu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom - MPP Mihai Bravu (Tineretului)",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 257687205,
+  "lat": 44.3975908,
+  "lon": 26.0425987,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 261715786,
+  "lat": 44.3949053,
+  "lon": 26.1037639,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 271284266,
+  "lat": 44.4210727,
+  "lon": 26.0747546,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "64-78",
+    "addr:postcode": "050883",
+    "addr:street": "Bulevardul Tudor Vladimirescu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 271284799,
+  "lat": 44.4207720,
+  "lon": 26.0650827,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "Mol",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 271286204,
+  "lat": 44.4180937,
+  "lon": 26.0595301,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "yes",
+    "name": "Mol 13 Septembrie",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 271286226,
+  "lat": 44.4177395,
+  "lon": 26.0581082,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 271286402,
+  "lat": 44.4262621,
+  "lon": 26.0590629,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrom",
+    "opening_hours": "Mo-Su 06:00-22:00",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 271872853,
+  "lat": 44.4201419,
+  "lon": 26.0884403,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 271872976,
+  "lat": 44.4172967,
+  "lon": 26.0831181,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 271873319,
+  "lat": 44.4165809,
+  "lon": 26.0795984,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 271874467,
+  "lat": 44.4145312,
+  "lon": 26.0751959,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 286658810,
+  "lat": 44.4190878,
+  "lon": 26.0349013,
+  "tags": {
+    "amenity": "fuel",
+    "biodiesel": "no",
+    "fuel:octane_100": "yes",
+    "fuel:octane_95": "yes",
+    "name": "Petrom",
+    "opening_hours": "00:00-24:00",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 286659719,
+  "lat": 44.4118146,
+  "lon": 26.0137547,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Lukoil",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 286844938,
+  "lat": 44.4260116,
+  "lon": 26.0476667,
+  "tags": {
+    "addr:housenumber": "5a",
+    "addr:street": "Strada Sibiu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "opening_hours": "00:00-24:00",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 286914208,
+  "lat": 44.4319826,
+  "lon": 26.0337355,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Lujerului",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 286914248,
+  "lat": 44.4317241,
+  "lon": 26.0326725,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 286914321,
+  "lat": 44.4254282,
+  "lon": 26.0137545,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV Bulevardul Timișoara",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 291903503,
+  "lat": 44.4795909,
+  "lon": 26.0986910,
+  "tags": {
+    "addr:city": "București",
+    "addr:street": "Șoseaua Pipera",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Aviației",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 291909263,
+  "lat": 44.4802848,
+  "lon": 26.1018741,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "1",
+    "addr:postcode": "014281",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Strada Căpitan Aviator Alexandru Șerbănescu",
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil Aviației",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 293888011,
+  "lat": 44.4555383,
+  "lon": 26.1208399,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV Lizeanu",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 293931694,
+  "lat": 44.4479983,
+  "lon": 26.1074287,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "85",
+    "addr:postcode": "020072",
+    "addr:street": "Strada Mihai Eminescu",
+    "amenity": "fuel",
+    "name": "Petrom - Mihai Eminescu",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 295355771,
+  "lat": 44.4657210,
+  "lon": 26.1090053,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "Mol",
+    "operator": "Mol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 297655901,
+  "lat": 44.4921032,
+  "lon": 26.0876375,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV Băneasa",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 310980672,
+  "lat": 44.5035513,
+  "lon": 26.0816019,
+  "tags": {
+    "addr:postcode": "013696",
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 360053758,
+  "lat": 44.4563102,
+  "lon": 26.0633580,
+  "tags": {
+    "amenity": "fuel",
+    "name": "MOL",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 398816564,
+  "lat": 44.4339973,
+  "lon": 25.9905092,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol Gas",
+    "fuel:lpg": "yes",
+    "name": "Crimbo Gas 2000"
+  }
+},
+{
+  "type": "node",
+  "id": 406535810,
+  "lat": 44.4410115,
+  "lon": 26.1922994,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 406535816,
+  "lat": 44.4405230,
+  "lon": 26.1886004,
+  "tags": {
+    "amenity": "fuel",
+    "name": "RomPetrol",
+    "operator": "RomPetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 406969082,
+  "lat": 44.4439164,
+  "lon": 26.0360580,
+  "tags": {
+    "Picture": "GeoTagged",
+    "addr:city": "București",
+    "addr:street": "Șoseaua Virtuții",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "local:picture": "wami-20090519-000095-26,036267-44,443833.jpg",
+    "name": "Petrom Virtuții",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 406969319,
+  "lat": 44.4464235,
+  "lon": 26.0381557,
+  "tags": {
+    "Picture": "GeoTagged",
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "local:picture": "wami-20090519-000096-26,038270-44,446252.jpg",
+    "name": "Lukoil Pod Ciurel",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 408782101,
+  "lat": 44.4798442,
+  "lon": 26.0436016,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "Rompetrol Bucureștii Noi",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 411425308,
+  "lat": 44.4166169,
+  "lon": 26.1352730,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "321",
+    "addr:postcode": "030323",
+    "addr:street": "Șoseaua Mihai Bravu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom - Miraj",
+    "operator": "Petrom",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 430079794,
+  "lat": 44.4309967,
+  "lon": 26.0715475,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "opening_hours": "Mo-Su 06:00-22:00",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 431120976,
+  "lat": 44.3821269,
+  "lon": 26.1330240,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Berceni",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 442020897,
+  "lat": 44.4849912,
+  "lon": 26.0574503,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Lukoil Jiului",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 444344817,
+  "lat": 44.4416480,
+  "lon": 26.0359059,
+  "tags": {
+    "addr:city": "București",
+    "addr:street": "Șoseaua Virtuții",
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Virtuții",
+    "opening_hours": "24/7",
+    "operator": "MOL",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 444362141,
+  "lat": 44.4718635,
+  "lon": 26.0499019,
+  "tags": {
+    "addr:city": "București",
+    "alt_name": "MOL Chibrit",
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL",
+    "operator": "Eni S.p.A."
+  }
+},
+{
+  "type": "node",
+  "id": 450519597,
+  "lat": 44.4140150,
+  "lon": 26.1305000,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 453442176,
+  "lat": 44.4915338,
+  "lon": 26.0894976,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Trans Gas"
+  }
+},
+{
+  "type": "node",
+  "id": 471784734,
+  "lat": 44.4285027,
+  "lon": 26.0461185,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 476261124,
+  "lat": 44.4383611,
+  "lon": 26.0693828,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "26",
+    "addr:postcode": "050082",
+    "addr:street": "Splaiul Independenței",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Mihai Vodă",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 491393182,
+  "lat": 44.4024487,
+  "lon": 26.0978585,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "yes",
+    "fuel:octane_95": "yes",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 508671068,
+  "lat": 44.4868477,
+  "lon": 26.0924618,
+  "tags": {
+    "addr:city": "București",
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "Mol Aviației",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 509051950,
+  "lat": 44.4597523,
+  "lon": 26.1070357,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "78",
+    "addr:postcode": "020282",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Strada Barbu Văcărescu",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Barbu Văcărescu",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 509173625,
+  "lat": 44.4371225,
+  "lon": 26.1139362,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "35",
+    "addr:postcode": "023963",
+    "addr:street": "Strada Mântuleasa",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Mântuleasa",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 509195129,
+  "lat": 44.4371547,
+  "lon": 26.1049436,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "3A",
+    "addr:postcode": "020941",
+    "addr:street": "Strada Tudor Arghezi",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Intercontinental",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 509251564,
+  "lat": 44.4115143,
+  "lon": 26.0924796,
+  "tags": {
+    "addr:city": "București",
+    "addr:country": "RO",
+    "addr:housenumber": "3A",
+    "addr:postcode": "050192",
+    "addr:street": "Strada Mitropolit Grigore",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom - Veniamin Costache",
+    "operator": "Petrom",
+    "source": "survey, field survey ( 2014 - 2016)"
+  }
+},
+{
+  "type": "node",
+  "id": 601722030,
+  "lat": 44.4076911,
+  "lon": 26.0780553,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 601722300,
+  "lat": 44.4083540,
+  "lon": 26.0761858,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 639266959,
+  "lat": 44.4142593,
+  "lon": 26.1637892,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "34B",
+    "addr:postcode": "030455",
+    "addr:street": "Bulevardul Nicolae Grigorescu",
+    "amenity": "fuel",
+    "is_in:city": "București",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 639267011,
+  "lat": 44.4148107,
+  "lon": 26.1650134,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "51",
+    "addr:postcode": "030455",
+    "addr:street": "Bulevardul Nicolae Grigorescu",
+    "amenity": "fuel",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 639531686,
+  "lat": 44.4166220,
+  "lon": 26.1695098,
+  "tags": {
+    "amenity": "fuel",
+    "is_in:city": "București",
+    "name": "Mol Postăvarului",
+    "opening_hours": "24/7",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 639531959,
+  "lat": 44.4094112,
+  "lon": 26.1787901,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 639532381,
+  "lat": 44.4134386,
+  "lon": 26.1563686,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "is_in:city": "București",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 639533971,
+  "lat": 44.4215631,
+  "lon": 26.1366245,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 641127357,
+  "lat": 44.4157515,
+  "lon": 26.1743882,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "138",
+    "addr:postcode": "032469",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Bulevardul 1 Decembrie 1918",
+    "amenity": "fuel",
+    "is_in:city": "București",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 655399081,
+  "lat": 44.4147792,
+  "lon": 26.0377870,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 663457922,
+  "lat": 44.4238770,
+  "lon": 26.1749070,
+  "tags": {
+    "amenity": "fuel",
+    "is_in:city": "București",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 849335423,
+  "lat": 44.4593831,
+  "lon": 26.0951006,
+  "tags": {
+    "addr:city": "București",
+    "addr:housename": "180",
+    "addr:postcode": "010583",
+    "addr:street": "Calea Dorobanților",
+    "amenity": "fuel",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "no",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "Petrom - Dorobanți",
+    "note": "Nos Stop",
+    "operator": "Petrom",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 886681314,
+  "lat": 44.4208475,
+  "lon": 26.1257476,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "49-55",
+    "addr:postcode": "031281",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Calea Vitan",
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom",
+    "website": "http://www.petrom.com/portal/01/petromcom"
+  }
+},
+{
+  "type": "node",
+  "id": 932316058,
+  "lat": 44.4313005,
+  "lon": 26.1101536,
+  "tags": {
+    "amenity": "fuel",
+    "name": "OMV",
+    "operator": "PetromV"
+  }
+},
+{
+  "type": "node",
+  "id": 932331440,
+  "lat": 44.4316299,
+  "lon": 26.1108617,
+  "tags": {
+    "amenity": "fuel",
+    "name": "MOL Corneliu Coposu",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 1092852896,
+  "lat": 44.5157335,
+  "lon": 26.0162527,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Odăii",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 1109771439,
+  "lat": 44.3726804,
+  "lon": 26.0906223,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 1164023994,
+  "lat": 44.4662024,
+  "lon": 26.1475856,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Fundeni",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 1215714972,
+  "lat": 44.4549811,
+  "lon": 26.0561683,
+  "tags": {
+    "amenity": "fuel",
+    "name": "MOL Giulești"
+  }
+},
+{
+  "type": "node",
+  "id": 1494530567,
+  "lat": 44.4844256,
+  "lon": 26.1754287,
+  "tags": {
+    "addr:city": "Voluntari",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 2152143722,
+  "lat": 44.4159444,
+  "lon": 26.1345916,
+  "tags": {
+    "amenity": "fuel",
+    "designation": "GPL",
+    "name": "Butan Gaz Răcari"
+  }
+},
+{
+  "type": "node",
+  "id": 2279741491,
+  "lat": 44.4382724,
+  "lon": 26.0565380,
+  "tags": {
+    "amenity": "fuel",
+    "name": "OMV",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2290859519,
+  "lat": 44.3898903,
+  "lon": 26.1246061,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "fuel:diesel": "yes",
+    "fuel:octane_100": "yes",
+    "fuel:octane_95": "yes",
+    "name": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 2344676923,
+  "lat": 44.4338608,
+  "lon": 26.0416134,
+  "tags": {
+    "addr:city": "București",
+    "addr:street": "Bulevardul Iuliu Maniu",
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Iuliu Maniu - Lujerului",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 2344677154,
+  "lat": 44.4346225,
+  "lon": 26.0444299,
+  "tags": {
+    "addr:city": "București",
+    "addr:street": "Bulevardul Iuliu Maniu",
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 2345438556,
+  "lat": 44.4535357,
+  "lon": 26.1360956,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL CarboGaz"
+  }
+},
+{
+  "type": "node",
+  "id": 2345438591,
+  "lat": 44.4529859,
+  "lon": 26.1413655,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 2353058568,
+  "lat": 44.4078514,
+  "lon": 26.1219072,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 2353058570,
+  "lat": 44.4092579,
+  "lon": 26.1215827,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 2353743237,
+  "lat": 44.4490207,
+  "lon": 26.1654252,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "name": "LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 2356419535,
+  "lat": 44.4116352,
+  "lon": 26.1278992,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "473-483",
+    "addr:postcode": "030314",
+    "addr:street": "Șoseaua Mihai Bravu",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol București - Mihai Bravu",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 2356419537,
+  "lat": 44.4116491,
+  "lon": 26.1255174,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2390018131,
+  "lat": 44.4449811,
+  "lon": 26.0746943,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "29",
+    "addr:street": "Bulevardul Dinicu Golescu",
+    "amenity": "fuel",
+    "name": "MOL Gara de Nord",
+    "opening_hours": "24/7",
+    "website": "www.mol.ro"
+  }
+},
+{
+  "type": "node",
+  "id": 2394954385,
+  "lat": 44.4870315,
+  "lon": 26.0790245,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2426382539,
+  "lat": 44.4365131,
+  "lon": 26.1691587,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "is_in:city": "București",
+    "name": "Petrom",
+    "operator": "Petrom",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2430938883,
+  "lat": 44.4183331,
+  "lon": 26.0594859,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Mol 13 Septembrie"
+  }
+},
+{
+  "type": "node",
+  "id": 2434145089,
+  "lat": 44.4479647,
+  "lon": 26.1115504,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Art"
+  }
+},
+{
+  "type": "node",
+  "id": 2434239929,
+  "lat": 44.3628004,
+  "lon": 26.0871368,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2434411598,
+  "lat": 44.4590134,
+  "lon": 26.1067962,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Barbu Văcărescu",
+    "operator": "MOL",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2437122364,
+  "lat": 44.4551164,
+  "lon": 26.0559152,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL MOL Giulești",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2437135667,
+  "lat": 44.4800434,
+  "lon": 26.1014840,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Lukoil Aviației",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2437148866,
+  "lat": 44.4654752,
+  "lon": 26.1090966,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "GPL Mol Barbu Văcărescu",
+    "operator": "Mol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2437165124,
+  "lat": 44.4659410,
+  "lon": 26.1133049,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Glucoza",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2437203373,
+  "lat": 44.4533078,
+  "lon": 26.1363160,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "name": "CarboGaz",
+    "operator": "CarboGaz"
+  }
+},
+{
+  "type": "node",
+  "id": 2437700619,
+  "lat": 44.4849152,
+  "lon": 26.0227014,
+  "tags": {
+    "amenity": "fuel",
+    "building": "yes",
+    "name": "GPL"
+  }
+},
+{
+  "type": "node",
+  "id": 2445052801,
+  "lat": 44.4663237,
+  "lon": 26.0532479,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Auto Non-Stop",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2445064332,
+  "lat": 44.4286664,
+  "lon": 26.0331538,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Auto Gaz",
+    "opening_hours": "24/7",
+    "operator": "Rompetrol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2449856533,
+  "lat": 44.4764595,
+  "lon": 26.0452244,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL LukOil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2452325315,
+  "lat": 44.4144660,
+  "lon": 26.0637792,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Auto",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2455478418,
+  "lat": 44.4311033,
+  "lon": 26.1367969,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "GPL MOL Piața Muncii",
+    "operator": "MOL",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456210456,
+  "lat": 44.4868587,
+  "lon": 26.0929218,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "fuel:lpg": "yes",
+    "name": "GPL Mol Aviației",
+    "operator": "Mol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456215751,
+  "lat": 44.4939893,
+  "lon": 26.0626371,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL LukOil Străulești",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456227505,
+  "lat": 44.4939886,
+  "lon": 26.0629788,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "LukOil",
+    "name": "LukOil Străulești",
+    "opening_hours": "24/7",
+    "operator": "LukOil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456244010,
+  "lat": 44.4771717,
+  "lon": 26.1566508,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Carbogaz Andronache",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456244011,
+  "lat": 44.4770885,
+  "lon": 26.1566129,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Carbogaz Andronache",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2456940469,
+  "lat": 44.4517022,
+  "lon": 26.0737751,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2459049593,
+  "lat": 44.4415078,
+  "lon": 26.0363246,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Agip Virtuții",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2459051742,
+  "lat": 44.4466838,
+  "lon": 26.0381801,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "GPL Lukoil Pod Ciurel",
+    "opening_hours": "24/7",
+    "operator": "Lukoil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2459127094,
+  "lat": 44.4800579,
+  "lon": 26.0434212,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Bulrom Gaz Bucureștii Noi",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2459416826,
+  "lat": 44.4848218,
+  "lon": 26.0576494,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Lukoil Jiului",
+    "operator": "Lukoil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2460510708,
+  "lat": 44.4688966,
+  "lon": 26.1444539,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL MOL Colentina",
+    "operator": "MOL",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2463087946,
+  "lat": 44.3755103,
+  "lon": 26.1115299,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "opening_hours": "24/7",
+    "operator": "Lukoil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2463087967,
+  "lat": 44.3751606,
+  "lon": 26.1115062,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "GPL Lukoil",
+    "opening_hours": "24/7",
+    "operator": "Lukoil",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2463087996,
+  "lat": 44.3773401,
+  "lon": 26.0987159,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Lukoil",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2470506165,
+  "lat": 44.4477219,
+  "lon": 26.1659450,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Rompetrol Fundeni",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2471430823,
+  "lat": 44.4160440,
+  "lon": 26.1403852,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "fuel:diesel": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "MOL Râmnicu Vâlcea",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 2471432776,
+  "lat": 44.4162917,
+  "lon": 26.1405033,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL MOL Râmnicu Vâlcea",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2477683671,
+  "lat": 44.4163719,
+  "lon": 26.1691942,
+  "tags": {
+    "amenity": "fuel",
+    "is_in:city": "București",
+    "name": "GPL Mol Postăvarului"
+  }
+},
+{
+  "type": "node",
+  "id": 2481507174,
+  "lat": 44.4281781,
+  "lon": 26.0382167,
+  "tags": {
+    "amenity": "fuel",
+    "is_in": "București",
+    "name": "Lukoil",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2484985498,
+  "lat": 44.4159356,
+  "lon": 26.1448041,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "is_in": "București",
+    "name": "GPL Auto",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2492573225,
+  "lat": 44.4301953,
+  "lon": 25.9752668,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Lukoil Preciziei",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2493725023,
+  "lat": 44.4131461,
+  "lon": 26.1561191,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "is_in:city": "București",
+    "name": "GPL Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 2494013631,
+  "lat": 44.3914517,
+  "lon": 26.1094750,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Brâncoveanu",
+    "operator": "Petrom",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2499490956,
+  "lat": 44.4631781,
+  "lon": 26.1529229,
+  "tags": {
+    "amenity": "fuel",
+    "name": "MOL Fundeni"
+  }
+},
+{
+  "type": "node",
+  "id": 2511853261,
+  "lat": 44.4634232,
+  "lon": 26.1530586,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL MOL Fundeni"
+  }
+},
+{
+  "type": "node",
+  "id": 2511892365,
+  "lat": 44.4778286,
+  "lon": 26.1641095,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV Colentina",
+    "operator": "OMV",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2512334651,
+  "lat": 44.4918530,
+  "lon": 26.1899571,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV Voluntari",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 2514505578,
+  "lat": 44.4160342,
+  "lon": 26.1138866,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL MOL Timpuri Noi",
+    "operator": "Agip"
+  }
+},
+{
+  "type": "node",
+  "id": 2518777520,
+  "lat": 44.4049737,
+  "lon": 26.2074207,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Pallady",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 2518777521,
+  "lat": 44.4058715,
+  "lon": 26.2089994,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 2521491770,
+  "lat": 44.3755585,
+  "lon": 26.1191316,
+  "tags": {
+    "amenity": "fuel",
+    "is_in": "București",
+    "name": "GPL Mol Grand Arena"
+  }
+},
+{
+  "type": "node",
+  "id": 2521491771,
+  "lat": 44.3756686,
+  "lon": 26.1187494,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "is_in": "București",
+    "name": "Mol Grand Arena",
+    "operator": "Mol"
+  }
+},
+{
+  "type": "node",
+  "id": 2535980937,
+  "lat": 44.4124745,
+  "lon": 26.0217236,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2540600941,
+  "lat": 44.4348812,
+  "lon": 25.9889666,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Petrom",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2540981050,
+  "lat": 44.4932711,
+  "lon": 26.1942645,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "is_in": "Voluntari",
+    "name": "Rompetrol Voluntari",
+    "operator": "Rompetrol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2540981051,
+  "lat": 44.4930501,
+  "lon": 26.1947960,
+  "tags": {
+    "amenity": "fuel",
+    "is_in": "Voluntari",
+    "name": "Rompetrol Voluntari",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2571566090,
+  "lat": 44.3906764,
+  "lon": 26.0882647,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "PETROM",
+    "name": "GPL",
+    "operator": "PETROM"
+  }
+},
+{
+  "type": "node",
+  "id": 2578441780,
+  "lat": 44.3877125,
+  "lon": 26.0078049,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Partener Rompetrol",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2578448264,
+  "lat": 44.3859091,
+  "lon": 26.0037583,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Partener Rompetrol",
+    "opening_hours": "24/7",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2596134816,
+  "lat": 44.4026760,
+  "lon": 26.0976362,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "fuel:lpg": "yes",
+    "name": "GPL OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 2610482125,
+  "lat": 44.4327676,
+  "lon": 26.1485750,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 2610487186,
+  "lat": 44.4418014,
+  "lon": 26.1241481,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Benzinărie"
+  }
+},
+{
+  "type": "node",
+  "id": 2610493622,
+  "lat": 44.4350323,
+  "lon": 26.1781556,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 2610493623,
+  "lat": 44.4353825,
+  "lon": 26.1786906,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 2610495139,
+  "lat": 44.4528146,
+  "lon": 26.1639703,
+  "tags": {
+    "addr:housenumber": "124",
+    "addr:street": "Șoseaua Fundeni",
+    "amenity": "fuel",
+    "name": "Rompetrol Fundeni",
+    "opening_hours": "24/7",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 2613561558,
+  "lat": 44.3835189,
+  "lon": 26.1103584,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrom",
+    "operator": "OMV-Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2962881237,
+  "lat": 44.4283901,
+  "lon": 26.1400730,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrom",
+    "opening_hours": "24/7",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 2963307410,
+  "lat": 44.4944087,
+  "lon": 26.0314622,
+  "tags": {
+    "amenity": "fuel",
+    "name": "OMV Bucureștii Noi",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 3001224265,
+  "lat": 44.4463651,
+  "lon": 26.0605806,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 3096410329,
+  "lat": 44.4720779,
+  "lon": 26.1527373,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Mol",
+    "name": "Mol Colentina",
+    "operator": "Mol",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 3096550430,
+  "lat": 44.3834798,
+  "lon": 26.1382098,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "MOL",
+    "name": "MOL Iriceanu",
+    "operator": "MOL"
+  }
+},
+{
+  "type": "node",
+  "id": 3103149229,
+  "lat": 44.4217865,
+  "lon": 26.1309018,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Auto",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3179956661,
+  "lat": 44.4297144,
+  "lon": 26.0169922,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto Moinești",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3269854661,
+  "lat": 44.3863595,
+  "lon": 26.0047373,
+  "tags": {
+    "amenity": "fuel",
+    "name": "TSV GPL Auto",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3290376149,
+  "lat": 44.3784630,
+  "lon": 26.0930481,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 3334249305,
+  "lat": 44.4331553,
+  "lon": 26.1602577,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "OMV",
+    "name": "OMV",
+    "name:en": "OMV",
+    "name:ro": "OMV",
+    "operator": "OMV"
+  }
+},
+{
+  "type": "node",
+  "id": 3334249708,
+  "lat": 44.4934426,
+  "lon": 26.0633691,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Petrom",
+    "name": "Petrom Străulești",
+    "operator": "Petrom"
+  }
+},
+{
+  "type": "node",
+  "id": 3505133193,
+  "lat": 44.4749739,
+  "lon": 26.1579406,
+  "tags": {
+    "addr:city": "București",
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 3506288293,
+  "lat": 44.4653183,
+  "lon": 26.1365971,
+  "tags": {
+    "addr:city": "București",
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto Pod Colentina"
+  }
+},
+{
+  "type": "node",
+  "id": 3506306793,
+  "lat": 44.4749053,
+  "lon": 26.1578144,
+  "tags": {
+    "addr:city": "București",
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 3753175328,
+  "lat": 44.4470986,
+  "lon": 26.0155276,
+  "tags": {
+    "amenity": "fuel",
+    "name": "GPL Carbogaz"
+  }
+},
+{
+  "type": "node",
+  "id": 3884605367,
+  "lat": 44.4420774,
+  "lon": 26.0358146,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "42-48",
+    "addr:postcode": "060786",
+    "addr:postcode:source": "Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana",
+    "addr:street": "Șoseaua Virtuții",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol Virtuții",
+    "opening_hours": "24/7",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 4096305191,
+  "lat": 44.3882588,
+  "lon": 26.1347617,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 4183568127,
+  "lat": 44.4236322,
+  "lon": 26.1774491,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4271672190,
+  "lat": 44.4841029,
+  "lon": 26.0481058,
+  "tags": {
+    "addr:street": "Strada Jiului",
+    "amenity": "fuel",
+    "name": "GPL NON-STOP",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 4287274332,
+  "lat": 44.4141637,
+  "lon": 26.0917059,
+  "tags": {
+    "addr:city": "București",
+    "amenity": "fuel",
+    "name": "GPL auto",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 4291027534,
+  "lat": 44.3948144,
+  "lon": 26.0357932,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 4316553791,
+  "lat": 44.4473609,
+  "lon": 26.1436138,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 4357933893,
+  "lat": 44.3992026,
+  "lon": 26.1618387,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "name:ro": "lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 4409154691,
+  "lat": 44.4554580,
+  "lon": 26.1641031,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 4409169289,
+  "lat": 44.4490342,
+  "lon": 26.1650461,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL LukOil",
+    "operator": "LukOil"
+  }
+},
+{
+  "type": "node",
+  "id": 4409170289,
+  "lat": 44.4459609,
+  "lon": 26.1659925,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "GPL Auto"
+  }
+},
+{
+  "type": "node",
+  "id": 4503772516,
+  "lat": 44.4370249,
+  "lon": 26.1709478,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Socar",
+    "name": "Socar",
+    "operator": "Socar"
+  }
+},
+{
+  "type": "node",
+  "id": 4518041590,
+  "lat": 44.4201445,
+  "lon": 26.0349187,
+  "tags": {
+    "addr:street": "Strada Brașov",
+    "amenity": "fuel",
+    "name": "G.P.L.",
+    "name:ro": "G.P.L."
+  }
+},
+{
+  "type": "node",
+  "id": 4518095091,
+  "lat": 44.4221556,
+  "lon": 26.0371178,
+  "tags": {
+    "addr:housenumber": "45",
+    "addr:street": "Drumul Taberei",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "GPL Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 4543896716,
+  "lat": 44.4303210,
+  "lon": 26.1739491,
+  "tags": {
+    "addr:street": "Bulevardul 1 Decembrie 1918",
+    "amenity": "fuel",
+    "fuel:lpg": "yes",
+    "name": "Art GPL",
+    "name:en": "Ansi car wash",
+    "name:ro": "Spalatoria Ansi"
+  }
+},
+{
+  "type": "node",
+  "id": 4548393011,
+  "lat": 44.3911658,
+  "lon": 26.0204312,
+  "tags": {
+    "addr:street": "Șoseaua Alexandriei",
+    "amenity": "fuel",
+    "brand": "Lukoil",
+    "name": "Lukoil",
+    "name:ro": "Lukoil",
+    "operator": "Lukoil"
+  }
+},
+{
+  "type": "node",
+  "id": 4554310491,
+  "lat": 44.4184879,
+  "lon": 26.1152374,
+  "tags": {
+    "addr:housenumber": "29",
+    "addr:street": "Bulevardul Nerva Traian",
+    "amenity": "fuel",
+    "name": "GPL",
+    "name:ro": "GPL",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 4676193842,
+  "lat": 44.4820180,
+  "lon": 26.0311674,
+  "tags": {
+    "addr:street": "Șoseaua Chitilei",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 4766454039,
+  "lat": 44.5201235,
+  "lon": 26.0248946,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 4805491272,
+  "lat": 44.4170532,
+  "lon": 26.0136825,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "93-95",
+    "addr:street": "Strada Valea Oltului",
+    "amenity": "fuel",
+    "brand": "Rompetrol",
+    "name": "Rompetrol",
+    "operator": "Rompetrol"
+  }
+},
+{
+  "type": "node",
+  "id": 4834128725,
+  "lat": 44.5144099,
+  "lon": 26.0169363,
+  "tags": {
+    "amenity": "fuel",
+    "name:en": "Rompetrol Gas"
+  }
+},
+{
+  "type": "node",
+  "id": 4883863322,
+  "lat": 44.4074889,
+  "lon": 26.1918186,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Socar",
+    "name": "Socar",
+    "operator": "Socar"
+  }
+},
+{
+  "type": "node",
+  "id": 5865550330,
+  "lat": 44.4316146,
+  "lon": 26.0025079,
+  "tags": {
+    "addr:city": "București",
+    "addr:housenumber": "1G",
+    "addr:street": "Strada Preciziei",
+    "amenity": "fuel",
+    "brand": "Engie",
+    "fuel:cng": "yes",
+    "fuel:electricity": "yes",
+    "name": "Engie",
+    "opening_hours": "Mo-Fr 07:30-21:00; Sa 08-12.00",
+    "operator": "Engie",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "website": "www.engie.ro"
+  }
+}
+
+  ]
+}
