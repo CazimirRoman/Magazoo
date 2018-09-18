@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.register.RegisterPresenter;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
@@ -33,7 +33,7 @@ public class RegisterPresenterTest {
     private RegisterActivityView mRegisterActivityView;
 
     @Mock
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Captor
     private ArgumentCaptor<OnRegisterWithEmailCallback> mOnRegisterWithEmailCallbackCaptor;

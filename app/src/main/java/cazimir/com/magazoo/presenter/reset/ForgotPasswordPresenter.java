@@ -1,15 +1,15 @@
 package cazimir.com.magazoo.presenter.reset;
 
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 
 public class ForgotPasswordPresenter implements IForgotPasswordPresenter {
 
     private ForgotPasswordActivityView mForgotPasswordActivityView;
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
-    public ForgotPasswordPresenter(ForgotPasswordActivityView forgotPasswordActivityView, AuthenticationPresenter mAuthenticationPresenter) {
+    public ForgotPasswordPresenter(ForgotPasswordActivityView forgotPasswordActivityView, AuthPresenter mAuthenticationPresenter) {
         this.mForgotPasswordActivityView = forgotPasswordActivityView;
         this.mAuthenticationPresenter = mAuthenticationPresenter;
     }

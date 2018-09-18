@@ -1,6 +1,6 @@
 package cazimir.com.magazoo.presenter.register;
 
-import cazimir.com.magazoo.presenter.authentication.IAuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 
@@ -10,9 +10,9 @@ import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 public class RegisterPresenter implements IRegisterPresenter {
 
     private IRegisterActivityView mRegisterActivityView;
-    private IAuthenticationPresenter mAuthenticationPresenter;
+    private IAuthPresenter mAuthenticationPresenter;
 
-    public RegisterPresenter(IRegisterActivityView view, IAuthenticationPresenter authenticationPresenter) {
+    public RegisterPresenter(IRegisterActivityView view, IAuthPresenter authenticationPresenter) {
         mRegisterActivityView = view;
         mAuthenticationPresenter = authenticationPresenter;
     }

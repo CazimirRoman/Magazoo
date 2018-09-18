@@ -5,10 +5,10 @@ import com.facebook.login.LoginResult;
 
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
-import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
+import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 
-public interface IAuthenticationPresenter {
+public interface IAuthPresenter {
     void login (OnLoginWithEmailCallback listener, String email, String password);
     void register (OnRegisterWithEmailCallback listener, String email, String password);
     boolean isLoggedIn();

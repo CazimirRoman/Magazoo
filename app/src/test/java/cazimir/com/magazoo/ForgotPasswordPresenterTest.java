@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.reset.ForgotPasswordPresenter;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
@@ -31,7 +31,7 @@ public class ForgotPasswordPresenterTest {
     ForgotPasswordActivityView mForgotPasswordActivityView;
 
     @Mock
-    AuthenticationPresenter mAuthenticationPresenter;
+    AuthPresenter mAuthenticationPresenter;
 
     @Captor
     ArgumentCaptor<OnResetInstructionsCallback> mOnResetInstructionsCallbackArgumentCaptor;

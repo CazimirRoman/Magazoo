@@ -14,7 +14,6 @@ import cazimir.com.magazoo.ui.map.OnIsAllowedToReportListener;
 public interface IMapPresenter {
     void writeReportToDatabase(Report currentReportedShop);
     void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView);
-    boolean isUserLoggedIn();
     String getUserEmail();
     void getAllMarkers(LatLngBounds mBounds);
     void addMarkerToFirebase(Shop markerToAdd);

@@ -3,16 +3,16 @@ package cazimir.com.magazoo.presenter.login;
 import com.facebook.FacebookCallback;
 import com.facebook.login.LoginResult;
 
-import cazimir.com.magazoo.presenter.authentication.IAuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
 
 public class LoginPresenter implements ILoginPresenter {
 
     private ILoginActivityView mLoginActivityView;
-    private IAuthenticationPresenter mAuthenticationPresenter;
+    private IAuthPresenter mAuthenticationPresenter;
 
-    public LoginPresenter(ILoginActivityView view, IAuthenticationPresenter authPresenter) {
+    public LoginPresenter(ILoginActivityView view, IAuthPresenter authPresenter) {
         mLoginActivityView = view;
         mAuthenticationPresenter = authPresenter;
     }

@@ -94,6 +94,7 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.reports.ReportsActivity;
 import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
@@ -214,7 +215,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapPresenter(this, new AuthenticationPresenter(this), new Repository());
+        mPresenter = new MapPresenter(this, new AuthPresenter(this), new Repository());
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback() {
@@ -453,14 +454,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             }
         });
 
-        if (mPresenter.isUserLoggedIn()) {
             navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
             View headerLayout = navigationView.getHeaderView(0);
             TextView headerText = headerLayout.findViewById(R.id.signedInUserEmail);
             headerText.setText(mPresenter.getUserEmail());
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
-        }
     }
 
     private void startReportActivity() {

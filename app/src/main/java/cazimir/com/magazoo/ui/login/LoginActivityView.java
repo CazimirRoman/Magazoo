@@ -24,7 +24,7 @@ import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.login.LoginPresenter;
 import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
@@ -61,12 +61,12 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthenticationPresenter = new AuthenticationPresenter(this);
+        mAuthenticationPresenter = new AuthPresenter(this);
         mLoginPresenter = new LoginPresenter(this, mAuthenticationPresenter);
         mFacebookCallbackManager = CallbackManager.Factory.create();
         initUI();

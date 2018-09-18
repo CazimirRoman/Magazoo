@@ -6,13 +6,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 
-import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
-import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
-import cazimir.com.magazoo.repository.Repository;
+import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
+import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
@@ -29,10 +27,10 @@ public class MapPresenter implements IMapPresenter {
 
     private IRepository mRepository;
     private IMapActivityView mMapActivityView;
-    private IAuthenticationPresenter mAuthenticationPresenter;
+    private IAuthPresenter mAuthenticationPresenter;
     private String userId;
 
-    public MapPresenter(IMapActivityView view, IAuthenticationPresenter authenticationPresenter, IRepository repository) {
+    public MapPresenter(IMapActivityView view, IAuthPresenter authenticationPresenter, IRepository repository) {
         mMapActivityView = view;
         mRepository = repository;
         mAuthenticationPresenter = authenticationPresenter;
@@ -72,11 +70,6 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public boolean isUserLoggedIn() {
-        return mAuthenticationPresenter.isLoggedIn();
-    }
-
-    @Override
     public String getUserEmail() {
         return mAuthenticationPresenter.getUserEmail();
     }
@@ -86,7 +79,7 @@ public class MapPresenter implements IMapPresenter {
         mRepository.getMarkers(new OnGetMarkersListener() {
             @Override
             public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
-                Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
+                //Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
                 mMapActivityView.addMarkersToMap(markers);
             }
 
@@ -99,18 +92,17 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void addMarkerToFirebase(Shop shop) {
-        mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
+        mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseCallback() {
             @Override
-            public void onAddMarkerSuccess() {
-
-                Log.d(TAG, "onAddMarkerSuccess: called");
+            public void onSuccess() {
+                //Log.d(TAG, "onSuccess: called");
                 mMapActivityView.hideProgressBar();
                 mMapActivityView.refreshMarkersOnMap();
                 mMapActivityView.showAddThanksPopup();
             }
 
             @Override
-            public void onAddMarkerFailed(String error) {
+            public void onFailed(String error) {
                 mMapActivityView.hideProgressBar();
                 mMapActivityView.showToast(error);
             }

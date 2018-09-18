@@ -5,8 +5,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddListenerForNewMarkerAdded;
-import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
@@ -22,7 +21,7 @@ public interface IRepository {
 
     void getShopsAddedToday(OnGetShopsAddedTodayListener listener, String userId);
     void getMarkers(OnGetMarkersListener listener, LatLngBounds bounds);
-    void addMarkerToDatabase(OnAddMarkerToDatabaseListener listener, Shop markerToAdd);
+    void addMarkerToDatabase(OnAddMarkerToDatabaseCallback listener, Shop markerToAdd);
     void deleteShop(OnDeleteShopListener listener, String id);
 
     void getAllShopsForReport(OnGetAllShopsReportCallback callback);

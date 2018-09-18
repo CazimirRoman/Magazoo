@@ -24,8 +24,7 @@ import java.util.Map;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddListenerForNewMarkerAdded;
-import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
@@ -33,6 +32,8 @@ import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.reports.OnGetAllShopsReportCallback;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
+import cazimir.com.magazoo.utils.ApiFailedException;
+import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 
 import static cazimir.com.magazoo.constants.Constants.SMALL_SHOP;
@@ -107,14 +108,13 @@ public class Repository implements IRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
                 mapPresenter.onGetAllMarkersFailed(databaseError.getMessage());
             }
         });
     }
 
     @Override
-    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Shop shop) {
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseCallback mapPresenter, Shop shop) {
 
         String shopId = mStoreRef.push().getKey();
         shop.setId(shopId);
@@ -123,15 +123,15 @@ public class Repository implements IRepository {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    mapPresenter.onAddMarkerSuccess();
+                    mapPresenter.onSuccess();
                 } else {
-                    mapPresenter.onAddMarkerFailed(task.getException().getMessage());
+                    mapPresenter.onFailed(task.getException().getMessage());
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mapPresenter.onAddMarkerFailed(e.getMessage());
+                mapPresenter.onFailed(e.getMessage());
             }
         });
     }

@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.login.LoginPresenter;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
@@ -29,7 +29,7 @@ public class LoginPresenterTest {
     private LoginPresenter mLoginPresenter;
 
     @Mock
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Mock
     private LoginActivityView mLoginActivityView;

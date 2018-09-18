@@ -18,7 +18,7 @@ import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.register.RegisterPresenter;
 import cazimir.com.magazoo.utils.OnFormValidatedCallback;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
@@ -39,12 +39,12 @@ public class RegisterActivityView extends BaseBackActivity implements IRegisterA
     AVLoadingIndicatorView progress;
 
     private RegisterPresenter mPresenter;
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthenticationPresenter = new AuthenticationPresenter(this);
+        mAuthenticationPresenter = new AuthPresenter(this);
         mPresenter = new RegisterPresenter(this, mAuthenticationPresenter);
         btnRegisterWithEmail.setBootstrapBrand(getLoginRegisterbrand());
     }

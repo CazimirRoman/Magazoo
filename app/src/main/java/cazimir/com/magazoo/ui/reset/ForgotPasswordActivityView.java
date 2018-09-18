@@ -17,7 +17,7 @@ import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.reset.ForgotPasswordPresenter;
 import cazimir.com.magazoo.utils.OnFormValidatedCallback;
 
@@ -32,13 +32,13 @@ public class ForgotPasswordActivityView extends BaseBackActivity implements IFor
     @BindView(R.id.progress)
     FrameLayout progress;
 
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
     private ForgotPasswordPresenter mForgotPasswordPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthenticationPresenter = new AuthenticationPresenter(this);
+        mAuthenticationPresenter = new AuthPresenter(this);
         mForgotPasswordPresenter = new ForgotPasswordPresenter(this, mAuthenticationPresenter);
         btnForgotPassword.setBootstrapBrand(getLoginRegisterbrand());
     }

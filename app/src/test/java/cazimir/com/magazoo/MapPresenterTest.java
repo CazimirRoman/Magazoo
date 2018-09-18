@@ -1,5 +1,10 @@
 package cazimir.com.magazoo;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -9,10 +14,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+
 import cazimir.com.magazoo.model.Report;
-import cazimir.com.magazoo.presenter.authentication.AuthenticationPresenter;
+import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
+import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
@@ -26,10 +35,11 @@ import static org.mockito.Mockito.when;
  */
 public class MapPresenterTest {
 
+    private static final String EMAIL_ADDRESS = "test@gmail.com";
     private MapPresenter mMapPresenter;
 
     @Mock
-    private AuthenticationPresenter mAuthenticationPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Mock
     private MapActivityView mMapActivityView;
@@ -42,6 +52,9 @@ public class MapPresenterTest {
 
     @Captor
     private ArgumentCaptor<OnReportWrittenToDatabaseCallback> mOnReportWrittenToDatabaseCallbackArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<OnGetMarkersListener> mOnGetMarkersListenerArgumentCaptor;
 
     private Report mReport;
 
@@ -97,19 +110,34 @@ public class MapPresenterTest {
     }
 
     @Test
-    public void isUserLoggedIn() {
-    }
-
-    @Test
     public void getUserEmail() {
+        when(mAuthenticationPresenter.getUserEmail()).thenReturn(EMAIL_ADDRESS);
+        String email = mMapPresenter.getUserEmail();
+        Assert.assertEquals(EMAIL_ADDRESS, email);
     }
 
     @Test
-    public void getAllMarkers() {
+    public void shouldAddMarkersToMapIfAllShopsFetchedWithSuccess() {
+
+        ArrayList<Shop> shops = new ArrayList<>();
+
+        LatLngBounds bounds = new LatLngBounds(new LatLng(49.46771509317244,11.099801994860172),
+                new LatLng(49.46966754906408,11.101733520627022));
+
+        mMapPresenter.getAllMarkers(bounds);
+
+        verify(mRepository).getMarkers(mOnGetMarkersListenerArgumentCaptor.capture(), eq(bounds));
+
+        mOnGetMarkersListenerArgumentCaptor.getValue().onGetAllMarkersSuccess(shops);
+
+        verify(mMapActivityView).addMarkersToMap(shops);
     }
 
     @Test
     public void addMarkerToFirebase() {
+        Shop shopToBeAdded = new Shop();
+        mMapPresenter.addMarkerToFirebase(shopToBeAdded);
+
     }
 
     @Test
