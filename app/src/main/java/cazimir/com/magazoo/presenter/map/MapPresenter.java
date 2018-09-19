@@ -132,6 +132,7 @@ public class MapPresenter implements IMapPresenter {
     public boolean isAdmin() {
         return mAuthenticationPresenter.isAdmin();
     }
+
     public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
 
         if(userId.equals(CAZIMIR)|| userId.equals(ANA_MARIA)){

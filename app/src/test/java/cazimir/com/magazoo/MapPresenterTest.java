@@ -20,6 +20,7 @@ import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.repository.Repository;
@@ -36,6 +37,7 @@ import static org.mockito.Mockito.when;
 public class MapPresenterTest {
 
     private static final String EMAIL_ADDRESS = "test@gmail.com";
+    private static final String ERROR_MESSAGE = "This is an error message";
     private MapPresenter mMapPresenter;
 
     @Mock
@@ -55,6 +57,9 @@ public class MapPresenterTest {
 
     @Captor
     private ArgumentCaptor<OnGetMarkersListener> mOnGetMarkersListenerArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<OnAddMarkerToDatabaseCallback> mOnAddMarkerToDatabaseCallbackArgumentCaptor;
 
     private Report mReport;
 
@@ -110,6 +115,25 @@ public class MapPresenterTest {
     }
 
     @Test
+    public void shouldWriteReportToDatabaseAndShowErrorToastIfWritingToDBFailed() {
+
+        when(mMapActivityView.getCurrentReportedShop())
+                .thenReturn(mReport);
+
+        mMapPresenter.writeReportToDatabase(mReport);
+
+        verify(mRepository).checkIfDuplicateReport(mOnDuplicateReportCallbackArgumentCaptor.capture(), eq(mReport));
+
+        mOnDuplicateReportCallbackArgumentCaptor.getValue().isNotDuplicate();
+
+        verify(mRepository).writeReportToDatabase(mOnReportWrittenToDatabaseCallbackArgumentCaptor.capture(), eq(mReport));
+
+        mOnReportWrittenToDatabaseCallbackArgumentCaptor.getValue().onFailed(ERROR_MESSAGE);
+
+        verify(mMapActivityView).showToast(ERROR_MESSAGE);
+    }
+
+    @Test
     public void getUserEmail() {
         when(mAuthenticationPresenter.getUserEmail()).thenReturn(EMAIL_ADDRESS);
         String email = mMapPresenter.getUserEmail();
@@ -134,10 +158,29 @@ public class MapPresenterTest {
     }
 
     @Test
-    public void addMarkerToFirebase() {
+    public void shouldAddMarkerToFirebaseAndShowAddThanksOnSuccess() {
         Shop shopToBeAdded = new Shop();
         mMapPresenter.addMarkerToFirebase(shopToBeAdded);
+        verify(mRepository).addMarkerToDatabase(mOnAddMarkerToDatabaseCallbackArgumentCaptor.capture(), eq(shopToBeAdded));
+        mOnAddMarkerToDatabaseCallbackArgumentCaptor.getValue().onSuccess();
 
+        InOrder inOrder = Mockito.inOrder(mMapActivityView);
+        inOrder.verify(mMapActivityView).hideProgressBar();
+        inOrder.verify(mMapActivityView).refreshMarkersOnMap();
+        inOrder.verify(mMapActivityView).showAddThanksPopup();
+    }
+
+    @Test
+    public void shouldAddMarkerToFirebaseAndShowErrorToastOnFailed() {
+        Shop shopToBeAdded = new Shop();
+        mMapPresenter.addMarkerToFirebase(shopToBeAdded);
+        verify(mRepository).addMarkerToDatabase(mOnAddMarkerToDatabaseCallbackArgumentCaptor.capture(), eq(shopToBeAdded));
+        mOnAddMarkerToDatabaseCallbackArgumentCaptor.getValue().onFailed(ERROR_MESSAGE);
+
+        InOrder inOrder = Mockito.inOrder(mMapActivityView);
+
+        inOrder.verify(mMapActivityView).hideProgressBar();
+        inOrder.verify(mMapActivityView).showToast(ERROR_MESSAGE);
     }
 
     @Test

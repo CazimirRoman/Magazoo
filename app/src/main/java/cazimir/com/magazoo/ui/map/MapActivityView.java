@@ -1058,7 +1058,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void refreshMarkersOnMap() {
-        Log.d(TAG, "refreshMarkersOnMap: called");
+        //Log.d(TAG, "refreshMarkersOnMap: called");
         getShopMarkers(getMapBounds());
     }
 
