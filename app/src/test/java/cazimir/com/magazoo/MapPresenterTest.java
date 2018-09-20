@@ -21,10 +21,12 @@ import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
+import cazimir.com.magazoo.presenter.map.OnDeleteShopCallback;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.MapActivityView;
+import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -38,6 +40,7 @@ public class MapPresenterTest {
 
     private static final String EMAIL_ADDRESS = "test@gmail.com";
     private static final String ERROR_MESSAGE = "This is an error message";
+    private static final String SHOP_ID = "1234";
     private MapPresenter mMapPresenter;
 
     @Mock
@@ -60,6 +63,12 @@ public class MapPresenterTest {
 
     @Captor
     private ArgumentCaptor<OnAddMarkerToDatabaseCallback> mOnAddMarkerToDatabaseCallbackArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<OnDeleteShopCallback> mOnDeleteShopCallbackArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<OnIsAllowedToAddCallback> mOnIsAllowedToAddCallbackArgumentCaptor;
 
     private Report mReport;
 
@@ -178,16 +187,32 @@ public class MapPresenterTest {
         mOnAddMarkerToDatabaseCallbackArgumentCaptor.getValue().onFailed(ERROR_MESSAGE);
 
         InOrder inOrder = Mockito.inOrder(mMapActivityView);
-
         inOrder.verify(mMapActivityView).hideProgressBar();
         inOrder.verify(mMapActivityView).showToast(ERROR_MESSAGE);
     }
 
     @Test
-    public void deleteShopFromDB() {
+    public void shouldShowToastWithSuccessIfShopDeletedSuccessfully() {
+        mMapPresenter.deleteShopFromDB(SHOP_ID);
+        verify(mRepository).deleteShop(mOnDeleteShopCallbackArgumentCaptor.capture(), eq(SHOP_ID));
+        mOnDeleteShopCallbackArgumentCaptor.getValue().onSuccess();
+
+        InOrder inOrder = Mockito.inOrder(mMapActivityView);
+        inOrder.verify(mMapActivityView).showToast("Deleted!");
+        inOrder.verify(mMapActivityView).closeShopDetails();
+        inOrder.verify(mMapActivityView).refreshMarkersOnMap();
+        inOrder.verify(mMapActivityView).hideProgressBar();
     }
 
     @Test
-    public void checkIfAllowedToAdd() {
+    public void shouldShowTheAddShopDialogIfAllowedToAdd() {
+
+        //mMapPresenter.checkIfAllowedToAddShop
+
+        mOnIsAllowedToAddCallbackArgumentCaptor.getValue().isAllowedToAdd();
+
+        InOrder inOrder = Mockito.inOrder(mMapActivityView);
+        inOrder.verify(mMapActivityView).showAddShopDialog();
+        inOrder.verify(mMapActivityView).hideProgressBar();
     }
 }

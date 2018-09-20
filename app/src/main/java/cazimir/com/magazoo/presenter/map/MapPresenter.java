@@ -1,7 +1,5 @@
 package cazimir.com.magazoo.presenter.map;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
-import cazimir.com.magazoo.ui.map.OnIsAllowedToAddListener;
+import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 
 import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
@@ -28,13 +26,11 @@ public class MapPresenter implements IMapPresenter {
     private IRepository mRepository;
     private IMapActivityView mMapActivityView;
     private IAuthPresenter mAuthenticationPresenter;
-    private String userId;
 
     public MapPresenter(IMapActivityView view, IAuthPresenter authenticationPresenter, IRepository repository) {
         mMapActivityView = view;
         mRepository = repository;
         mAuthenticationPresenter = authenticationPresenter;
-        userId = mAuthenticationPresenter.getUserId();
     }
 
     @Override
@@ -111,10 +107,10 @@ public class MapPresenter implements IMapPresenter {
 
     @Override
     public void deleteShopFromDB(String shopId) {
-        mRepository.deleteShop(new OnDeleteShopListener() {
+        mRepository.deleteShop(new OnDeleteShopCallback() {
             @Override
-            public void onDeleteSuccess() {
-                Log.d(TAG, "onDeleteSuccess: true");
+            public void onSuccess() {
+                //Log.d(TAG, "onSuccess: true");
                 mMapActivityView.showToast("Deleted!");
                 mMapActivityView.closeShopDetails();
                 mMapActivityView.refreshMarkersOnMap();
@@ -122,7 +118,7 @@ public class MapPresenter implements IMapPresenter {
             }
 
             @Override
-            public void onDeleteFailed(String error) {
+            public void onFailed(String error) {
                 mMapActivityView.showToast(error);
             }
         }, shopId);
@@ -133,7 +129,9 @@ public class MapPresenter implements IMapPresenter {
         return mAuthenticationPresenter.isAdmin();
     }
 
-    public void checkIfAllowedToAdd(final OnIsAllowedToAddListener mapActivityView) {
+    public void checkIfAllowedToAddShop(final OnIsAllowedToAddCallback mapActivityView) {
+
+        String userId = mAuthenticationPresenter.getUserId();
 
         if(userId.equals(CAZIMIR)|| userId.equals(ANA_MARIA)){
             mapActivityView.isAllowedToAdd();

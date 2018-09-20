@@ -25,7 +25,7 @@ import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
-import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
+import cazimir.com.magazoo.presenter.map.OnDeleteShopCallback;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
@@ -137,15 +137,15 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void deleteShop(final OnDeleteShopListener mapPresenter, String id) {
+    public void deleteShop(final OnDeleteShopCallback mapPresenter, String id) {
         mStoreRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "deleteShop: success!");
-                    mapPresenter.onDeleteSuccess();
+                    mapPresenter.onSuccess();
                 }else{
-                    mapPresenter.onDeleteFailed(task.getException().toString());
+                    mapPresenter.onFailed(task.getException().toString());
                 }
             }
         });

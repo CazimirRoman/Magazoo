@@ -39,7 +39,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -97,13 +96,10 @@ import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.reports.ReportsActivity;
-import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
-import cazimir.com.magazoo.utils.ApiFailedException;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
-import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -123,7 +119,6 @@ import static cazimir.com.magazoo.constants.Constants.TRELLO_ACCESS_TOKEN;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_APP_KEY;
 import static cazimir.com.magazoo.constants.Constants.TRELLO_FEEDBACK_LIST;
 import static cazimir.com.magazoo.constants.Constants.UPDATE_INTERVAL;
-import static cazimir.com.magazoo.constants.Constants.LOCATION_TAG;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class MapActivityView extends BaseActivity implements IMapActivityView, LocationListener, OnErrorHandledListener {
@@ -610,7 +605,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         @Override
                         public void run() {
                             if (isCorrectAccuracy()) {
-                                mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
+                                mPresenter.checkIfAllowedToAddShop(new OnIsAllowedToAddCallback() {
                                     @Override
                                     public void isAllowedToAdd() {
                                         runOnUiThread(new Runnable() {
@@ -1167,7 +1162,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showAddShopDialog() {
+    public void showAddShopDialog() {
 
         mAddLatitude = mCurrentLocation.latitude;
         mAddLongitude = mCurrentLocation.longitude;
