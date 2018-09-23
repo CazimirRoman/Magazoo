@@ -12,6 +12,8 @@ import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
+import cazimir.com.magazoo.utils.IUtil;
+import cazimir.com.magazoo.utils.Util;
 
 import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
 import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
@@ -129,22 +131,22 @@ public class MapPresenter implements IMapPresenter {
         return mAuthenticationPresenter.isAdmin();
     }
 
-    public void checkIfAllowedToAddShop(final OnIsAllowedToAddCallback mapActivityView) {
+    public void checkIfAllowedToAddShop() {
 
-        String userId = mAuthenticationPresenter.getUserId();
-
-        if(userId.equals(CAZIMIR)|| userId.equals(ANA_MARIA)){
-            mapActivityView.isAllowedToAdd();
+        if(mAuthenticationPresenter.isAdmin()){
+            mMapActivityView.isAllowedToAdd();
             return;
         }
 
         mRepository.getShopsAddedToday(new OnGetShopsAddedTodayListener() {
             @Override
             public void onGetShopsAddedTodaySuccess(ArrayList<Shop> shopsAddedToday) {
-                if (isUnderTheAddLimit(shopsAddedToday)) {
-                    mapActivityView.isAllowedToAdd();
+
+                IUtil util = new Util();
+                if (util.isUnderTheAddLimit(shopsAddedToday)) {
+                    mMapActivityView.isAllowedToAdd();
                 } else {
-                    mapActivityView.isNotAllowedToAdd();
+                    mMapActivityView.isNotAllowedToAdd();
                 }
             }
 
@@ -152,11 +154,7 @@ public class MapPresenter implements IMapPresenter {
             public void onGetShopsAddedTodayFailed() {
                 //TODO: handle this
             }
-        }, userId);
-    }
-
-    private boolean isUnderTheAddLimit(ArrayList<Shop> shopsAddedToday) {
-        return shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT;
+        }, mAuthenticationPresenter.getUserId());
     }
 
     public String getUserId() {

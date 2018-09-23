@@ -22,4 +22,6 @@ public interface IMapActivityView {
     void refreshMarkersOnMap();
     void showProgressBar();
     void hideProgressBar();
+    void isAllowedToAdd();
+    void isNotAllowedToAdd();
 }

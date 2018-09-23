@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
+import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
@@ -24,10 +25,13 @@ import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
 import cazimir.com.magazoo.presenter.map.OnDeleteShopCallback;
 import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
+import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.MapActivityView;
 import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
+import cazimir.com.magazoo.utils.IUtil;
+import cazimir.com.magazoo.utils.Util;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -52,6 +56,9 @@ public class MapPresenterTest {
     @Mock
     private Repository mRepository;
 
+    @Mock
+    private Util mUtil;
+
     @Captor
     private ArgumentCaptor<OnDuplicateReportCallback> mOnDuplicateReportCallbackArgumentCaptor;
 
@@ -68,7 +75,7 @@ public class MapPresenterTest {
     private ArgumentCaptor<OnDeleteShopCallback> mOnDeleteShopCallbackArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<OnIsAllowedToAddCallback> mOnIsAllowedToAddCallbackArgumentCaptor;
+    private ArgumentCaptor<OnGetShopsAddedTodayListener> mOnGetShopsAddedTodayListenerArgumentCaptor;
 
     private Report mReport;
 
@@ -207,12 +214,18 @@ public class MapPresenterTest {
     @Test
     public void shouldShowTheAddShopDialogIfAllowedToAdd() {
 
-        //mMapPresenter.checkIfAllowedToAddShop
+        String userId = "random user id";
+        ArrayList<Shop> shops = new ArrayList<>();
 
-        mOnIsAllowedToAddCallbackArgumentCaptor.getValue().isAllowedToAdd();
+        when(mAuthenticationPresenter.isAdmin()).thenReturn(false);
+        when(mAuthenticationPresenter.getUserId()).thenReturn(userId);
+        when(mUtil.isUnderTheAddLimit(shops)).thenReturn(true);
 
-        InOrder inOrder = Mockito.inOrder(mMapActivityView);
-        inOrder.verify(mMapActivityView).showAddShopDialog();
-        inOrder.verify(mMapActivityView).hideProgressBar();
+        mMapPresenter.checkIfAllowedToAddShop();
+
+        verify(mRepository).getShopsAddedToday(mOnGetShopsAddedTodayListenerArgumentCaptor.capture(), eq(userId));
+        mOnGetShopsAddedTodayListenerArgumentCaptor.getValue().onGetShopsAddedTodaySuccess(eq(shops));
+
+        verify(mMapActivityView).isAllowedToAdd();
     }
 }

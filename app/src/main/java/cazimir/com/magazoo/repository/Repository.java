@@ -424,6 +424,7 @@ public class Repository implements IRepository {
         thread.start();
     }
 
+    @Override
     public void getShopsAddedToday(final OnGetShopsAddedTodayListener mapPresenter, String userId) {
 
         final ArrayList<Shop> addedShopsToday = new ArrayList<>();

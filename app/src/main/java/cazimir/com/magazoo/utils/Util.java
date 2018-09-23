@@ -12,13 +12,15 @@ import com.blankj.utilcode.util.NetworkUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.constants.Constants;
+import cazimir.com.magazoo.model.Shop;
 
-public class Util {
+public class Util implements IUtil {
 
     public static boolean isValidEmail(CharSequence target) {
         if (TextUtils.isEmpty(target)) {
@@ -99,5 +101,8 @@ public class Util {
         return json;
     }
 
-
+    @Override
+    public boolean isUnderTheAddLimit(ArrayList<Shop> shopsAddedToday) {
+        return shopsAddedToday.size() <= Constants.ADD_SHOP_LIMIT;
+    }
 }

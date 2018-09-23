@@ -605,30 +605,33 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         @Override
                         public void run() {
                             if (isCorrectAccuracy()) {
-                                mPresenter.checkIfAllowedToAddShop(new OnIsAllowedToAddCallback() {
-                                    @Override
-                                    public void isAllowedToAdd() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                showAddShopDialog();
-                                                hideProgressBar();
-                                            }
-                                        });
-                                    }
 
-                                    @Override
-                                    public void isNotAllowedToAdd() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                showAddLimitAlertPopup();
-                                                hideProgressBar();
-                                            }
-                                        });
+                                mPresenter.checkIfAllowedToAddShop();
 
-                                    }
-                                });
+//                                mPresenter.checkIfAllowedToAddShop(new OnIsAllowedToAddCallback() {
+//                                    @Override
+//                                    public void isAllowedToAdd() {
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                showAddShopDialog();
+//                                                hideProgressBar();
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void isNotAllowedToAdd() {
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                showAddLimitAlertPopup();
+//                                                hideProgressBar();
+//                                            }
+//                                        });
+//
+//                                    }
+//                                });
                             } else {
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -1066,6 +1069,28 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void hideProgressBar() {
         mProgress.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void isAllowedToAdd() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showAddShopDialog();
+                hideProgressBar();
+            }
+        });
+    }
+
+    @Override
+    public void isNotAllowedToAdd() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showAddLimitAlertPopup();
+                hideProgressBar();
+            }
+        });
     }
 
     private void setZoomLevel() {
