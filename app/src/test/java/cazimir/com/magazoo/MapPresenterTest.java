@@ -45,6 +45,7 @@ public class MapPresenterTest {
     private static final String EMAIL_ADDRESS = "test@gmail.com";
     private static final String ERROR_MESSAGE = "This is an error message";
     private static final String SHOP_ID = "1234";
+
     private MapPresenter mMapPresenter;
 
     @Mock
