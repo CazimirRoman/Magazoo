@@ -215,6 +215,7 @@ public class MapPresenterTest {
     @Test
     public void shouldShowTheAddShopDialogIfAllowedToAdd() {
 
+
         String userId = "random user id";
         ArrayList<Shop> shops = new ArrayList<>();
 
