@@ -34,6 +34,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -365,7 +366,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 mMap = googleMap;
                 setMyLocationEnabled();
                 setUpClusterer();
-                setMapTheme();
+                //setMapTheme();
                 getMapBounds();
                 setOnCameraChangeListener();
                 mMap.setIndoorEnabled(false);
@@ -871,21 +872,36 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void addMarkersToMap(ArrayList<Shop> shops) {
-        Log.d(TAG, "addMarkersToMap - number of markers to add: " + shops.size());
-        mClusterManager.clearItems();
-        for (int i = 0; i < shops.size(); i++) {
-            mClusterManager.addItem(shops.get(i));
-        }
+    public void addMarkersToMap(final ArrayList<Shop> shops) {
+        final TimingLogger timings = new TimingLogger(TAG, "addMarkersToMap");
 
-        mClusterManager.cluster();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "addMarkersToMap - number of markers to add: " + shops.size());
+                mClusterManager.clearItems();
+                for (int i = 0; i < shops.size(); i++) {
+                    mClusterManager.addItem(shops.get(i));
+                }
 
-        mShopsInBounds = shops;
-        Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
+                mClusterManager.cluster();
 
-        for (Shop shop : mShopsInBounds) {
-            Log.d(TAG, "ShopInBounds id is: " + shop.getId());
-        }
+                mShopsInBounds = shops;
+                Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
+
+                for (Shop shop : mShopsInBounds) {
+                    Log.d(TAG, "ShopInBounds id is: " + shop.getId());
+                }
+
+                timings.addSplit("done!");
+
+                timings.dumpToLog();
+
+                hideProgressBar();
+
+            }
+        });
+
     }
 
     public class CustomClusterRenderer extends DefaultClusterRenderer<Shop> {
@@ -921,8 +937,15 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 .customView(layout, true);
     }
 
-    private void getShopMarkers(LatLngBounds bounds) {
-        mPresenter.getAllMarkers(bounds);
+    private void getShopMarkers(final LatLngBounds bounds) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getAllMarkers(bounds);
+            }
+        }).start();
+
     }
 
     public void showAddThanksPopup() {
@@ -1343,6 +1366,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void onLocationChanged(Location location) {
+
+        Log.d(TAG, "Got new location: " + location);
 
         mCurrentAccuracy = location.getAccuracy();
         mCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());

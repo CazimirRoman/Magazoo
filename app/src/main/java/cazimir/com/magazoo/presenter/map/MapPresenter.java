@@ -1,5 +1,7 @@
 package cazimir.com.magazoo.presenter.map;
 
+import android.util.TimingLogger;
+
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
@@ -73,19 +75,31 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void getAllMarkers(LatLngBounds bounds) {
-        mRepository.getMarkers(new OnGetMarkersListener() {
-            @Override
-            public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
-                //Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
-                mMapActivityView.addMarkersToMap(markers);
-            }
+    public void getAllMarkers(final LatLngBounds bounds) {
 
+        final TimingLogger timings = new TimingLogger(TAG, "getAllMarkers from Presenter");
+
+        new Thread(new Runnable() {
             @Override
-            public void onGetAllMarkersFailed(String message) {
-                mMapActivityView.showToast(message);
+            public void run() {
+
+                mRepository.getMarkers(new OnGetMarkersListener() {
+                    @Override
+                    public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
+                        //Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
+                        mMapActivityView.addMarkersToMap(markers);
+                        timings.addSplit("getAllMarkers from Presenter - done!");
+                        timings.dumpToLog();
+                    }
+
+                    @Override
+                    public void onGetAllMarkersFailed(String message) {
+                        mMapActivityView.showToast(message);
+                    }
+                }, bounds);
             }
-        }, bounds);
+        }).start();
+
     }
 
     @Override
