@@ -93,14 +93,13 @@ import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
+import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.map.MapPresenter;
 import cazimir.com.magazoo.reports.ReportsActivity;
-import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
+import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.login.LoginActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
-import cazimir.com.magazoo.utils.ApiFailedException;
 import cazimir.com.magazoo.utils.OnErrorHandledListener;
-import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -211,7 +210,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapPresenter(this);
+        mPresenter = new MapPresenter(this, new AuthPresenter(this), new Repository());
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback() {
@@ -450,14 +449,10 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             }
         });
 
-        if (mPresenter.isUserLoggedIn()) {
             navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
             View headerLayout = navigationView.getHeaderView(0);
             TextView headerText = headerLayout.findViewById(R.id.signedInUserEmail);
             headerText.setText(mPresenter.getUserEmail());
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_signin).setVisible(true);
-        }
     }
 
     private void startReportActivity() {
@@ -610,30 +605,33 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         @Override
                         public void run() {
                             if (isCorrectAccuracy()) {
-                                mPresenter.checkIfAllowedToAdd(new OnIsAllowedToAddListener() {
-                                    @Override
-                                    public void isAllowedToAdd() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                showAddShopDialog();
-                                                hideProgressBar();
-                                            }
-                                        });
-                                    }
 
-                                    @Override
-                                    public void isNotAllowedToAdd() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                showAddLimitAlertPopup();
-                                                hideProgressBar();
-                                            }
-                                        });
+                                mPresenter.checkIfAllowedToAddShop();
 
-                                    }
-                                });
+//                                mPresenter.checkIfAllowedToAddShop(new OnIsAllowedToAddCallback() {
+//                                    @Override
+//                                    public void isAllowedToAdd() {
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                showAddShopDialog();
+//                                                hideProgressBar();
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void isNotAllowedToAdd() {
+//                                        runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                showAddLimitAlertPopup();
+//                                                hideProgressBar();
+//                                            }
+//                                        });
+//
+//                                    }
+//                                });
                             } else {
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -808,7 +806,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_LOCATION, false, mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
 
@@ -818,7 +816,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_247, !mCurrentSelectedShop.getNonstop(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
 
@@ -828,7 +826,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_POS, !mCurrentSelectedShop.getPos(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
 
         });
@@ -839,7 +837,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 closeReportDialog();
                 showProgressBar();
                 mCurrentReportedShop = new Report(mCurrentSelectedShop.getId(), Constants.REPORT_TICKETS, !mCurrentSelectedShop.getTickets(), mPresenter.getUserId(), new Date().getTime());
-                mPresenter.checkIfDuplicateReport(mCurrentReportedShop);
+                mPresenter.writeReportToDatabase(mCurrentReportedShop);
             }
         });
     }
@@ -1058,7 +1056,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
 
     @Override
     public void refreshMarkersOnMap() {
-        Log.d(TAG, "refreshMarkersOnMap: called");
+        //Log.d(TAG, "refreshMarkersOnMap: called");
         getShopMarkers(getMapBounds());
     }
 
@@ -1071,6 +1069,28 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     @Override
     public void hideProgressBar() {
         mProgress.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void isAllowedToAdd() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showAddShopDialog();
+                hideProgressBar();
+            }
+        });
+    }
+
+    @Override
+    public void isNotAllowedToAdd() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showAddLimitAlertPopup();
+                hideProgressBar();
+            }
+        });
     }
 
     private void setZoomLevel() {
@@ -1120,7 +1140,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
                             onLocationChanged(location);
-                            //zoomToCurrentLocation();
                         }
                     }
                 })
@@ -1168,7 +1187,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showAddShopDialog() {
+    public void showAddShopDialog() {
 
         mAddLatitude = mCurrentLocation.latitude;
         mAddLongitude = mCurrentLocation.longitude;

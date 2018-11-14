@@ -24,14 +24,14 @@ import java.util.Map;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
-import cazimir.com.magazoo.presenter.map.OnDeleteShopListener;
-import cazimir.com.magazoo.presenter.map.OnDuplicateReportListener;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
+import cazimir.com.magazoo.presenter.map.OnDeleteShopCallback;
+import cazimir.com.magazoo.presenter.map.OnDuplicateReportCallback;
 import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.reports.OnGetAllShopsReportCallback;
 import cazimir.com.magazoo.ui.map.OnGetReportsFromDatabaseListener;
-import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseListener;
+import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 import cazimir.com.magazoo.utils.ApiFailedException;
 import cazimir.com.magazoo.utils.PlacesService;
 import cazimir.com.magazoo.utils.Util;
@@ -108,14 +108,13 @@ public class Repository implements IRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
                 mapPresenter.onGetAllMarkersFailed(databaseError.getMessage());
             }
         });
     }
 
     @Override
-    public void addMarkerToDatabase(final OnAddMarkerToDatabaseListener mapPresenter, Shop shop) {
+    public void addMarkerToDatabase(final OnAddMarkerToDatabaseCallback mapPresenter, Shop shop) {
 
         String shopId = mStoreRef.push().getKey();
         shop.setId(shopId);
@@ -124,29 +123,29 @@ public class Repository implements IRepository {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    mapPresenter.onAddMarkerSuccess();
+                    mapPresenter.onSuccess();
                 } else {
-                    mapPresenter.onAddMarkerFailed(task.getException().getMessage());
+                    mapPresenter.onFailed(task.getException().getMessage());
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mapPresenter.onAddMarkerFailed(e.getMessage());
+                mapPresenter.onFailed(e.getMessage());
             }
         });
     }
 
     @Override
-    public void deleteShop(final OnDeleteShopListener mapPresenter, String id) {
+    public void deleteShop(final OnDeleteShopCallback mapPresenter, String id) {
         mStoreRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "deleteShop: success!");
-                    mapPresenter.onDeleteSuccess();
+                    mapPresenter.onSuccess();
                 }else{
-                    mapPresenter.onDeleteFailed(task.getException().toString());
+                    mapPresenter.onFailed(task.getException().toString());
                 }
             }
         });
@@ -425,6 +424,7 @@ public class Repository implements IRepository {
         thread.start();
     }
 
+    @Override
     public void getShopsAddedToday(final OnGetShopsAddedTodayListener mapPresenter, String userId) {
 
         final ArrayList<Shop> addedShopsToday = new ArrayList<>();
@@ -456,7 +456,8 @@ public class Repository implements IRepository {
         });
     }
     //resolved reports are not taken into account for this check
-    public void checkIfDuplicateReport(final OnDuplicateReportListener mapPresenter, final Report currentReportedShop) {
+    @Override
+    public void checkIfDuplicateReport(final OnDuplicateReportCallback mapPresenter, final Report currentReportedShop) {
         final ArrayList<Report> reports = new ArrayList<>();
 
         Query query = mReportRef.orderByChild("reportedBy").equalTo(currentReportedShop.getReportedBy());
@@ -474,9 +475,9 @@ public class Repository implements IRepository {
                 }
 
                 if (reports.contains(currentReportedShop)) {
-                    mapPresenter.isDuplicateReport();
+                    mapPresenter.isDuplicate();
                 } else {
-                    mapPresenter.isNotDuplicateReport();
+                    mapPresenter.isNotDuplicate();
                 }
             }
 
@@ -487,7 +488,8 @@ public class Repository implements IRepository {
         });
     }
 
-    public void writeReportToDatabase(final OnReportWrittenToDatabaseListener mapPresenter, final Report report) {
+    @Override
+    public void writeReportToDatabase(final OnReportWrittenToDatabaseCallback mapPresenter, final Report report) {
         mReportRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -495,7 +497,7 @@ public class Repository implements IRepository {
                     mReportRef.push().setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            mapPresenter.onReportWrittenSuccess();
+                            mapPresenter.onSuccess();
                         }
                     });
                 }
@@ -503,7 +505,7 @@ public class Repository implements IRepository {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                mapPresenter.onReportWrittenFailed(databaseError.getMessage());
+                mapPresenter.onFailed(databaseError.getMessage());
             }
         });
     }

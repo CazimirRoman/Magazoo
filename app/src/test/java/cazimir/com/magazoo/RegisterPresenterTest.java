@@ -9,13 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.register.RegisterPresenter;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 import cazimir.com.magazoo.ui.register.RegisterActivityView;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,7 +33,7 @@ public class RegisterPresenterTest {
     private RegisterActivityView mRegisterActivityView;
 
     @Mock
-    private AuthPresenter mAuthPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Captor
     private ArgumentCaptor<OnRegisterWithEmailCallback> mOnRegisterWithEmailCallbackCaptor;
@@ -44,7 +42,7 @@ public class RegisterPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mRegisterPresenter = new RegisterPresenter(mRegisterActivityView, mAuthPresenter);
+        mRegisterPresenter = new RegisterPresenter(mRegisterActivityView, mAuthenticationPresenter);
     }
 
     @Test
@@ -52,7 +50,7 @@ public class RegisterPresenterTest {
 
         mRegisterPresenter.performRegisterWithEmail(EMAIL, PASSWORD);
 
-        verify(mAuthPresenter, times(1)).register(mOnRegisterWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
+        verify(mAuthenticationPresenter, times(1)).register(mOnRegisterWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
 
         mOnRegisterWithEmailCallbackCaptor.getValue().onSuccess(EMAIL);
 
@@ -67,7 +65,7 @@ public class RegisterPresenterTest {
 
         mRegisterPresenter.performRegisterWithEmail(EMAIL, PASSWORD);
 
-        verify(mAuthPresenter, times(1)).register(mOnRegisterWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
+        verify(mAuthenticationPresenter, times(1)).register(mOnRegisterWithEmailCallbackCaptor.capture(), eq(EMAIL), eq(PASSWORD));
 
         mOnRegisterWithEmailCallbackCaptor.getValue().onFailed(ERROR_MESSAGE);
 

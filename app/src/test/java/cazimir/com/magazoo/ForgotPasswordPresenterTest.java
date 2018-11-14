@@ -31,7 +31,7 @@ public class ForgotPasswordPresenterTest {
     ForgotPasswordActivityView mForgotPasswordActivityView;
 
     @Mock
-    AuthPresenter mAuthPresenter;
+    AuthPresenter mAuthenticationPresenter;
 
     @Captor
     ArgumentCaptor<OnResetInstructionsCallback> mOnResetInstructionsCallbackArgumentCaptor;
@@ -40,7 +40,7 @@ public class ForgotPasswordPresenterTest {
     public void setUp() throws Exception {
 
         MockitoAnnotations.initMocks(this);
-        mForgotPasswordPresenter = new ForgotPasswordPresenter(mForgotPasswordActivityView, mAuthPresenter);
+        mForgotPasswordPresenter = new ForgotPasswordPresenter(mForgotPasswordActivityView, mAuthenticationPresenter);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ForgotPasswordPresenterTest {
 
         mForgotPasswordPresenter.sendResetInstructions(EMAIL);
 
-        verify(mAuthPresenter, times(1)).sendResetInstructions(mOnResetInstructionsCallbackArgumentCaptor.capture(), eq(EMAIL));
+        verify(mAuthenticationPresenter, times(1)).sendResetInstructions(mOnResetInstructionsCallbackArgumentCaptor.capture(), eq(EMAIL));
 
         mOnResetInstructionsCallbackArgumentCaptor.getValue().onSuccess();
 
@@ -63,7 +63,7 @@ public class ForgotPasswordPresenterTest {
 
         mForgotPasswordPresenter.sendResetInstructions(EMAIL);
 
-        verify(mAuthPresenter, times(1)).sendResetInstructions(mOnResetInstructionsCallbackArgumentCaptor.capture(), eq(EMAIL));
+        verify(mAuthenticationPresenter, times(1)).sendResetInstructions(mOnResetInstructionsCallbackArgumentCaptor.capture(), eq(EMAIL));
 
         mOnResetInstructionsCallbackArgumentCaptor.getValue().onFailed();
 

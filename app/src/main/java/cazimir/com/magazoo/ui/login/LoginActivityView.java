@@ -31,7 +31,6 @@ import cazimir.com.magazoo.ui.register.RegisterActivityView;
 import cazimir.com.magazoo.ui.reset.ForgotPasswordActivityView;
 import cazimir.com.magazoo.ui.tutorial.TutorialActivity;
 import cazimir.com.magazoo.utils.OnFormValidatedCallback;
-import cazimir.com.magazoo.utils.UtilHelperClass;
 
 import static cazimir.com.magazoo.utils.UtilHelperClass.validateFormData;
 
@@ -62,13 +61,13 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
 
     private CallbackManager mFacebookCallbackManager;
     private LoginPresenter mLoginPresenter;
-    private AuthPresenter mAuthPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthPresenter = new AuthPresenter(this);
-        mLoginPresenter = new LoginPresenter(this, mAuthPresenter);
+        mAuthenticationPresenter = new AuthPresenter(this);
+        mLoginPresenter = new LoginPresenter(this, mAuthenticationPresenter);
         mFacebookCallbackManager = CallbackManager.Factory.create();
         initUI();
         redirectToMapScreenIfLoggedIn();
@@ -90,7 +89,7 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
     }
 
     private void redirectToMapScreenIfLoggedIn() {
-        mAuthPresenter.checkIfUserLoggedInAndRedirectToMap();
+        mAuthenticationPresenter.checkIfUserLoggedInAndRedirectToMap();
     }
 
     @Override
@@ -191,10 +190,10 @@ public class LoginActivityView extends BaseActivity implements ILoginActivityVie
         Log.d(TAG, "isFirstRun");
 
         SharedPreferences mPreferences = this.getSharedPreferences("first_time", Context.MODE_PRIVATE);
-        mFirstRun = mPreferences.getBoolean(mAuthPresenter.getUserId(), true);
+        mFirstRun = mPreferences.getBoolean(mAuthenticationPresenter.getUserId(), true);
         if (mFirstRun) {
             SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putBoolean(mAuthPresenter.getUserId(), false);
+            editor.putBoolean(mAuthenticationPresenter.getUserId(), false);
             editor.apply();
             return true;
         }

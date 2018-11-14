@@ -1,7 +1,5 @@
 package cazimir.com.magazoo.presenter.register;
 
-import cazimir.com.magazoo.R;
-import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
 import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.ui.register.IRegisterActivityView;
 import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
@@ -12,15 +10,15 @@ import cazimir.com.magazoo.ui.register.OnRegisterWithEmailCallback;
 public class RegisterPresenter implements IRegisterPresenter {
 
     private IRegisterActivityView mRegisterActivityView;
-    private IAuthPresenter mAuthPresenter;
+    private IAuthPresenter mAuthenticationPresenter;
 
-    public RegisterPresenter(IRegisterActivityView view, IAuthPresenter authPresenter) {
+    public RegisterPresenter(IRegisterActivityView view, IAuthPresenter authenticationPresenter) {
         mRegisterActivityView = view;
-        mAuthPresenter = authPresenter;
+        mAuthenticationPresenter = authenticationPresenter;
     }
 
     public void performRegisterWithEmail(String email, String password) {
-        mAuthPresenter.register(new OnRegisterWithEmailCallback() {
+        mAuthenticationPresenter.register(new OnRegisterWithEmailCallback() {
             @Override
             public void onSuccess(String email) {
                 mRegisterActivityView.showRegistrationConfirmationToast(email);

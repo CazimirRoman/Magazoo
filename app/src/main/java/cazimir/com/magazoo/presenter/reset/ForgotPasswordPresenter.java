@@ -7,16 +7,16 @@ import cazimir.com.magazoo.ui.reset.OnResetInstructionsCallback;
 public class ForgotPasswordPresenter implements IForgotPasswordPresenter {
 
     private ForgotPasswordActivityView mForgotPasswordActivityView;
-    private AuthPresenter mAuthPresenter;
+    private AuthPresenter mAuthenticationPresenter;
 
-    public ForgotPasswordPresenter(ForgotPasswordActivityView forgotPasswordActivityView, AuthPresenter mAuthPresenter) {
+    public ForgotPasswordPresenter(ForgotPasswordActivityView forgotPasswordActivityView, AuthPresenter mAuthenticationPresenter) {
         this.mForgotPasswordActivityView = forgotPasswordActivityView;
-        this.mAuthPresenter = mAuthPresenter;
+        this.mAuthenticationPresenter = mAuthenticationPresenter;
     }
 
     @Override
     public void sendResetInstructions(String email) {
-        mAuthPresenter.sendResetInstructions(new OnResetInstructionsCallback() {
+        mAuthenticationPresenter.sendResetInstructions(new OnResetInstructionsCallback() {
 
             @Override
             public void onSuccess() {

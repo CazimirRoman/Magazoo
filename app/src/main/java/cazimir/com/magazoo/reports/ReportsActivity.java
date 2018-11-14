@@ -28,7 +28,7 @@ import cazimir.com.magazoo.base.BaseBackActivity;
 import cazimir.com.magazoo.base.IGeneralView;
 import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Shop;
-import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseListener;
+import cazimir.com.magazoo.presenter.map.OnAddMarkerToDatabaseCallback;
 import cazimir.com.magazoo.repository.OnGetAdminNameCallback;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.utils.ApiFailedException;
@@ -306,16 +306,16 @@ public class ReportsActivity extends BaseBackActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseListener() {
+                            mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseCallback() {
                                 @Override
-                                public void onAddMarkerSuccess() {
+                                public void onSuccess() {
                                     Log.d(TAG, "added gas station to map with nonstop set to " + shop.getNonstop());
                                     mPausedForAddingShop = false;
                                     mTotalNumberOfImportedShops++;
                                 }
 
                                 @Override
-                                public void onAddMarkerFailed(String error) {
+                                public void onFailed(String error) {
                                     Log.e(TAG, "failed adding gas station to map");
                                 }
                             }, shop);

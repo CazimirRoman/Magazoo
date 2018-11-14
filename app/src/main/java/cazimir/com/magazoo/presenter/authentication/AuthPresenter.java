@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import cazimir.com.magazoo.R;
 import cazimir.com.magazoo.base.IGeneralView;
-import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.presenter.login.OnLoginWithFacebookCallback;
 import cazimir.com.magazoo.ui.login.ILoginActivityView;
 import cazimir.com.magazoo.ui.login.OnLoginWithEmailCallback;
