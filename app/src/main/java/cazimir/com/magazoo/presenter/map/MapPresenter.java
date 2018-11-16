@@ -1,24 +1,20 @@
 package cazimir.com.magazoo.presenter.map;
 
+import android.util.Log;
 import android.util.TimingLogger;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 
-import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
-import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 import cazimir.com.magazoo.utils.IUtil;
 import cazimir.com.magazoo.utils.Util;
-
-import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
-import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
 
 /**
  * TODO: Add a class header comment!
@@ -77,29 +73,19 @@ public class MapPresenter implements IMapPresenter {
     @Override
     public void getAllMarkers(final LatLngBounds bounds) {
 
-        final TimingLogger timings = new TimingLogger(TAG, "getAllMarkers from Presenter");
-
-        new Thread(new Runnable() {
+        mRepository.getMarkers(new OnGetMarkersListener() {
             @Override
-            public void run() {
+            public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
 
-                mRepository.getMarkers(new OnGetMarkersListener() {
-                    @Override
-                    public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
-                        //Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
-                        mMapActivityView.addMarkersToMap(markers);
-                        timings.addSplit("getAllMarkers from Presenter - done!");
-                        timings.dumpToLog();
-                    }
-
-                    @Override
-                    public void onGetAllMarkersFailed(String message) {
-                        mMapActivityView.showToast(message);
-                    }
-                }, bounds);
+                Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
+                mMapActivityView.addMarkersToMap(markers);
             }
-        }).start();
 
+            @Override
+            public void onGetAllMarkersFailed(String message) {
+                mMapActivityView.showToast(message);
+            }
+        }, bounds);
     }
 
     @Override

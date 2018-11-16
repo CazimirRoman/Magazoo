@@ -3,6 +3,7 @@ package cazimir.com.magazoo.repository;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.TimingLogger;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -86,31 +87,35 @@ public class Repository implements IRepository {
     @Override
     public void getMarkers(final OnGetMarkersListener mapPresenter, final LatLngBounds bounds) {
         Log.d(TAG, "getMarkers: called");
-        mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<Shop> markersInVisibleArea = new ArrayList<>();
-                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
-                    Shop marker = markerSnapshot.getValue(Shop.class);
-                    //update model with id from firebase
-                    if (marker != null) {
-                        marker.setId(markerSnapshot.getKey());
-                        if (bounds.contains(new LatLng(marker.getLat(), marker.getLon()))) {
-                            markersInVisibleArea.add(marker);
-                        }
+                mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                ArrayList<Shop> markersToShow = new ArrayList<>();
+                                for (DataSnapshot markerSnapshot : dataSnapshot.getChildren()) {
+                                    Shop marker = markerSnapshot.getValue(Shop.class);
+                                    //update model with id from firebase
+                                    if (marker != null) {
+                                        marker.setId(markerSnapshot.getKey());
+                                        markersToShow.add(marker);
+                                    }
+                                }
+
+                                mapPresenter.onGetAllMarkersSuccess(markersToShow);
+                            }
+                        }).start();
                     }
-                }
 
-                Log.d(TAG, "markersInVisibleArea: " + markersInVisibleArea.size());
-                mapPresenter.onGetAllMarkersSuccess(markersInVisibleArea);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mapPresenter.onGetAllMarkersFailed(databaseError.getMessage());
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        mapPresenter.onGetAllMarkersFailed(databaseError.getMessage());
+                    }
+                });
     }
 
     @Override
