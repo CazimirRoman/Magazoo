@@ -1,22 +1,20 @@
 package cazimir.com.magazoo.presenter.map;
 
-import com.google.android.gms.maps.model.LatLngBounds;
+import android.util.Log;
 
 import java.util.ArrayList;
 
-import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.IAuthPresenter;
 import cazimir.com.magazoo.repository.IRepository;
 import cazimir.com.magazoo.ui.map.IMapActivityView;
-import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
 import cazimir.com.magazoo.utils.IUtil;
 import cazimir.com.magazoo.utils.Util;
 
-import static cazimir.com.magazoo.constants.Constants.ANA_MARIA;
-import static cazimir.com.magazoo.constants.Constants.CAZIMIR;
+import static cazimir.com.magazoo.constants.Constants.ADD;
+import static cazimir.com.magazoo.constants.Constants.REMOVE;
 
 /**
  * TODO: Add a class header comment!
@@ -73,29 +71,31 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void getAllMarkers(LatLngBounds bounds) {
+    public void getAllMarkers() {
+
         mRepository.getMarkers(new OnGetMarkersListener() {
             @Override
             public void onGetAllMarkersSuccess(ArrayList<Shop> markers) {
-                //Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
-                mMapActivityView.addMarkersToMap(markers);
+
+                Log.d(TAG, "onGetAllMarkersSuccess: " + markers.size());
+                mMapActivityView.addShopsToLocalStorage(markers);
             }
 
             @Override
             public void onGetAllMarkersFailed(String message) {
                 mMapActivityView.showToast(message);
             }
-        }, bounds);
+        });
     }
 
     @Override
-    public void addMarkerToFirebase(Shop shop) {
+    public void addMarkerToFirebase(final Shop shop) {
         mRepository.addMarkerToDatabase(new OnAddMarkerToDatabaseCallback() {
             @Override
             public void onSuccess() {
                 //Log.d(TAG, "onSuccess: called");
                 mMapActivityView.hideProgressBar();
-                mMapActivityView.refreshMarkersOnMap();
+                mMapActivityView.addMarkerToLocalDatabase(shop);
                 mMapActivityView.showAddThanksPopup();
             }
 
@@ -108,14 +108,14 @@ public class MapPresenter implements IMapPresenter {
     }
 
     @Override
-    public void deleteShopFromDB(String shopId) {
+    public void deleteShopFromDB(final Shop shop) {
         mRepository.deleteShop(new OnDeleteShopCallback() {
             @Override
             public void onSuccess() {
                 //Log.d(TAG, "onSuccess: true");
                 mMapActivityView.showToast("Deleted!");
                 mMapActivityView.closeShopDetails();
-                mMapActivityView.refreshMarkersOnMap();
+                mMapActivityView.removeMarkerFromLocalDatabase(shop);
                 mMapActivityView.hideProgressBar();
             }
 
@@ -123,7 +123,7 @@ public class MapPresenter implements IMapPresenter {
             public void onFailed(String error) {
                 mMapActivityView.showToast(error);
             }
-        }, shopId);
+        }, shop);
     }
 
     @Override

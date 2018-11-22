@@ -3,6 +3,9 @@ package cazimir.com.magazoo.constants;
 public class Constants {
 
     public static final String EVENT_ADDED = "shop_added";
+    public static final String ADD = "add_marker";
+    public static final String REMOVE = "remove_marker";
+
 
     public static final String CAZIMIR = "0nErC13lEHfdGcrSyZNJiNyIUHk2";
     public static final String ANA_MARIA = "cJEabMRtfLc6h5fHxSuJpJegnNE3";
@@ -15,7 +18,7 @@ public class Constants {
     public static final int MY_LOCATION_REQUEST_CODE = 523;
     public static final long UPDATE_INTERVAL = 2000;  /* 2 secs */
     public static final long FASTEST_INTERVAL = 1000; /* 1 secs */
-    public static final int ACCURACY_DESIRED = 12;
+    public static final int ACCURACY_DESIRED = 50;
     public static final int ACCURACY_DESIRED_BAM = 20;
     public static final int ZOOM_LEVEL_DESIRED = 18;
     public static final int ADD_SHOP_LIMIT = 5;

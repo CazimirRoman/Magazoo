@@ -17,11 +17,13 @@ public interface IMapActivityView {
     void closeShopDetails();
     void openShopDetails();
     void closeReportDialog();
-    void addMarkersToMap(ArrayList<Shop> markers);
+    void addShopsToLocalStorage(ArrayList<Shop> shops);
     void closeAddShopDialog();
-    void refreshMarkersOnMap();
+    void getAllMarkers();
     void showProgressBar();
     void hideProgressBar();
     void isAllowedToAdd();
     void isNotAllowedToAdd();
+    void addMarkerToLocalDatabase(Shop shop);
+    void removeMarkerFromLocalDatabase(Shop shop);
 }

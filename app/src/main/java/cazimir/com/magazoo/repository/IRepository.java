@@ -20,9 +20,9 @@ public interface IRepository {
     void getAdminNameForLocation(OnGetAdminNameCallback callback, LatLng location);
 
     void getShopsAddedToday(OnGetShopsAddedTodayListener listener, String userId);
-    void getMarkers(OnGetMarkersListener listener, LatLngBounds bounds);
+    void getMarkers(OnGetMarkersListener listener);
     void addMarkerToDatabase(OnAddMarkerToDatabaseCallback listener, Shop markerToAdd);
-    void deleteShop(OnDeleteShopCallback listener, String id);
+    void deleteShop(OnDeleteShopCallback listener, Shop shop);
 
     void getAllShopsForReport(OnGetAllShopsReportCallback callback);
     void updateAdminNameForBucharest();
