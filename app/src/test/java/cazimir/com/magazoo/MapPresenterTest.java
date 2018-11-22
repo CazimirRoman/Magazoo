@@ -16,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import cazimir.com.magazoo.constants.Constants;
 import cazimir.com.magazoo.model.Report;
 import cazimir.com.magazoo.model.Shop;
 import cazimir.com.magazoo.presenter.authentication.AuthPresenter;
@@ -28,9 +27,7 @@ import cazimir.com.magazoo.presenter.map.OnGetMarkersListener;
 import cazimir.com.magazoo.presenter.map.OnGetShopsAddedTodayListener;
 import cazimir.com.magazoo.repository.Repository;
 import cazimir.com.magazoo.ui.map.MapActivityView;
-import cazimir.com.magazoo.ui.map.OnIsAllowedToAddCallback;
 import cazimir.com.magazoo.ui.map.OnReportWrittenToDatabaseCallback;
-import cazimir.com.magazoo.utils.IUtil;
 import cazimir.com.magazoo.utils.Util;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -171,7 +168,7 @@ public class MapPresenterTest {
 
         mOnGetMarkersListenerArgumentCaptor.getValue().onGetAllMarkersSuccess(shops);
 
-        verify(mMapActivityView).addMarkersToMap(shops);
+        verify(mMapActivityView).addShopsToLocalStorage(shops);
     }
 
     @Test
@@ -183,7 +180,7 @@ public class MapPresenterTest {
 
         InOrder inOrder = Mockito.inOrder(mMapActivityView);
         inOrder.verify(mMapActivityView).hideProgressBar();
-        inOrder.verify(mMapActivityView).refreshMarkersOnMap();
+        inOrder.verify(mMapActivityView).getAllMarkers();
         inOrder.verify(mMapActivityView).showAddThanksPopup();
     }
 
@@ -208,7 +205,7 @@ public class MapPresenterTest {
         InOrder inOrder = Mockito.inOrder(mMapActivityView);
         inOrder.verify(mMapActivityView).showToast("Deleted!");
         inOrder.verify(mMapActivityView).closeShopDetails();
-        inOrder.verify(mMapActivityView).refreshMarkersOnMap();
+        inOrder.verify(mMapActivityView).getAllMarkers();
         inOrder.verify(mMapActivityView).hideProgressBar();
     }
 

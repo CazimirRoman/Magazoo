@@ -85,7 +85,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void getMarkers(final OnGetMarkersListener mapPresenter, final LatLngBounds bounds) {
+    public void getMarkers(final OnGetMarkersListener mapPresenter) {
         Log.d(TAG, "getMarkers: called");
 
                 mStoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -142,8 +142,8 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void deleteShop(final OnDeleteShopCallback mapPresenter, String id) {
-        mStoreRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void deleteShop(final OnDeleteShopCallback mapPresenter, Shop shop) {
+        mStoreRef.child(shop.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){

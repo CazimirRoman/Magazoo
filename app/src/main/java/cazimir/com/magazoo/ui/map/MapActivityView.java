@@ -34,7 +34,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TimingLogger;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,7 +157,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private Shop mCurrentSelectedShop;
     private Report mCurrentReportedShop;
     private float mCurrentZoomLevel;
-    private ArrayList<Shop> mShopsInBounds;
+    private ArrayList<Shop> mShopsInBounds = new ArrayList<>();
     private MaterialDialog mReportDialog;
     private MaterialDialog mAddShopDialog;
     private MaterialDialog mFeedbackDialog;
@@ -180,6 +179,8 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     private boolean animatingToUserLocation = false;
     private String mAdminName = "";
     private boolean mPausedForGettingAdmin = false;
+    private CameraPosition mPreviousCameraPosition = null;
+    private ArrayList<Shop> mAllShops;
 
     @Override
     protected void onStart() {
@@ -281,6 +282,13 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+
+        if(mLocationDialog != null){
+            //otherwise you will get a activity-has-leaked-window-that-was-originally-added error
+            // this means the activity was killed and after that the location dialog was dismissed
+            mLocationDialog.dismiss();
+        }
+
 
         closeShopDetails();
     }
@@ -396,7 +404,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                     }
                 });
 
-                refreshMarkersOnMap();
+                getAllMarkers();
             }
         });
     }
@@ -742,7 +750,7 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 public boolean onLongClick(View view) {
                     closeShopDetails();
                     showProgressBar();
-                    mPresenter.deleteShopFromDB(mCurrentSelectedShop.getId());
+                    mPresenter.deleteShopFromDB(mCurrentSelectedShop);
                     return true;
                 }
             });
@@ -875,35 +883,47 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void addMarkersToMap(final ArrayList<Shop> shops) {
+    public void addShopsToLocalStorage(final ArrayList<Shop> shops) {
 
-        runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                final TimingLogger timings = new TimingLogger(TAG, "addMarkersToMap");
-                Log.d(TAG, "addMarkersToMap - number of markers to add: " + shops.size());
-                mClusterManager.clearItems();
-                for (int i = 0; i < shops.size(); i++) {
-                    mClusterManager.addItem(shops.get(i));
-                }
-
-                mClusterManager.cluster();
-
-                mShopsInBounds = shops;
-//                Log.d(TAG, "mShopsInBounds: " + mShopsInBounds.size());
-//
-//                for (Shop shop : mShopsInBounds) {
-//                    Log.d(TAG, "ShopInBounds id is: " + shop.getId());
-//                }
-
-                timings.addSplit("done!");
-
-                timings.dumpToLog();
-
-                hideProgressBar();
+                mAllShops = shops;
+                Log.d(TAG, "Number of shops stored in local array: " + mAllShops.size());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                        refreshMarkersInBounds();
+                    }
+                });
 
             }
-        });
+        }).start();
+
+    }
+
+    private void refreshMarkersInBounds(final OnCalculateAndAddToShopInBoundsCallback callback, final LatLngBounds bounds) {
+
+        //reset shop in bounds
+        mShopsInBounds = new ArrayList<>();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                for (Shop shop: mAllShops
+                        ) {
+                    if(bounds.contains(new LatLng(shop.getLat(), shop.getLon()))){
+                        mShopsInBounds.add(shop);
+                    }
+                }
+
+                Log.d(TAG, "Shops in bounds: " + mShopsInBounds.size());
+                callback.onSuccess();
+            }
+        }).start();
+
 
     }
 
@@ -938,10 +958,6 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
         return new MaterialDialog.Builder(this)
                 .title(title)
                 .customView(layout, true);
-    }
-
-    private void getShopMarkers(final LatLngBounds bounds) {
-        mPresenter.getAllMarkers(bounds);
     }
 
     public void showAddThanksPopup() {
@@ -1052,23 +1068,47 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
             }
         });
 
+
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-
                 Log.d(TAG, "onCameraIdle");
+
+                //wait for mAllShops to be populated first time
+                if(mAllShops != null){
+                    refreshMarkersInBounds();
+                }
+
                 animatingToUserLocation = false;
                 animatingToMarker = false;
 
-                mClusterManager.cluster();
-
                 setZoomLevel();
-
-                if (!worldMapShowing()) {
-                    //refreshMarkersOnMap();
-                }
             }
         });
+    }
+
+    private void refreshMarkersInBounds() {
+
+        LatLngBounds bounds = getMapBounds();
+
+        refreshMarkersInBounds(new OnCalculateAndAddToShopInBoundsCallback() {
+            @Override
+            public void onSuccess() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mClusterManager.clearItems();
+                        for (int i = 0; i < mShopsInBounds.size(); i++) {
+                            mClusterManager.addItem(mShopsInBounds.get(i));
+                        }
+
+                        mClusterManager.cluster();
+                    }
+                });
+
+            }
+        }, bounds);
     }
 
     private boolean isDesiredZoomLevel() {
@@ -1076,9 +1116,9 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
     }
 
     @Override
-    public void refreshMarkersOnMap() {
-        Log.d(TAG, "refreshMarkersOnMap: called");
-        getShopMarkers(getMapBounds());
+    public void getAllMarkers() {
+        Log.d(TAG, "getAllMarkers: called");
+        mPresenter.getAllMarkers();
     }
 
     @Override
@@ -1112,6 +1152,18 @@ public class MapActivityView extends BaseActivity implements IMapActivityView, L
                 hideProgressBar();
             }
         });
+    }
+
+    @Override
+    public void addMarkerToLocalDatabase(Shop shop) {
+        mAllShops.add(shop);
+        refreshMarkersInBounds();
+    }
+
+    @Override
+    public void removeMarkerFromLocalDatabase(Shop shop) {
+        mAllShops.remove(shop);
+        refreshMarkersInBounds();
     }
 
     private void setZoomLevel() {

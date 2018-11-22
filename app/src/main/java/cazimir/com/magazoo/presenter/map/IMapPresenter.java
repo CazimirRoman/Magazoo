@@ -15,8 +15,8 @@ public interface IMapPresenter {
     void writeReportToDatabase(Report currentReportedShop);
     void checkIfAllowedToAddShop();
     String getUserEmail();
-    void getAllMarkers(LatLngBounds mBounds);
+    void getAllMarkers();
     void addMarkerToFirebase(Shop markerToAdd);
-    void deleteShopFromDB(String id);
+    void deleteShopFromDB(Shop shop);
     boolean isAdmin();
 }
